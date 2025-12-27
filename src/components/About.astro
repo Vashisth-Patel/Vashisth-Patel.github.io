@@ -1,0 +1,74 @@
+---
+// About section with grid layout and image with green tint overlay
+---
+
+<section id="about" class="max-w-[1000px] mx-auto px-6 sm:px-12 py-24">
+  <!-- Section Heading -->
+  <div class="flex items-center gap-4 mb-12">
+    <h2 class="text-3xl font-bold text-lightest-slate font-mono whitespace-nowrap">
+      <span class="text-green">01.</span> About Me
+    </h2>
+    <div class="h-[1px] bg-lightest-navy w-full max-w-xs"></div>
+  </div>
+
+  <!-- Grid Layout: Text Left, Image Right -->
+  <div class="grid md:grid-cols-[2fr_1fr] gap-12 items-start">
+    <!-- Text Content -->
+    <div class="space-y-4">
+      <p class="text-slate leading-relaxed">
+        Hello! I'm Vashisth, and I'm passionate about understanding how businesses can leverage 
+        technology to create meaningful value. My journey started with curiosity about how products 
+        come to life and how they solve real-world problems.
+      </p>
+      
+      <p class="text-slate leading-relaxed">
+        I'm currently focused on learning the full product lifecycle—from gathering requirements 
+        and mapping processes to final implementation. I believe that the best solutions come from 
+        understanding both the business context and the technical possibilities.
+      </p>
+
+      <p class="text-slate leading-relaxed">
+        Here are some technologies and tools I've been learning:
+      </p>
+
+      <!-- Tech Stack List with Custom Arrows -->
+      <ul class="grid grid-cols-2 gap-2 mt-4 text-sm">
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> Python
+        </li>
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> SQL
+        </li>
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> Process Mapping
+        </li>
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> Astro
+        </li>
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> RAG Architecture
+        </li>
+        <li class="flex items-center gap-2 text-slate font-mono">
+          <span class="text-green">▹</span> Tableau
+        </li>
+      </ul>
+    </div>
+
+    <!-- Image with Green Tint Overlay -->
+    <div class="relative group max-w-[300px] mx-auto md:mx-0">
+      <!-- Border that shifts on hover -->
+      <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-green rounded group-hover:bottom-0 group-hover:right-0 transition-all duration-300 z-0"></div>
+      
+      <!-- Image Container -->
+      <div class="relative overflow-hidden rounded z-10">
+        <img 
+          src="/me.jpeg" 
+          alt="Vashisth Patel"
+          class="relative z-10 rounded grayscale hover:grayscale-0 transition-all duration-300"
+        />
+        <!-- Green Tint Overlay that fades on hover -->
+        <div class="absolute inset-0 bg-green/40 mix-blend-multiply group-hover:bg-transparent transition-all duration-300 z-20"></div>
+      </div>
+    </div>
+  </div>
+</section>

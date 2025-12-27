@@ -1,0 +1,39 @@
+---
+// Navbar component with glassmorphism effect
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-navy/90 shadow-lg">
+  <div class="max-w-[1200px] mx-auto px-6 sm:px-12">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="#" class="text-green font-mono text-2xl font-bold hover:text-green/80 transition-colors">
+        VP
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="flex items-center gap-8">
+        <a href="#about" class="font-mono text-sm text-slate hover:text-green transition-colors">
+          <span class="text-green">01.</span> About
+        </a>
+        <a href="#experience" class="font-mono text-sm text-slate hover:text-green transition-colors">
+          <span class="text-green">02.</span> Experience
+        </a>
+        <a href="#contact" class="font-mono text-sm text-slate hover:text-green transition-colors">
+          <span class="text-green">03.</span> Contact
+        </a>
+        
+        <!-- Resume Button -->
+        <a 
+          href="/resume.pdf" 
+          target="_blank"
+          class="px-4 py-2 border border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-all duration-300"
+        >
+          Resume
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Spacer to prevent content from hiding behind fixed navbar -->
+<div class="h-20"></div>
