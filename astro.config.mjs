@@ -1,8 +1,11 @@
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite'; // [1] Import Tailwind
+import tailwindcss from '@tailwindcss/vite';
 
+// https://astro.build/config
 export default defineConfig({
+  site: 'https://your-username.github.io', // Replace with your GitHub username
+  base: '/your-repo-name',                  // Replace with your repository name (e.g., '/portfolio')
   vite: {
-    plugins: [tailwindcss()], // [2] Add to Vite plugins
+    plugins: [tailwindcss()],
   },
 });

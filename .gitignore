@@ -1,1 +1,19 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build output (GitHub Actions will generate this itself)
+dist/
+
+# Astro internal cache
+.astro/
+
+# Environment variables (Crucial for security!)
+.env
+.env.*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Playwright/Cypress/Testing logs
+test-results/
