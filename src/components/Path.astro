@@ -1,0 +1,133 @@
+---
+// Path section with real education teaser cards
+---
+
+<section id="path" class="max-w-[1000px] mx-auto px-6 sm:px-12 py-24">
+  <!-- Section Heading -->
+  <div class="flex items-center gap-4 mb-12">
+    <h2 class="text-3xl font-bold text-lightest-slate font-mono whitespace-nowrap">
+      <span class="text-green">03.</span> Academic Pedigree
+    </h2>
+    <div class="h-[1px] bg-lightest-navy w-full max-w-xs"></div>
+  </div>
+
+  <!-- Teaser Cards List -->
+  <div class="space-y-6">
+    
+    <!-- Card 1: EBS University -->
+    <div class="group bg-light-navy p-6 rounded-lg border border-lightest-navy hover:border-green hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-modal="education-modal-ebs">
+      <!-- Title -->
+      <h3 class="text-xl font-semibold text-lightest-slate mb-2">
+        M.Sc. in Management
+      </h3>
+      
+      <!-- Subtitle -->
+      <p class="text-slate text-sm mb-1">
+        EBS University for Business and Law
+      </p>
+      <p class="text-green text-xs font-mono mb-4">
+        Aug 2024 — July 2026
+      </p>
+      
+      <!-- Metadata Badges -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          Planned Thesis: SaaS Business Models
+        </span>
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          German: B2.1
+        </span>
+      </div>
+      
+      <!-- Action Button -->
+      <button class="inline-flex items-center gap-2 px-4 py-2 border border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-colors duration-300">
+        View Details & Credentials
+        <span class="group-hover:translate-x-1 transition-transform">↗</span>
+      </button>
+    </div>
+
+    <!-- Card 2: SP Jain -->
+    <div class="group bg-light-navy p-6 rounded-lg border border-lightest-navy hover:border-green hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-modal="education-modal-spjain">
+      <!-- Title -->
+      <h3 class="text-xl font-semibold text-lightest-slate mb-2">
+        Global Management Programme
+      </h3>
+      
+      <!-- Subtitle -->
+      <p class="text-slate text-sm mb-1">
+        S P Jain Institute of Management and Research
+      </p>
+      <p class="text-green text-xs font-mono mb-4">
+        Dec 2023 — June 2024
+      </p>
+      
+      <!-- Metadata Badges -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          Dean's Honor List - Rank #2
+        </span>
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          99.7%ile Quant | 99.4%ile DILR
+        </span>
+      </div>
+      
+      <!-- Action Button -->
+      <button class="inline-flex items-center gap-2 px-4 py-2 border border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-colors duration-300">
+        View Details & Credentials
+        <span class="group-hover:translate-x-1 transition-transform">↗</span>
+      </button>
+    </div>
+
+    <!-- Card 3: IIT Gandhinagar -->
+    <div class="group bg-light-navy p-6 rounded-lg border border-lightest-navy hover:border-green hover:-translate-y-1 transition-all duration-300 cursor-pointer" data-modal="education-modal-iit">
+      <!-- Title -->
+      <h3 class="text-xl font-semibold text-lightest-slate mb-2">
+        B.Tech in Materials Science and Engineering
+      </h3>
+      
+      <!-- Subtitle -->
+      <p class="text-slate text-sm mb-1">
+        Indian Institute of Technology (IIT) Gandhinagar
+      </p>
+      <p class="text-green text-xs font-mono mb-4">
+        Aug 2019 — June 2023
+      </p>
+      
+      <!-- Metadata Badges -->
+      <div class="flex flex-wrap gap-2 mb-4">
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          JEE Advanced: Rank 7060
+        </span>
+        <span class="text-xs font-mono text-green bg-green/10 px-3 py-1 rounded border border-green/30">
+          JEE Mains: 99.17%ile
+        </span>
+      </div>
+      
+      <!-- Action Button -->
+      <button class="inline-flex items-center gap-2 px-4 py-2 border border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-colors duration-300">
+        View Details & Credentials
+        <span class="group-hover:translate-x-1 transition-transform">↗</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- Modal toggle functionality -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('[data-modal]');
+    
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const modalId = card.getAttribute('data-modal');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+  });
+</script>

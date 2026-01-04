@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
+import Path from '../components/Path.astro';
+import EducationModal from '../components/EducationModal.astro';
 import Contact from '../components/Contact.astro';
 ---
 
@@ -11,6 +13,219 @@ import Contact from '../components/Contact.astro';
   <Navbar />
   <Hero />
   <About />
+  <!-- Section 02: Professional Impact (moved before education) -->
   <Experience />
+  <!-- Section 03: Academic Pedigree -->
+  <Path />
   <Contact />
+  
+  <!--  Education Modal 1: EBS University -->
+  <EducationModal 
+    modalId="education-modal-ebs"
+    degree="M.Sc. in Management"
+    university="EBS University for Business and Law"
+    location="Wiesbaden, Germany"
+    years="Aug 2024 — July 2026"
+    imageUrl="https://placehold.co/600x200/0a192f/64ffda?text=EBS+University"
+    websiteUrl="https://www.ebs.edu"
+    duration="2 Years"
+    credits="120 ECTS"
+    faculty="EBS Business School"
+    mission="This program is equipping me with advanced knowledge in digital business transformation and strategic management. With a planned thesis on SaaS Business Models, I'm focusing on understanding how software-as-a-service companies create and capture value in competitive markets. The curriculum bridges traditional business strategy with modern digital technologies, preparing me to lead in technology-driven business environments."
+    projects={[
+      {
+        title: "Circular Economy Strategy - MedTech Client",
+        timeline: "Jan - Apr 2025",
+        description: "Built Excel revenue forecast and breakeven model for a recycling pilot; projected 85% recovery rate and quantified CO₂ savings. Delivered a go-to-market roadmap and cost-sharing framework presented to client leadership.",
+        tools: ["Excel", "Financial Modeling", "Sustainability Analysis"],
+        outcomes: [
+          "85% projected recovery rate for recycling pilot",
+          "Quantified CO₂ savings and environmental impact",
+          "Created go-to-market roadmap with cost-sharing framework",
+          "Presented strategic recommendations to client leadership"
+        ]
+      },
+      {
+        title: "Battery Tech Investment Evaluation",
+        timeline: "Aug - Dec 2024",
+        description: "Built a market evaluation framework for an investor seeking high-potential solid-state battery startups; analyzed 626 EU firms (Tracxn + Excel), shortlisted 6, and conducted due diligence on the finalist. Produced an ecosystem map and structured Excel/PowerPoint reports with investment recommendations.",
+        tools: ["Tracxn", "Excel", "PowerPoint", "Market Analysis"],
+        outcomes: [
+          "Analyzed 626 European firms in battery technology sector",
+          "Shortlisted 6 high-potential solid-state battery startups",
+          "Conducted comprehensive due diligence on finalist company",
+          "Created ecosystem map and investment recommendations"
+        ]
+      }
+    ]}
+    coreModules={[
+      "Digital Technologies for Business",
+      "Digital Product Management",
+      "Business Modeling & Data Visualization",
+      "Strategic Management",
+      "Innovation & Entrepreneurship"
+    ]}
+    technicalSkills={[
+      "SaaS Business Model Analysis",
+      "Excel Financial Modeling",
+      "Market Evaluation Frameworks",
+      "Business German (B2.1 Level)",
+      "Cross-Cultural Management"
+    ]}
+    documents={[
+      { title: "Admission Letter", type: "Official Document" },
+      { title: "Current Transcript", type: "Academic Record" },
+      { title: "German Language Certificate (B2.1)", type: "Language Certification" }
+    ]}
+  />
+  
+  <!-- Education Modal 2: SP Jain Institute -->
+  <EducationModal 
+    modalId="education-modal-spjain"
+    degree="Global Management Programme"
+    university="S P Jain Institute of Management and Research"
+    location="Mumbai, India"
+    years="Dec 2023 — June 2024"
+    imageUrl="https://placehold.co/600x200/0a192f/64ffda?text=SP+Jain+Institute"
+    websiteUrl="https://www.spjain.org"
+    duration="7 Months"
+    faculty="School of Management"
+    mission="This intensive program transformed my understanding of business analytics and strategic decision-making. Ranked #2 on the Dean's Honor List with exceptional performance in quantitative analysis (99.7th percentile) and data interpretation (99.4th percentile), I developed a rigorous analytical foundation that bridges technical skills with business acumen."
+    projects={[
+      {
+        title: "Digital Product Management - IRCTC App Redesign",
+        description: "Identified consumer pain points and developed solutions to improve the IRCTC app (an Indian rail corporation's app). Applied value proposition canvas and customer journey framework and utilized Figma for prototyping.",
+        tools: ["Figma", "Value Proposition Canvas", "Customer Journey Mapping", "User Research"],
+        outcomes: [
+          "Identified key consumer pain points in IRCTC app",
+          "Applied Value Proposition Canvas methodology",
+          "Created customer journey maps",
+          "Developed interactive Figma prototypes"
+        ]
+      },
+      {
+        title: "Design Thinking - Dadar Vegetable Market",
+        description: "Conducted primary interviews and brainstorming sessions to determine the needs of vegetable vendors and customers at the Dadar Vegetable Market in Mumbai, India. Proposed solutions to enhance market visibility and consumer experience.",
+        tools: ["Primary Research", "Design Thinking", "Stakeholder Interviews"],
+        outcomes: [
+          "Conducted interviews with vendors and customers",
+          "Identified market visibility challenges",
+          "Proposed solutions to enhance consumer experience",
+          "Created actionable recommendations for market improvement"
+        ]
+      },
+      {
+        title: "Operations and Supply Chain - Laundry Business Optimization",
+        description: "Created a process flow diagram for a local laundry shop, analyzed task-specific data, and calculated throughput time, rate, and average queue length. Identified bottlenecks and recommended process improvements for efficiency.",
+        tools: ["Process Mapping", "Throughput Analysis", "Operations Management"],
+        outcomes: [
+          "Created detailed process flow diagrams",
+          "Calculated throughput time, rate, and queue length",
+          "Identified operational bottlenecks",
+          "Recommended efficiency improvements"
+        ]
+      }
+    ]}
+    analyticalCredentials={{
+      rigor: "CAT 98.3 percentile (99.7%ile Quant | 99.4%ile DILR). Top-tier mathematical foundation from IIT with 4 semesters of Advanced Calculus & Linear Algebra.",
+      modules: "Exceeded in Digital Technologies for Business, Digital Product Management, and Business Modeling (All A/A+ at SP Jain).",
+      communication: "IELTS Academic: 7.5 (C1 Business Fluent). Verified ability to bridge technical and business requirements in international environments."
+    }}
+    coreModules={[
+      "Business Analytics & Data Visualization",
+      "Strategic Marketing Management",
+      "Financial Analysis & Valuation",
+      "Operations & Supply Chain Strategy",
+      "Organizational Behavior",
+      "Project Management",
+      "Financial and Managerial Accounting"
+    ]}
+    technicalSkills={[
+      "Figma Prototyping",
+      "Python for Data Analysis",
+      "Statistical Modeling",
+      "Market Research Methodologies",
+      "Process Optimization"
+    ]}
+    documents={[
+      { title: "Dean's Honor List Certificate (#2 Rank)", type: "Academic Achievement" },
+      { title: "CAT Scorecard (98.3%ile)", type: "Standardized Test" },
+      { title: "IELTS Certificate (7.5)", type: "Language Proficiency" },
+      { title: "Program Completion Certificate", type: "Diploma" },
+      { title: "Final Transcript (A/A+ Grades)", type: "Academic Record" }
+    ]}
+  />
+  
+  <!-- Education Modal 3: IIT Gandhinagar -->
+  <EducationModal 
+    modalId="education-modal-iit"
+    degree="B.Tech in Materials Science and Engineering"
+    university="Indian Institute of Technology (IIT) Gandhinagar"
+    location="Gandhinagar, India"
+    years="Aug 2019 — June 2023"
+    imageUrl="https://placehold.co/600x200/0a192f/64ffda?text=IIT+Gandhinagar"
+    websiteUrl="https://www.iitgn.ac.in"
+    duration="4 Years"
+    credits="160 Credits"
+    faculty="School of Engineering"
+    mission="My undergraduate journey at IIT Gandhinagar built a strong analytical and technical foundation. Through rigorous coursework in mathematics, programming, and materials science, I developed problem-solving skills and quantitative thinking that form the backbone of my approach to business and technology challenges. The JEE Advanced selection (Rank 7060) reflects the competitive academic rigor of this program."
+    projects={[
+      {
+        title: "Digital Innovation and Transformation of Enterprise - TATA Motors",
+        description: "Conducted an in-depth study on Tata Motors' strategic shift towards digitalization in customer service and vehicle manufacturing. Analyzed how its innovative approach helped reverse a declining market share trend.",
+        tools: ["Strategic Analysis", "Market Research", "Digital Transformation Frameworks"],
+        outcomes: [
+          "Analyzed TATA Motors' digitalization strategy",
+          "Identified key factors in reversing market share decline",
+          "Documented transformation in customer service approach",
+          "Evaluated impact on vehicle manufacturing processes"
+        ]
+      },
+      {
+        title: "Numerical Analysis of Euler Bernoulli Beams with FDM",
+        timeline: "Jan - Apr 2021 | Prof. Satyajit Pramanik",
+        description: "In a group of four, developed numerical and analytical solutions for deflection of the Euler Bernoulli beam (fixed at both ends) on the application of constant external load. Using MATLAB, solved fourth-order differential equation with the Finite Difference Method (FDM) and plotted the resulting total deflection vs distance curve.",
+        tools: ["MATLAB", "Finite Difference Method", "Numerical Analysis"],
+        outcomes: [
+          "Developed numerical solutions using FDM",
+          "Created analytical solutions for beam deflection",
+          "Solved fourth-order differential equations in MATLAB",
+          "Plotted deflection vs distance curves"
+        ]
+      },
+      {
+        title: "Social Media Marketing Strategy Analysis",
+        description: "Evaluated the effectiveness of marketing strategies for assigned biscuit companies by analyzing normalized sales data using Gretl software and recommended an optimal strategy based on data-driven insights and visual representations.",
+        tools: ["Gretl", "Statistical Analysis", "Data Visualization"],
+        outcomes: [
+          "Analyzed normalized sales data for multiple companies",
+          "Evaluated marketing strategy effectiveness",
+          "Created data-driven visual representations",
+          "Recommended optimal marketing strategies"
+        ]
+      }
+    ]}
+    coreModules={[
+      "Advanced Calculus (4 Semesters)",
+      "Linear Algebra & Differential Equations",
+      "Probability & Statistics",
+      "Programming & Data Structures (Python, C++)",
+      "Materials Characterization & Analysis",
+      "Thermodynamics & Kinetics"
+    ]}
+    technicalSkills={[
+      "MATLAB Programming",
+      "Python Programming",
+      "Statistical Analysis (Gretl)",
+      "Numerical Methods",
+      "Technical Report Writing",
+      "Research Methodology"
+    ]}
+    documents={[
+      { title: "B.Tech Degree Certificate", type: "Diploma" },
+      { title: "Final Transcript", type: "Academic Record" },
+      { title: "JEE Advanced Scorecard (Rank 7060)", type: "Entrance Exam" },
+      { title: "JEE Mains Scorecard (99.17%ile)", type: "Standardized Test" }
+    ]}
+  />
 </Layout>
