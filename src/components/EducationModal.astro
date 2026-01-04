@@ -19,6 +19,19 @@ interface Props {
     tools?: string[];
     outcomes?: string[];
   }[];
+  studentEmployment?: {
+    title: string;
+    company: string;
+    timeline: string;
+    description: string;
+  }[];
+  globalCredentials?: {
+    languages: {
+      language: string;
+      level: string;
+      description: string;
+    }[];
+  };
   analyticalCredentials?: {
     rigor: string;
     modules: string;
@@ -42,6 +55,8 @@ const {
   faculty,
   mission,
   projects,
+  studentEmployment,
+  globalCredentials,
   analyticalCredentials,
   coreModules,
   technicalSkills,
@@ -184,6 +199,58 @@ const {
                 <span class="text-lightest-slate font-semibold">Global Communication: </span>
                 {analyticalCredentials.communication}
               </p>
+            </div>
+          </div>
+        )}
+
+        <!-- Student Employment & Integration (Optional) -->
+        {studentEmployment && studentEmployment.length > 0 && (
+          <div class="mb-8">
+            <h4 class="text-xl font-bold text-lightest-slate mb-4 flex items-center gap-2">
+              <span class="text-green">▹</span> Student Employment & Integration
+            </h4>
+            
+            <div class="space-y-4">
+              {studentEmployment.map(job => (
+                <div class="p-4 bg-navy/30 rounded-lg border border-lightest-navy">
+                  <div class="flex justify-between items-start mb-2">
+                    <h5 class="text-lg font-semibold text-lightest-slate">
+                      {job.title}
+                    </h5>
+                  </div>
+                  <p class="text-green text-sm font-mono mb-2">
+                    {job.company} | {job.timeline}
+                  </p>
+                  <p class="text-slate text-sm leading-relaxed">
+                    {job.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Global Credentials (Optional) -->
+        {globalCredentials && globalCredentials.languages && (
+          <div class="mb-8">
+            <h4 class="text-xl font-bold text-lightest-slate mb-4 flex items-center gap-2">
+              <span class="text-green">▹</span> Global Credentials
+            </h4>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+              {globalCredentials.languages.map(lang => (
+                <div class="p-4 bg-navy/50 rounded-lg border border-lightest-navy">
+                  <h5 class="text-green font-mono text-sm mb-1 uppercase tracking-wide">
+                    {lang.language}
+                  </h5>
+                  <p class="text-lightest-slate font-semibold mb-2">
+                    {lang.level}
+                  </p>
+                  <p class="text-slate text-sm">
+                    {lang.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         )}
