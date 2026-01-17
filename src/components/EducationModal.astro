@@ -93,8 +93,13 @@ const {
         <h3 class="text-3xl font-bold text-lightest-slate mb-2">
           {degree}
         </h3>
-        <p class="text-slate text-lg mb-6">
+        <p class="text-slate text-lg mb-2">
           {university} | {location} | {years}
+        </p>
+        <p class="mb-6">
+          <a href={websiteUrl} target="_blank" rel="noopener noreferrer" class="text-green hover:underline text-sm inline-flex items-center gap-1">
+            Official Website ↗
+          </a>
         </p>
 
         <!-- Quick Stats Bar -->
@@ -303,7 +308,9 @@ const {
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {documents.map(doc => (
               <a 
-                href="#" 
+                href={doc.href || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
                 class="group bg-navy/50 p-4 rounded-lg border border-lightest-navy hover:border-green transition-all duration-300"
               >
                 <div class="flex items-center justify-center h-24 mb-3 bg-lightest-navy/30 rounded group-hover:scale-105 transition-transform duration-300">
@@ -316,12 +323,19 @@ const {
               </a>
             ))}
           </div>
+          
+          <!-- GDPR Privacy Note -->
+          <div class="mt-6 p-4 bg-navy/30 rounded-lg border border-slate/20">
+            <p class="text-slate text-xs leading-relaxed">
+              <span class="text-green font-semibold">Privacy Note:</span> All documents are provided as flattened, redacted copies to ensure data privacy (GDPR/DSGVO compliance). Original unredacted versions are available for verification during the interview process.
+            </p>
+          </div>
         </div>
 
         <!-- Download CV Button -->
         <div class="text-center">
           <a 
-            href="/Vashisth_Patel_CV.pdf" 
+            href="/docs/Vashisth_Patel_CV.pdf" 
             target="_blank"
             class="inline-flex items-center gap-2 px-8 py-4 border-2 border-green text-green font-mono text-base rounded hover:bg-green/10 transition-all duration-300 hover:scale-105"
           >

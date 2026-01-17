@@ -7,6 +7,10 @@ import Experience from '../components/Experience.astro';
 import Path from '../components/Path.astro';
 import EducationModal from '../components/EducationModal.astro';
 import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import ProfessionalCertifications from '../components/ProfessionalCertifications.astro';
+import CertificationModal from '../components/CertificationModal.astro';
+import CertificationModal from '../components/CertificationModal.astro';
 ---
 
 <Layout title="Vashisth Patel | Business & Tech">
@@ -17,6 +21,7 @@ import Contact from '../components/Contact.astro';
   <Experience />
   <!-- Section 03: Academic Pedigree -->
   <Path />
+  <ProfessionalCertifications />
   <Contact />
   
   <!--  Education Modal 1: EBS University -->
@@ -101,11 +106,7 @@ import Contact from '../components/Contact.astro';
       "Zoho CRM",
       "SaaS Business Model Analysis"
     ]}
-    documents={[
-      { title: "Admission Letter", type: "Official Document" },
-      { title: "Current Transcript", type: "Academic Record" },
-      { title: "German Language Certificate (B2.1)", type: "Language Certification" }
-    ]}
+    documents={[]}
   />
   
   <!-- Education Modal 2: SP Jain Institute -->
@@ -177,11 +178,11 @@ import Contact from '../components/Contact.astro';
       "Process Optimization"
     ]}
     documents={[
-      { title: "Dean's Honor List Certificate (#2 Rank)", type: "Academic Achievement" },
-      { title: "CAT Scorecard (98.3%ile)", type: "Standardized Test" },
-      { title: "IELTS Certificate (7.5)", type: "Language Proficiency" },
-      { title: "Program Completion Certificate", type: "Diploma" },
-      { title: "Final Transcript (A/A+ Grades)", type: "Academic Record" }
+      { title: "Dean's Honor List Certificate (#2 Rank)", type: "Academic Achievement", href: "/docs/SPJIMR_Dean's_Honour_List.pdf" },
+      { title: "CAT 2023 Scorecard (98.3%ile)", type: "Standardized Test", href: "/docs/CAT_2023_Scorecard.pdf" },
+      { title: "CAT 2022 Scorecard", type: "Standardized Test", href: "/docs/CAT_2022_Scorecard.pdf" },
+      { title: "IELTS Certificate (7.5)", type: "Language Proficiency", href: "/docs/IELTS_Scorecard.pdf" },
+      { title: "Program Completion Certificate", type: "Diploma", href: "/docs/SPJIMR_Degree.pdf" }
     ]}
   />
   
@@ -251,10 +252,41 @@ import Contact from '../components/Contact.astro';
       "Technical Report Writing"
     ]}
     documents={[
-      { title: "B.Tech Degree Certificate", type: "Diploma" },
-      { title: "Final Transcript", type: "Academic Record" },
-      { title: "JEE Advanced Scorecard (Rank 7060)", type: "Entrance Exam" },
-      { title: "JEE Mains Scorecard (99.17%ile)", type: "Standardized Test" }
+      { title: "B.Tech Degree Certificate", type: "Diploma", href: "/docs/IITGn_Degree.pdf" },
+      { title: "JEE Advanced Scorecard (Rank 7060)", type: "Entrance Exam", href: "/docs/JEE_Advanced_Scorecard.pdf" },
+      { title: "JEE Mains Scorecard (99.17%ile)", type: "Standardized Test", href: "/docs/JEE_Mains_Scorecard.pdf" }
     ]}
   />
+  
+  <!-- Harvard Certifications Modal -->
+  <CertificationModal 
+    modalId="harvard-certifications-modal"
+    title="Harvard University Certifications"
+    organization="Harvard University"
+    certificates={[
+      { title: "Finance", file: "/docs/Certificates/Harvard/Finance.pdf" },
+      { title: "Financial Accounting", file: "/docs/Certificates/Harvard/Financial Accounting.pdf" },
+      { title: "Management Communication", file: "/docs/Certificates/Harvard/Management Communication.pdf" },
+      { title: "Mathematics for Management", file: "/docs/Certificates/Harvard/Mathematics for management.pdf" },
+      { title: "Quantitative Methods", file: "/docs/Certificates/Harvard/Quantitative methods.pdf" },
+      { title: "Spreadsheet Modeling", file: "/docs/Certificates/Harvard/Spreadsheet modeling.pdf" }
+    ]}
+  />
+  
+  <!-- Harvard Certifications Modal -->
+  <CertificationModal 
+    modalId="harvard-certifications-modal"
+    title="Harvard University Certifications"
+    organization="Harvard University"
+    certificates={[
+      { title: "Finance", file: "/docs/Certificates/Harvard/Finance.pdf" },
+      { title: "Financial Accounting", file: "/docs/Certificates/Harvard/Financial Accounting.pdf" },
+      { title: "Management Communication", file: "/docs/Certificates/Harvard/Management Communication.pdf" },
+      { title: "Mathematics for Management", file: "/docs/Certificates/Harvard/Mathematics for management.pdf" },
+      { title: "Quantitative Methods", file: "/docs/Certificates/Harvard/Quantitative methods.pdf" },
+      { title: "Spreadsheet Modeling", file: "/docs/Certificates/Harvard/Spreadsheet modeling.pdf" }
+    ]}
+  />
+  
+  <Footer />
 </Layout>
