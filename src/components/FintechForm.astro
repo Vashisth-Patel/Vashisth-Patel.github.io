@@ -1,0 +1,258 @@
+---
+// FintechForm.astro — Interactive partner qualification form
+---
+
+<section class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+  <div class="text-center mb-10">
+    <p class="font-mono text-green text-xs uppercase tracking-[0.2em] mb-4">Try it yourself</p>
+    <p class="text-slate-400 text-base leading-relaxed">See how your company would be evaluated by the engine.</p>
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md p-8 sm:p-12">
+    <form id="fintech-form" class="space-y-8 relative">
+
+      <!-- HONEYPOT FIELD (BOT PROTECTION — DO NOT USE display:none) -->
+      <input
+        type="text"
+        name="company_email"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+      />
+
+      <!-- Company Name -->
+      <div>
+        <label for="company_name" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          Company Name
+        </label>
+        <input
+          type="text"
+          id="company_name"
+          name="company_name"
+          required
+          placeholder="e.g., PayFlow GmbH"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+        />
+      </div>
+
+      <!-- Website -->
+      <div>
+        <label for="website" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          Company Website
+        </label>
+        <input
+          type="url"
+          id="website"
+          name="website"
+          required
+          placeholder="https://example.com"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+        />
+      </div>
+
+      <!-- Product Description -->
+      <div>
+        <label for="description" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          What does your company do?
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          required
+          minlength="50"
+          rows="4"
+          placeholder="Describe your product/service in 3-5 sentences"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+        ></textarea>
+        <p class="text-xs text-slate-600 mt-1.5 font-mono">Minimum 50 characters</p>
+      </div>
+
+      <!-- Pain Point -->
+      <div>
+        <label for="problem" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          What problem are you solving and for whom?
+        </label>
+        <textarea
+          id="problem"
+          name="problem"
+          required
+          minlength="50"
+          rows="3"
+          placeholder="Describe the pain point and your target customer"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+        ></textarea>
+        <p class="text-xs text-slate-600 mt-1.5 font-mono">Minimum 50 characters</p>
+      </div>
+
+      <!-- ARR & Team Size -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label for="revenue" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+            Annual Revenue / ARR
+          </label>
+          <select
+            id="revenue"
+            name="revenue"
+            required
+            class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 cursor-pointer"
+          >
+            <option value="" disabled selected class="text-slate-600">Select range</option>
+            <option value="Pre-revenue">Pre-revenue</option>
+            <option value="<100k">&lt;100k</option>
+            <option value="100k-500k">100k–500k</option>
+            <option value="500k-1M">500k–1M</option>
+            <option value="1M+">1M+</option>
+          </select>
+        </div>
+        <div>
+          <label for="team_size" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+            Team Size
+          </label>
+          <select
+            id="team_size"
+            name="team_size"
+            required
+            class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 cursor-pointer"
+          >
+            <option value="" disabled selected class="text-slate-600">Select size</option>
+            <option value="1-5">1–5</option>
+            <option value="6-20">6–20</option>
+            <option value="21-50">21–50</option>
+            <option value="50+">50+</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Partnership Goal -->
+      <div>
+        <label for="partnership_goal" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          What are you looking for from this partnership?
+        </label>
+        <textarea
+          id="partnership_goal"
+          name="partnership_goal"
+          required
+          rows="3"
+          placeholder="e.g., API integration, referral arrangement, white-label solution"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+        ></textarea>
+      </div>
+
+      <!-- Regulatory Status -->
+      <div>
+        <label for="regulatory_context" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+          Regulatory Status <span class="text-slate-600">(optional)</span>
+        </label>
+        <input
+          type="text"
+          id="regulatory_context"
+          name="regulatory_context"
+          placeholder="e.g., BaFin licensed, pursuing PSD2 license, or 'Not regulated'"
+          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+        />
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-2">
+        <button
+          type="submit"
+          id="submit-btn"
+          class="w-full bg-green text-navy font-bold font-mono text-base py-4 rounded-lg hover:bg-green/90 hover:shadow-lg hover:shadow-green/20 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <span id="btn-text">Analyze My Company</span>
+          <svg id="btn-spinner" class="hidden animate-spin h-5 w-5 text-navy" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+        <p id="dynamic-message" class="text-center text-green font-mono text-sm mt-5 hidden h-5 transition-opacity duration-300"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('fintech-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const dynamicMessage = document.getElementById('dynamic-message');
+
+  const messages = [
+    "Parsing Product/Market Fit...",
+    "Consulting EU Benchmark Dataset...",
+    "Evaluating BaFin Regulatory Alignment..."
+  ];
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    // Honeypot check
+    if (formData.get('company_email')) return;
+
+    const data = Object.fromEntries(formData.entries());
+
+    // Activate loading state
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = 'Analyzing...';
+    if (btnSpinner) btnSpinner.classList.remove('hidden');
+
+    // Rotating status messages
+    let msgIndex = 0;
+    if (dynamicMessage) {
+      dynamicMessage.classList.remove('hidden');
+      dynamicMessage.textContent = messages[0];
+    }
+    const msgInterval = setInterval(() => {
+      msgIndex = (msgIndex + 1) % messages.length;
+      if (dynamicMessage) dynamicMessage.textContent = messages[msgIndex];
+    }, 3000);
+
+    // Mock response (TestPay GmbH spec data)
+    const mockResponse = {
+      company_name: String(data.company_name || 'TestPay GmbH'),
+      one_line_summary: "Provides instant payment processing infrastructure for European e-commerce SMEs with same-day settlement.",
+      fintech_segment: "Payments",
+      final_score: 8,
+      final_action: "Prioritize",
+      regulatory_risk_level: "Medium",
+      strengths: [
+        "Clear value proposition addressing specific SME cash flow pain points",
+        "Revenue bucket indicates demonstrated early traction",
+        "Clear partnership goal aligned with technical capabilities"
+      ],
+      risks: [
+        "Currently relying on agent model, full BaFin license still pending",
+        "Team size may bottleneck rapid scaling during major integrations"
+      ],
+      benchmarks: {
+        overall: { score_percentile: 78, risk_percentile: 65, total_companies: 100 },
+        segment: { score_percentile: 85, risk_percentile: 70, segment_name: "Payments", segment_company_count: 24 }
+      },
+      regulatory_analysis: {
+        risk_level: "Medium",
+        regulations_required: ["PSD2", "AML 5AMLD", "GDPR"],
+        regulations_likely_compliant: ["GDPR"],
+        regulations_missing_or_unclear: ["PSD2", "AML 5AMLD"],
+        gap_severity: "Medium",
+        gap_explanation: "Operating under agent model mitigates immediate risk, but a direct BaFin license is required for independent scaling."
+      }
+    };
+
+    // After 9-second mock delay, fade out form and trigger results
+    setTimeout(() => {
+      clearInterval(msgInterval);
+      if (form) {
+        form.style.transition = 'opacity 0.5s ease';
+        form.style.opacity = '0';
+        setTimeout(() => {
+          form.closest('section')?.classList.add('hidden');
+          document.dispatchEvent(new CustomEvent('qualificationComplete', { detail: mockResponse }));
+        }, 500);
+      }
+    }, 9000);
+  });
+</script>

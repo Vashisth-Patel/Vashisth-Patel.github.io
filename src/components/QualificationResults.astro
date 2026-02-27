@@ -1,0 +1,270 @@
+---
+// QualificationResults.astro
+---
+
+<div id="qualification-results" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 hidden opacity-0 transition-opacity duration-700 ease-in-out overflow-x-hidden">
+
+  <!-- Header badge -->
+  <div class="flex items-center justify-center mb-10">
+    <div class="flex items-center gap-2 bg-green/10 border border-green/20 text-green px-4 py-2 rounded-full font-mono text-xs uppercase tracking-widest">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Qualification Report
+    </div>
+  </div>
+
+  <!-- Main card -->
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md overflow-hidden shadow-2xl">
+
+    <!-- SECTION 1: Company Summary -->
+    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
+      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-4">Company under review</p>
+      <div class="flex flex-wrap items-center gap-3 mb-3">
+        <h2 id="res-company" class="text-3xl font-bold text-white tracking-tight">—</h2>
+        <span id="res-segment" class="text-xs font-mono uppercase tracking-widest bg-slate-800 text-slate-400 px-3 py-1 rounded-full border border-slate-700">—</span>
+      </div>
+      <p id="res-summary" class="text-slate-400 text-lg leading-relaxed border-l-2 border-green/50 pl-4 mt-2">—</p>
+    </div>
+
+    <!-- SECTION 2 & 3: Score + Risk -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-800">
+      <!-- Score -->
+      <div class="px-8 sm:px-12 py-10 border-b sm:border-b-0 sm:border-r border-slate-800">
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6">Final Score</p>
+        <div class="flex items-end gap-3 mb-5">
+          <span id="res-score" class="text-7xl font-bold font-mono leading-none">—</span>
+          <span class="text-3xl text-slate-500 font-mono mb-2">/10</span>
+        </div>
+        <div id="res-action" class="inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wide border">
+          —
+        </div>
+      </div>
+
+      <!-- Regulatory Risk -->
+      <div class="px-8 sm:px-12 py-10">
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6">Regulatory Risk Level</p>
+        <span id="res-risk-badge" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-lg border">—</span>
+        <p class="text-slate-500 text-sm mt-5 leading-relaxed">Based on EU regulatory context and stated licensing status.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Insights -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-800">
+      <!-- Strengths -->
+      <div class="px-8 sm:px-12 py-10 border-b sm:border-b-0 sm:border-r border-slate-800">
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6 flex items-center gap-2">
+          <span class="text-green">✓</span> Top Strengths
+        </p>
+        <ul id="res-strengths" class="space-y-3 text-slate-400 text-sm leading-relaxed"></ul>
+      </div>
+
+      <!-- Risks -->
+      <div class="px-8 sm:px-12 py-10">
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6 flex items-center gap-2">
+          <span class="text-yellow-400">⚠</span> Top Risks
+        </p>
+        <ul id="res-risks" class="space-y-3 text-slate-400 text-sm leading-relaxed"></ul>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Benchmark Comparison -->
+    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
+      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-8 flex items-center gap-2">
+        <span>📊</span> Benchmark Comparison
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Overall -->
+        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-800">
+          <p class="text-slate-300 font-semibold text-sm mb-1">Overall</p>
+          <p class="text-slate-500 text-xs mb-5">vs. <span id="res-bench-total">—</span> EU FinTech startups</p>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li>Score higher than <strong class="text-slate-200" id="res-bench-overall-score">—</strong>% of all companies</li>
+            <li>Risk lower than <strong class="text-slate-200" id="res-bench-overall-risk">—</strong>% of all companies</li>
+          </ul>
+        </div>
+        <!-- Segment -->
+        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-800" id="res-bench-segment-container">
+          <p class="text-slate-300 font-semibold text-sm mb-1">Within <span id="res-bench-seg-name">—</span></p>
+          <p class="text-slate-500 text-xs mb-5">vs. <span id="res-bench-seg-count">—</span> segment companies</p>
+          <ul class="space-y-3 text-sm text-slate-400" id="res-bench-segment-list">
+            <li>Score higher than <strong class="text-slate-200" id="res-bench-seg-score">—</strong>% of <span class="res-bench-seg-name-inline">—</span> companies</li>
+            <li>Risk lower than <strong class="text-slate-200" id="res-bench-seg-risk">—</strong>% of <span class="res-bench-seg-name-inline">—</span> companies</li>
+          </ul>
+          <p id="res-bench-segment-missing" class="hidden text-yellow-400/70 text-xs italic mt-3">
+            Segment comparison unavailable (limited benchmark data).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: Regulatory Analysis -->
+    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
+      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-8 flex items-center gap-2">
+        <span>📋</span> Regulatory Analysis
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div>
+          <p class="text-slate-400 text-xs uppercase tracking-widest mb-4 font-mono">Required regulations</p>
+          <ul id="res-reg-list" class="space-y-3 text-sm"></ul>
+        </div>
+        <div>
+          <p class="text-slate-400 text-xs uppercase tracking-widest mb-4 font-mono">Gap assessment</p>
+          <p class="text-slate-300 font-semibold mb-2">Severity: <span id="res-reg-gap-sev" class="font-bold">—</span></p>
+          <p id="res-reg-gap-desc" class="text-slate-400 text-sm leading-relaxed">—</p>
+        </div>
+      </div>
+      <div class="flex gap-5 mt-8 text-xs text-slate-500 font-mono">
+        <span><span class="text-green font-bold">✓</span> Compliant</span>
+        <span><span class="text-red-400 font-bold">✗</span> Missing</span>
+        <span><span class="text-yellow-400 font-bold">⚠</span> Unclear</span>
+      </div>
+    </div>
+
+    <!-- SECTION 7: CTA -->
+    <div class="px-8 sm:px-12 py-10 text-center">
+      <h4 class="text-2xl font-bold text-white tracking-tight mb-3">Want this for your team?</h4>
+      <p class="text-slate-400 mb-8 leading-relaxed max-w-md mx-auto">This demo represents the qualification engine we can build for your specific deal flow and market context.</p>
+      <a
+        href="mailto:patelvashisth842124@gmail.com?subject=FinTech%20Qualification%20Engine%20Inquiry"
+        class="inline-flex items-center gap-2 px-8 py-4 border-2 border-green text-green font-mono font-bold rounded-lg hover:bg-green/10 transition-all duration-300 text-base"
+      >
+        Let's Talk
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('qualificationComplete', (e) => {
+    const data = (e as CustomEvent).detail;
+    if (!data) return;
+
+    const setText = (id: string, text: string | number) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(text);
+    };
+
+    // 1. Summary
+    setText('res-company', data.company_name);
+    setText('res-summary', data.one_line_summary);
+    setText('res-segment', data.fintech_segment);
+
+    // 2. Score
+    const scoreEl = document.getElementById('res-score');
+    if (scoreEl) {
+      scoreEl.textContent = String(data.final_score);
+      scoreEl.className = 'text-7xl font-bold font-mono leading-none ';
+      if (data.final_score >= 7) scoreEl.className += 'text-green';
+      else if (data.final_score >= 5) scoreEl.className += 'text-yellow-400';
+      else scoreEl.className += 'text-red-500';
+    }
+
+    const actionEl = document.getElementById('res-action');
+    if (actionEl) {
+      actionEl.textContent = data.final_action;
+      actionEl.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wide border ';
+      if (data.final_score >= 7) actionEl.className += 'bg-green/10 text-green border-green/30';
+      else if (data.final_score >= 5) actionEl.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30';
+      else actionEl.className += 'bg-red-500/10 text-red-500 border-red-500/30';
+    }
+
+    // 3. Risk
+    const riskBadge = document.getElementById('res-risk-badge');
+    if (riskBadge) {
+      riskBadge.textContent = data.regulatory_risk_level;
+      riskBadge.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-lg border ';
+      const risk = data.regulatory_risk_level?.toLowerCase();
+      if (risk === 'low') riskBadge.className += 'bg-green/10 text-green border-green/30';
+      else if (risk === 'medium') riskBadge.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30';
+      else if (risk === 'high') riskBadge.className += 'bg-red-500/10 text-red-400 border-red-500/30';
+      else riskBadge.className += 'bg-red-700/10 text-red-600 border-red-700/30';
+    }
+
+    // 4. Insights
+    const populateList = (id: string, items: string[], bullet: string, color: string) => {
+      const ul = document.getElementById(id);
+      if (ul) {
+        ul.innerHTML = '';
+        items.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start gap-2';
+          li.innerHTML = `<span class="${color} text-base leading-none mt-0.5">${bullet}</span><span>${item}</span>`;
+          ul.appendChild(li);
+        });
+      }
+    };
+    populateList('res-strengths', data.strengths, '✓', 'text-green');
+    populateList('res-risks', data.risks, '⚠', 'text-yellow-400');
+
+    // 5. Benchmarks
+    if (data.benchmarks) {
+      const o = data.benchmarks.overall;
+      if (o) {
+        setText('res-bench-total', o.total_companies);
+        setText('res-bench-overall-score', o.score_percentile);
+        setText('res-bench-overall-risk', o.risk_percentile);
+      }
+      const s = data.benchmarks.segment;
+      if (s?.score_percentile) {
+        setText('res-bench-seg-name', s.segment_name);
+        setText('res-bench-seg-count', s.segment_company_count);
+        setText('res-bench-seg-score', s.score_percentile);
+        setText('res-bench-seg-risk', s.risk_percentile);
+        document.querySelectorAll('.res-bench-seg-name-inline').forEach(el => {
+          el.textContent = s.segment_name;
+        });
+      } else {
+        const segList = document.getElementById('res-bench-segment-list');
+        const segMissing = document.getElementById('res-bench-segment-missing');
+        if (segList) segList.classList.add('hidden');
+        if (segMissing) segMissing.classList.remove('hidden');
+      }
+    }
+
+    // 6. Regulatory Analysis
+    if (data.regulatory_analysis) {
+      const a = data.regulatory_analysis;
+      const regList = document.getElementById('res-reg-list');
+      if (regList && a.regulations_required) {
+        regList.innerHTML = '';
+        a.regulations_required.forEach((reg: string) => {
+          let icon = '<span class="text-yellow-400 font-bold w-5 text-center">⚠</span>';
+          let status = 'Unclear';
+          let statusColor = 'text-slate-400';
+          if (a.regulations_likely_compliant?.includes(reg)) {
+            icon = '<span class="text-green font-bold w-5 text-center">✓</span>';
+            status = 'Compliant';
+            statusColor = 'text-green';
+          } else if (a.regulations_missing_or_unclear?.includes(reg)) {
+            icon = '<span class="text-red-400 font-bold w-5 text-center">✗</span>';
+            status = 'Missing';
+            statusColor = 'text-red-400';
+          }
+          regList.innerHTML += `<li class="flex items-center gap-3 text-sm"><div class="shrink-0 w-5 text-center">${icon}</div><span class="text-slate-300 font-medium">${reg}</span><span class="${statusColor} text-xs ml-auto">${status}</span></li>`;
+        });
+      }
+      setText('res-reg-gap-sev', a.gap_severity);
+      const sevEl = document.getElementById('res-reg-gap-sev');
+      if (sevEl) {
+        const sev = a.gap_severity?.toLowerCase();
+        if (sev === 'none' || sev === 'low') sevEl.className = 'font-bold text-green';
+        else if (sev === 'medium') sevEl.className = 'font-bold text-yellow-400';
+        else sevEl.className = 'font-bold text-red-500';
+      }
+      setText('res-reg-gap-desc', a.gap_explanation);
+    }
+
+    // Reveal with fade-in + scroll
+    const container = document.getElementById('qualification-results');
+    if (container) {
+      container.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          container.classList.remove('opacity-0');
+          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+  });
+</script>
