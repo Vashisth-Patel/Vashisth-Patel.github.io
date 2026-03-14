@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
+import FeatureSpotlight from '../components/FeatureSpotlight.astro';
 import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
 import Path from '../components/Path.astro';
@@ -16,6 +17,7 @@ import CertificationModal from '../components/CertificationModal.astro';
 <Layout title="Vashisth Patel | Business & Tech">
   <Navbar />
   <Hero />
+  <FeatureSpotlight />
   <About />
   <!-- Section 02: Professional Impact (moved before education) -->
   <Experience />
@@ -179,8 +181,8 @@ import CertificationModal from '../components/CertificationModal.astro';
     ]}
     documents={[
       { title: "Dean's Honor List Certificate (#2 Rank)", type: "Academic Achievement", href: "/docs/SPJIMR_Dean's_Honour_List.pdf" },
-      { title: "CAT 2023 Scorecard (98.3%ile)", type: "Standardized Test", href: "/docs/CAT_2023_Scorecard.pdf" },
-      { title: "CAT 2022 Scorecard", type: "Standardized Test", href: "/docs/CAT_2022_Scorecard.pdf" },
+      { title: "CAT 2023 Scorecard", type: "Standardized Test", href: "/docs/CAT_2023_Scorecard.pdf" },
+      { title: "CAT 2022 Scorecard (98.3%ile)", type: "Standardized Test", href: "/docs/CAT_2022_Scorecard.pdf" },
       { title: "IELTS Certificate (7.5)", type: "Language Proficiency", href: "/docs/IELTS_Scorecard.pdf" },
       { title: "Program Completion Certificate", type: "Diploma", href: "/docs/SPJIMR_Degree.pdf" }
     ]}

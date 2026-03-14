@@ -1,0 +1,53 @@
+---
+// FeatureSpotlight.astro (Selected Automation Projects)
+---
+
+<section id="automation-projects" class="max-w-[1000px] mx-auto px-6 sm:px-12 py-24">
+  <!-- Section Heading -->
+  <div class="flex items-center gap-4 mb-12">
+    <h2 class="text-3xl font-bold text-lightest-slate font-mono whitespace-nowrap">
+      Selected Automation Projects
+    </h2>
+    <div class="h-[1px] bg-lightest-navy w-full max-w-xs border-none"></div>
+  </div>
+
+  <!-- Project Card -->
+  <a href="/projects/fintech-qualifier" class="block group relative bg-slate-900/60 backdrop-blur-md shadow-inner p-8 rounded-lg border border-slate-800 border-l-4 border-l-blue-500 transition-all duration-300 hover:bg-slate-800/80 hover:scale-[1.01] active:scale-[0.98] hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] cursor-pointer">
+    <div class="flex flex-col h-full relative">
+      
+      <!-- Header Row -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+        <h3 class="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
+          FinTech Partner Qualification Engine
+        </h3>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex w-fit items-center justify-center bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1.5 rounded-full text-[10px] uppercase font-bold tracking-widest">
+            Live
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 group-hover:text-slate-400 transition-colors shrink-0"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </div>
+      </div>
+      
+      <!-- Description -->
+      <p class="text-slate-400 text-base md:text-lg leading-relaxed mb-8 max-w-2xl">
+        Bridging the gap between unstructured partner leads and strategic decisions with Hybrid AI & BaFin-aware logic.
+      </p>
+      
+      <!-- Tech Stack Pills -->
+      <div class="flex flex-wrap gap-2 mb-8">
+        <span class="text-slate-500 text-[10px] font-mono border border-slate-700/50 px-2.5 py-1 rounded-full">n8n Workflow</span>
+        <span class="text-slate-500 text-[10px] font-mono border border-slate-700/50 px-2.5 py-1 rounded-full">LLM Analysis</span>
+        <span class="text-slate-500 text-[10px] font-mono border border-slate-700/50 px-2.5 py-1 rounded-full">Render (Compute)</span>
+        <span class="text-slate-500 text-[10px] font-mono border border-slate-700/50 px-2.5 py-1 rounded-full">NeonDB (Storage)</span>
+        <span class="text-slate-500 text-[10px] font-mono border border-slate-700/50 px-2.5 py-1 rounded-full">Astro UI</span>
+      </div>
+      
+      <!-- Affordance Icon -->
+      <div class="mt-auto flex justify-end">
+        <span class="inline-flex items-center gap-2 font-mono text-sm text-blue-400 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+          Explore Engine <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+        </span>
+      </div>
+    </div>
+  </a>
+</section>
