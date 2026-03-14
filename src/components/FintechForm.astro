@@ -288,13 +288,13 @@
 
     // Timer and rotating messages
     let msgIndex = 0;
-    let secondsRemaining = 60;
+    let secondsRemaining = 120;
 
     if (dynamicMessage) {
       dynamicMessage.classList.remove('text-red-500');
       dynamicMessage.classList.add('text-blue-400');
       dynamicMessage.classList.remove('hidden');
-      dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[0]}`;
+      dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[0]} — Render (compute) may need a moment to wake up from idle.`;
     }
     
     const msgInterval = setInterval(() => {
