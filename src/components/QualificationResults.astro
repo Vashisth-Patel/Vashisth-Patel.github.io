@@ -2,269 +2,471 @@
 // QualificationResults.astro
 ---
 
-<div id="qualification-results" class="max-w-5xl mx-auto px-4 sm:px-6 py-12 hidden opacity-0 transition-opacity duration-700 ease-in-out overflow-x-hidden">
+<div id="qualification-results" class="w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-24 hidden opacity-0 translate-y-12 transition-all duration-1000 ease-out overflow-x-hidden">
 
   <!-- Header badge -->
-  <div class="flex items-center justify-center mb-10">
-    <div class="flex items-center gap-2 bg-green/10 border border-green/20 text-green px-4 py-2 rounded-full font-mono text-xs uppercase tracking-widest">
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Qualification Report
+  <div class="flex items-center justify-center mb-16 overflow-hidden">
+    <div class="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Qualification Dashboard
     </div>
   </div>
 
-  <!-- Main card -->
-  <div class="rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md overflow-hidden shadow-2xl">
-
-    <!-- SECTION 1: Company Summary -->
-    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
-      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-4">Company under review</p>
-      <div class="flex flex-wrap items-center gap-3 mb-3">
-        <h2 id="res-company" class="text-3xl font-bold text-white tracking-tight">—</h2>
-        <span id="res-segment" class="text-xs font-mono uppercase tracking-widest bg-slate-800 text-slate-400 px-3 py-1 rounded-full border border-slate-700">—</span>
+  <!-- PARTIAL DASHBOARD -->
+  <div id="res-partial-dashboard" class="hidden max-w-4xl mx-auto overflow-hidden">
+    <div class="rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm shadow-2xl overflow-hidden relative">
+      <!-- Amber Banner -->
+      <div class="bg-yellow-500/10 border-b border-yellow-500/20 p-6 flex items-start gap-4 overflow-hidden">
+        <span class="text-yellow-400 mt-0.5 text-lg flex-shrink-0">⚠</span>
+        <p class="text-yellow-400 text-sm font-medium leading-relaxed break-words hyphens-auto">Submission received successfully. Full qualification analysis is currently being generated; showing submitted details in the meantime.</p>
       </div>
-      <p id="res-summary" class="text-slate-400 text-lg leading-relaxed border-l-2 border-green/50 pl-4 mt-2">—</p>
-    </div>
-
-    <!-- SECTION 2 & 3: Score + Risk -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-800">
-      <!-- Score -->
-      <div class="px-8 sm:px-12 py-10 border-b sm:border-b-0 sm:border-r border-slate-800">
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6">Final Score</p>
-        <div class="flex items-end gap-3 mb-5">
-          <span id="res-score" class="text-7xl font-bold font-mono leading-none">—</span>
-          <span class="text-3xl text-slate-500 font-mono mb-2">/10</span>
-        </div>
-        <div id="res-action" class="inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wide border">
-          —
-        </div>
-      </div>
-
-      <!-- Regulatory Risk -->
-      <div class="px-8 sm:px-12 py-10">
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6">Regulatory Risk Level</p>
-        <span id="res-risk-badge" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-lg border">—</span>
-        <p class="text-slate-500 text-sm mt-5 leading-relaxed">Based on EU regulatory context and stated licensing status.</p>
-      </div>
-    </div>
-
-    <!-- SECTION 4: Insights -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 border-b border-slate-800">
-      <!-- Strengths -->
-      <div class="px-8 sm:px-12 py-10 border-b sm:border-b-0 sm:border-r border-slate-800">
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6 flex items-center gap-2">
-          <span class="text-green">✓</span> Top Strengths
-        </p>
-        <ul id="res-strengths" class="space-y-3 text-slate-400 text-sm leading-relaxed"></ul>
-      </div>
-
-      <!-- Risks -->
-      <div class="px-8 sm:px-12 py-10">
-        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-6 flex items-center gap-2">
-          <span class="text-yellow-400">⚠</span> Top Risks
-        </p>
-        <ul id="res-risks" class="space-y-3 text-slate-400 text-sm leading-relaxed"></ul>
+      
+      <!-- Submission Details -->
+      <div class="p-6 sm:p-8 overflow-hidden">
+        <h3 class="text-2xl font-bold text-white mb-8 tracking-tight break-words hyphens-auto">Submission Summary</h3>
+        <dl class="space-y-8 text-sm">
+          <div class="overflow-hidden">
+            <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Company Name</dt>
+            <dd id="part-company" class="text-white font-semibold text-xl break-words hyphens-auto">—</dd>
+          </div>
+          <div class="overflow-hidden">
+            <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Website</dt>
+            <dd id="part-website" class="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer break-words hyphens-auto">—</dd>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="overflow-hidden">
+              <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Description</dt>
+              <dd id="part-desc" class="text-slate-300 leading-relaxed text-base break-words hyphens-auto">—</dd>
+            </div>
+            <div class="overflow-hidden">
+              <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Problem solving</dt>
+              <dd id="part-prob" class="text-slate-300 leading-relaxed text-base break-words hyphens-auto">—</dd>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-800/50 pt-8 mt-4">
+            <div class="overflow-hidden">
+              <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Revenue / ARR</dt>
+              <dd id="part-rev" class="text-slate-200 text-base font-semibold break-words hyphens-auto">—</dd>
+            </div>
+            <div class="overflow-hidden">
+              <dt class="text-slate-500 font-mono text-xs uppercase tracking-widest mb-2 break-words hyphens-auto">Regulatory Context</dt>
+              <dd id="part-reg" class="text-slate-200 text-base break-words hyphens-auto">—</dd>
+            </div>
+          </div>
+        </dl>
       </div>
     </div>
+  </div>
 
-    <!-- SECTION 5: Benchmark Comparison -->
-    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
-      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-8 flex items-center gap-2">
-        <span>📊</span> Benchmark Comparison
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <!-- Overall -->
-        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-800">
-          <p class="text-slate-300 font-semibold text-sm mb-1">Overall</p>
-          <p class="text-slate-500 text-xs mb-5">vs. <span id="res-bench-total">—</span> EU FinTech startups</p>
-          <ul class="space-y-3 text-sm text-slate-400">
-            <li>Score higher than <strong class="text-slate-200" id="res-bench-overall-score">—</strong>% of all companies</li>
-            <li>Risk lower than <strong class="text-slate-200" id="res-bench-overall-risk">—</strong>% of all companies</li>
-          </ul>
-        </div>
-        <!-- Segment -->
-        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-800" id="res-bench-segment-container">
-          <p class="text-slate-300 font-semibold text-sm mb-1">Within <span id="res-bench-seg-name">—</span></p>
-          <p class="text-slate-500 text-xs mb-5">vs. <span id="res-bench-seg-count">—</span> segment companies</p>
-          <ul class="space-y-3 text-sm text-slate-400" id="res-bench-segment-list">
-            <li>Score higher than <strong class="text-slate-200" id="res-bench-seg-score">—</strong>% of <span class="res-bench-seg-name-inline">—</span> companies</li>
-            <li>Risk lower than <strong class="text-slate-200" id="res-bench-seg-risk">—</strong>% of <span class="res-bench-seg-name-inline">—</span> companies</li>
-          </ul>
-          <p id="res-bench-segment-missing" class="hidden text-yellow-400/70 text-xs italic mt-3">
-            Segment comparison unavailable (limited benchmark data).
-          </p>
-        </div>
-      </div>
-    </div>
+  <!-- FULL DASHBOARD GRID -->
+  <div id="res-full-dashboard" class="hidden relative">
 
-    <!-- SECTION 6: Regulatory Analysis -->
-    <div class="px-8 sm:px-12 py-10 border-b border-slate-800">
-      <p class="text-xs uppercase tracking-[0.2em] text-slate-500 font-mono mb-8 flex items-center gap-2">
-        <span>📋</span> Regulatory Analysis
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <div>
-          <p class="text-slate-400 text-xs uppercase tracking-widest mb-4 font-mono">Required regulations</p>
-          <ul id="res-reg-list" class="space-y-3 text-sm"></ul>
-        </div>
-        <div>
-          <p class="text-slate-400 text-xs uppercase tracking-widest mb-4 font-mono">Gap assessment</p>
-          <p class="text-slate-300 font-semibold mb-2">Severity: <span id="res-reg-gap-sev" class="font-bold">—</span></p>
-          <p id="res-reg-gap-desc" class="text-slate-400 text-sm leading-relaxed">—</p>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      
+      <!-- Col 1: Summary, Score, Risk (Span 4) -->
+      <div class="md:col-span-4 flex flex-col min-h-full">
+          <!-- Vital Stats Card -->
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.4)] flex flex-col h-full relative overflow-hidden group hover:border-slate-700/60 transition-colors duration-500">
+              <!-- Glow fx -->
+              <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700 pointer-events-none"></div>
+
+              <div>
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-mono mb-4 break-words hyphens-auto">Under Review</p>
+                <div class="flex flex-wrap items-center gap-4 mb-4">
+                  <h2 id="res-company" class="text-3xl lg:text-4xl font-extrabold text-white tracking-tight break-words hyphens-auto">—</h2>
+                </div>
+                <div class="mb-8">
+                  <span id="res-segment" class="inline-block text-xs font-mono uppercase tracking-widest bg-slate-800 text-slate-300 px-4 py-1.5 rounded-full border border-slate-700/50 break-words hyphens-auto">—</span>
+                </div>
+                <p id="res-summary" class="text-slate-400 text-base leading-relaxed mb-10 border-l-2 border-blue-500/50 pl-5 break-words hyphens-auto">—</p>
+              </div>
+
+              <div class="flex flex-col items-center text-center mt-auto w-full">
+                <div class="h-px w-full bg-slate-800/50 mb-8"></div>
+                
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-mono mb-6 w-full text-center break-words hyphens-auto">Benchmarked Score</p>
+                <div class="flex items-end justify-center gap-3 mb-6 w-full">
+                  <span id="res-score" class="text-8xl font-black font-mono leading-none tracking-tighter break-words hyphens-auto">—</span>
+                  <span class="text-4xl text-slate-600 font-mono mb-2">/10</span>
+                </div>
+                <div class="flex justify-center w-full mb-6 relative">
+                  <div id="res-action" class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest border text-center break-words hyphens-auto max-w-full"><span class="break-words hyphens-auto truncate whitespace-normal">—</span></div>
+                </div>
+
+                <!-- Decision Key (Legend) -->
+                <div class="w-full bg-slate-950/40 border border-slate-800/50 rounded-xl p-4 mb-10 text-left">
+                  <p class="text-[10px] uppercase tracking-widest text-slate-500 font-mono mb-3 text-center border-b border-slate-800/50 pb-2">Status Definitions</p>
+                  <ul class="space-y-2.5">
+                    <li class="flex items-start gap-2 text-xs leading-tight">
+                      <span class="w-2 h-2 rounded-full bg-green-500 mt-0.5 flex-shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+                      <p><strong class="text-slate-300 font-medium">Prioritize:</strong> <span class="text-slate-500">Strong partnership candidate. We are interested in pursuing collaboration.</span></p>
+                    </li>
+                    <li class="flex items-start gap-2 text-xs leading-tight">
+                      <span class="w-2 h-2 rounded-full bg-yellow-400 mt-0.5 flex-shrink-0 shadow-[0_0_8px_rgba(250,204,21,0.5)]"></span>
+                      <p><strong class="text-slate-300 font-medium">Review:</strong> <span class="text-slate-500">Potential partnership candidate that requires further evaluation.</span></p>
+                    </li>
+                    <li class="flex items-start gap-2 text-xs leading-tight">
+                      <span class="w-2 h-2 rounded-full bg-red-500 mt-0.5 flex-shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
+                      <p><strong class="text-slate-300 font-medium">Pass:</strong> <span class="text-slate-500">Not a suitable partnership candidate at this stage; we will not pursue collaboration.</span></p>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="h-px w-full bg-slate-800/50 mb-8"></div>
+
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-mono mb-6 w-full text-center break-words hyphens-auto">Regulatory Risk</p>
+                <div class="flex flex-col items-center w-full gap-4">
+                  <span id="res-risk-badge" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl font-bold text-sm tracking-wide border text-center break-words hyphens-auto">—</span>
+                  <p class="text-slate-500 text-xs leading-relaxed max-w-[180px] text-center break-words hyphens-auto">Derived from EU baseline and compliance stance.</p>
+                </div>
+              </div>
+          </div>
       </div>
-      <div class="flex gap-5 mt-8 text-xs text-slate-500 font-mono">
-        <span><span class="text-green font-bold">✓</span> Compliant</span>
-        <span><span class="text-red-400 font-bold">✗</span> Missing</span>
-        <span><span class="text-yellow-400 font-bold">⚠</span> Unclear</span>
+
+      <!-- Col 2: Insights & Validation (Span 8) -->
+      <div class="md:col-span-8 flex flex-col min-h-full">
+          <!-- Strengths & Risks Row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
+              <!-- Strengths Card -->
+              <div class="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 sm:p-8 backdrop-blur-sm shadow-lg relative group overflow-hidden">
+                  <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500/50 to-transparent opacity-50"></div>
+                  <p class="text-xs uppercase tracking-[0.25em] text-slate-400 font-mono mb-8 flex items-center gap-3 break-words hyphens-auto">
+                      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex-shrink-0">✓</span> 
+                      Top Strengths
+                  </p>
+                  <ul id="res-strengths" class="space-y-6 text-slate-300 text-sm leading-relaxed"></ul>
+              </div>
+
+              <!-- Risks Card -->
+              <div class="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 sm:p-8 backdrop-blur-sm shadow-lg relative group overflow-hidden">
+                  <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-yellow-500/50 to-transparent opacity-50"></div>
+                  <p class="text-xs uppercase tracking-[0.25em] text-slate-400 font-mono mb-8 flex items-center gap-3 break-words hyphens-auto">
+                      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex-shrink-0">⚠</span> 
+                      Key Risks
+                  </p>
+                  <ul id="res-risks" class="space-y-6 text-slate-300 text-sm leading-relaxed"></ul>
+              </div>
+          </div>
       </div>
+
+      <!-- Regulatory Context Row (Full Width Span 12) -->
+      <div class="md:col-span-12">
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.4)] overflow-hidden">
+              <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-mono mb-8 flex items-center gap-3 break-words hyphens-auto">
+                  <span class="text-xl flex-shrink-0">📋</span> Regulatory Requirements Match
+              </p>
+              
+              <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-8 min-h-full">
+                  <div class="lg:col-span-3 overflow-hidden">
+                      <p class="text-slate-500 text-xs uppercase tracking-widest mb-6 font-mono break-words hyphens-auto">Assessed Profiles</p>
+                      <ul id="res-reg-list" class="space-y-4"></ul>
+                  </div>
+                  
+                  <div class="lg:col-span-2 overflow-hidden h-full">
+                      <div class="bg-slate-950/50 rounded-2xl p-6 md:p-8 flex flex-col justify-center h-full border border-slate-800/50 overflow-hidden items-center group">
+                        <p class="text-slate-500 text-xs uppercase tracking-widest mb-4 font-mono w-full text-center break-words hyphens-auto">Gap Explanation</p>
+                        <p class="text-white font-medium mb-3 flex flex-wrap items-center justify-center gap-2 text-sm w-full break-words hyphens-auto text-center">Severity Base: <span id="res-reg-gap-sev" class="font-black tracking-wide">—</span></p>
+                        <p id="res-reg-gap-desc" class="text-slate-400 text-sm leading-relaxed break-words hyphens-auto w-full text-center">—</p>
+                        
+                        <div class="flex flex-wrap justify-center gap-4 mt-8 px-2 text-xs text-slate-500 font-mono w-full">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400 flex-shrink-0"></span> Compliant</span>
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-400 flex-shrink-0"></span> Missing</span>
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0"></span> Unclear</span>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Section 3: Benchmark Comparisons (Span 12 Full Width Bottom Row) -->
+      <div class="md:col-span-12">
+          <div class="rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm p-6 sm:p-8 lg:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.5)] flex flex-col md:flex-row gap-8 lg:gap-12 overflow-hidden items-stretch">
+              
+              <div class="md:min-w-[250px] lg:min-w-[300px] flex flex-col justify-center">
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-mono mb-4 break-words hyphens-auto">Market Benchmarks</p>
+                <h3 class="text-2xl font-bold text-white mb-2 tracking-tight break-words hyphens-auto">How you stack up</h3>
+                <p class="text-slate-400 text-sm leading-relaxed max-w-sm break-words hyphens-auto">Comparing your submitted metrics against our proprietary dataset of active FinTech entities.</p>
+              </div>
+
+              <div class="w-px bg-slate-800 hidden md:block"></div>
+
+              <div id="res-bench-grid" class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12 w-full min-w-0">
+                  <!-- Overall Market -->
+                  <div id="res-bench-overall-container" class="flex flex-col gap-6 relative overflow-hidden min-h-0 w-full min-w-0">
+                      <div class="absolute -left-6 top-1/2 -translate-y-1/2 h-4/5 w-1 bg-blue-500/20 rounded-full hidden sm:block"></div>
+                      <div class="overflow-hidden">
+                        <p class="text-slate-300 font-bold text-lg mb-1 hidden sm:block break-words hyphens-auto truncate max-w-full">Macro Market</p>
+                        <p class="text-slate-500 text-xs font-mono tracking-wide uppercase break-words hyphens-auto max-w-full">vs. <span id="res-bench-total" class="text-slate-300">—</span> EU entities</p>
+                      </div>
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full flex-grow overflow-hidden">
+                        <div class="bg-slate-800/30 border border-slate-700/50 p-6 rounded-xl flex flex-col items-center justify-center overflow-hidden gap-3 text-center">
+                          <span class="text-xs text-slate-400 uppercase tracking-widest font-mono break-words hyphens-auto w-full">Score Percentile</span>
+                          <span class="font-bold text-white text-3xl"><span id="res-bench-overall-score">—</span>%</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 p-6 rounded-xl flex flex-col items-center justify-center overflow-hidden gap-3 text-center">
+                          <span class="text-xs text-slate-400 uppercase tracking-widest font-mono break-words hyphens-auto w-full">Risk Mitigation</span>
+                          <span class="font-bold text-white text-3xl"><span id="res-bench-overall-risk">—</span>%</span>
+                        </div>
+                      </div>
+                  </div>
+
+                  <!-- Direct Competitors -->
+                  <div id="res-bench-segment-container" class="flex flex-col gap-6 relative overflow-hidden min-h-0 w-full min-w-0">
+                      <div class="absolute -left-6 top-1/2 -translate-y-1/2 h-4/5 w-1 bg-purple-500/20 rounded-full hidden sm:block"></div>
+                      <div class="overflow-hidden w-full min-w-0">
+                        <p class="text-slate-300 font-bold text-lg mb-1 hidden sm:block truncate max-w-full"><span class="truncate">Segment: <span id="res-bench-seg-name" class="capitalize">—</span></span></p>
+                        <p class="text-slate-500 text-xs font-mono tracking-wide uppercase break-words hyphens-auto truncate max-w-full">vs. <span id="res-bench-seg-count" class="text-slate-300">—</span> direct peers</p>
+                      </div>
+                      
+                      <div id="res-bench-segment-list" class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full flex-grow overflow-hidden">
+                        <div class="bg-slate-800/30 border border-slate-700/50 p-6 rounded-xl flex flex-col items-center justify-center overflow-hidden gap-3 text-center">
+                          <span class="text-xs text-slate-400 uppercase tracking-widest font-mono break-words hyphens-auto w-full">Score Percentile</span>
+                          <span class="font-bold text-purple-400 text-3xl"><span id="res-bench-seg-score">—</span>%</span>
+                        </div>
+                        <div class="bg-slate-800/30 border border-slate-700/50 p-6 rounded-xl flex flex-col items-center justify-center overflow-hidden gap-3 text-center">
+                          <span class="text-xs text-slate-400 uppercase tracking-widest font-mono break-words hyphens-auto w-full">Risk Mitigation</span>
+                          <span class="font-bold text-purple-400 text-3xl"><span id="res-bench-seg-risk">—</span>%</span>
+                        </div>
+                      </div>
+
+                      <div id="res-bench-segment-missing" class="hidden min-h-[120px] h-full items-center justify-center p-6 bg-slate-900/50 rounded-xl border border-yellow-500/10 overflow-hidden flex-grow w-full">
+                          <p class="text-yellow-500/60 text-sm font-medium text-center break-words hyphens-auto w-full leading-relaxed">Niche segment comparison unavailable.<br><span class="text-xs">Global EU FinTech Benchmark Applied.</span></p>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+      
     </div>
 
     <!-- SECTION 7: CTA -->
-    <div class="px-8 sm:px-12 py-10 text-center">
-      <h4 class="text-2xl font-bold text-white tracking-tight mb-3">Want this for your team?</h4>
-      <p class="text-slate-400 mb-8 leading-relaxed max-w-md mx-auto">This demo represents the qualification engine we can build for your specific deal flow and market context.</p>
+    <div class="mt-20 mb-8 py-12 px-6 text-center rounded-3xl bg-transparent relative overflow-hidden group">
+      <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+      <h4 class="text-3xl font-bold text-white tracking-tight mb-4 flex flex-wrap items-center justify-center gap-3 break-words hyphens-auto">
+        Automate your deal flow <span class="text-blue-500">→</span>
+      </h4>
+      <p class="text-slate-400 mb-10 leading-relaxed max-w-xl mx-auto text-lg break-words hyphens-auto">This interactive demo is exactly what we embed into prospect funnels to eliminate unviable leads automatically.</p>
       <a
         href="mailto:patelvashisth842124@gmail.com?subject=FinTech%20Qualification%20Engine%20Inquiry"
-        class="inline-flex items-center gap-2 px-8 py-4 border-2 border-green text-green font-mono font-bold rounded-lg hover:bg-green/10 transition-all duration-300 text-base"
+        class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-slate-900 font-mono font-bold rounded-xl hover:bg-slate-200 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 text-lg relative z-10 break-words hyphens-auto text-center overflow-hidden"
       >
-        Let's Talk
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <span class="truncate whitespace-normal">Deploy your own</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </a>
     </div>
 
-  </div>
+  </div> <!-- Close FULL DASHBOARD -->
+
 </div>
 
 <script>
+  function showFatalError(msg: string) {
+    console.error("Fatal UI Error:", msg);
+    alert(msg);
+  }
+
   document.addEventListener('qualificationComplete', (e) => {
     const data = (e as CustomEvent).detail;
     if (!data) return;
 
-    const setText = (id: string, text: string | number) => {
+    console.log("CRITICAL: Received API Payload:", data);
+
+    if (!data.company_name) {
+      showFatalError("No company data returned from the analysis engine.");
+      return;
+    }
+
+    const setText = (id: string, text: string | number | undefined | null) => {
       const el = document.getElementById(id);
-      if (el) el.textContent = String(text);
-    };
-
-    // 1. Summary
-    setText('res-company', data.company_name);
-    setText('res-summary', data.one_line_summary);
-    setText('res-segment', data.fintech_segment);
-
-    // 2. Score
-    const scoreEl = document.getElementById('res-score');
-    if (scoreEl) {
-      scoreEl.textContent = String(data.final_score);
-      scoreEl.className = 'text-7xl font-bold font-mono leading-none ';
-      if (data.final_score >= 7) scoreEl.className += 'text-green';
-      else if (data.final_score >= 5) scoreEl.className += 'text-yellow-400';
-      else scoreEl.className += 'text-red-500';
-    }
-
-    const actionEl = document.getElementById('res-action');
-    if (actionEl) {
-      actionEl.textContent = data.final_action;
-      actionEl.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wide border ';
-      if (data.final_score >= 7) actionEl.className += 'bg-green/10 text-green border-green/30';
-      else if (data.final_score >= 5) actionEl.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30';
-      else actionEl.className += 'bg-red-500/10 text-red-500 border-red-500/30';
-    }
-
-    // 3. Risk
-    const riskBadge = document.getElementById('res-risk-badge');
-    if (riskBadge) {
-      riskBadge.textContent = data.regulatory_risk_level;
-      riskBadge.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-lg border ';
-      const risk = data.regulatory_risk_level?.toLowerCase();
-      if (risk === 'low') riskBadge.className += 'bg-green/10 text-green border-green/30';
-      else if (risk === 'medium') riskBadge.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30';
-      else if (risk === 'high') riskBadge.className += 'bg-red-500/10 text-red-400 border-red-500/30';
-      else riskBadge.className += 'bg-red-700/10 text-red-600 border-red-700/30';
-    }
-
-    // 4. Insights
-    const populateList = (id: string, items: string[], bullet: string, color: string) => {
-      const ul = document.getElementById(id);
-      if (ul) {
-        ul.innerHTML = '';
-        items.forEach(item => {
-          const li = document.createElement('li');
-          li.className = 'flex items-start gap-2';
-          li.innerHTML = `<span class="${color} text-base leading-none mt-0.5">${bullet}</span><span>${item}</span>`;
-          ul.appendChild(li);
-        });
+      if (el && text !== undefined && text !== null && String(text).trim() !== "") {
+        el.textContent = String(text);
       }
     };
-    populateList('res-strengths', data.strengths, '✓', 'text-green');
-    populateList('res-risks', data.risks, '⚠', 'text-yellow-400');
 
-    // 5. Benchmarks
-    if (data.benchmarks) {
-      const o = data.benchmarks.overall;
-      if (o) {
-        setText('res-bench-total', o.total_companies);
-        setText('res-bench-overall-score', o.score_percentile);
-        setText('res-bench-overall-risk', o.risk_percentile);
+    const hasFullQualification = data.final_score !== undefined && data.final_score !== null;
+
+    if (!hasFullQualification) {
+      document.getElementById('res-partial-dashboard')?.classList.remove('hidden');
+      document.getElementById('res-full-dashboard')?.classList.add('hidden');
+      renderPartialResult(data);
+    } else {
+      document.getElementById('res-full-dashboard')?.classList.remove('hidden');
+      document.getElementById('res-partial-dashboard')?.classList.add('hidden');
+      renderFullQualificationResult(data);
+    }
+
+    function renderPartialResult(data: any) {
+      setText('part-company', data.company_name);
+      setText('part-website', data.website);
+      setText('part-desc', data.description);
+      setText('part-prob', data.problem);
+      setText('part-rev', data.revenue);
+      setText('part-reg', data.regulatory_context);
+      
+      revealContainer();
+    }
+
+    function renderFullQualificationResult(data: any) {
+      // 1. Summary
+      setText('res-company', data.company_name);
+      setText('res-summary', data.one_line_summary);
+      setText('res-segment', data.fintech_segment);
+
+      // 2. Score
+      if (data.final_score !== undefined) {
+        const scoreEl = document.getElementById('res-score');
+        if (scoreEl) {
+          scoreEl.textContent = String(data.final_score);
+          scoreEl.className = 'text-8xl font-black font-mono leading-none tracking-tighter break-words hyphens-auto ';
+          if (data.final_score >= 7) scoreEl.className += 'text-green-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]';
+          else if (data.final_score >= 5) scoreEl.className += 'text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.3)]';
+          else scoreEl.className += 'text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]';
+        }
       }
-      const s = data.benchmarks.segment;
-      if (s?.score_percentile) {
-        setText('res-bench-seg-name', s.segment_name);
-        setText('res-bench-seg-count', s.segment_company_count);
-        setText('res-bench-seg-score', s.score_percentile);
-        setText('res-bench-seg-risk', s.risk_percentile);
-        document.querySelectorAll('.res-bench-seg-name-inline').forEach(el => {
-          el.textContent = s.segment_name;
+
+      if (data.final_action) {
+        const actionEl = document.getElementById('res-action');
+        if (actionEl) {
+          actionEl.textContent = data.final_action;
+          actionEl.className = 'inline-flex items-center gap-3 px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest border text-center break-words hyphens-auto max-w-full ';
+          if (data.final_score >= 7) actionEl.className += 'bg-green-500/10 text-green-400 border-green-500/20';
+          else if (data.final_score >= 5) actionEl.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/20';
+          else actionEl.className += 'bg-red-500/10 text-red-500 border-red-500/20';
+        }
+      }
+
+      // 3. Risk
+      if (data.regulatory_risk_level) {
+        const riskBadge = document.getElementById('res-risk-badge');
+        if (riskBadge) {
+          riskBadge.textContent = data.regulatory_risk_level;
+          riskBadge.className = 'inline-flex items-center justify-center px-4 py-2.5 rounded-xl font-bold text-sm tracking-wide border text-center break-words hyphens-auto max-w-full ';
+          const risk = data.regulatory_risk_level.toLowerCase();
+          if (risk === 'low') riskBadge.className += 'bg-green-500/10 text-green-400 border-green-500/30';
+          else if (risk === 'medium') riskBadge.className += 'bg-yellow-400/10 text-yellow-400 border-yellow-400/30';
+          else if (risk === 'high') riskBadge.className += 'bg-red-500/10 text-red-400 border-red-500/30';
+          else riskBadge.className += 'bg-red-700/10 text-red-600 border-red-700/30';
+        }
+      }
+
+      // 4. Insights
+      const populateList = (id: string, items: string[], bullet: string, colorClass: string, bgClass: string) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = "";
+        if (!Array.isArray(items) || items.length === 0) return;
+
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "text-slate-300 mb-4 flex items-start gap-4 overflow-hidden w-full"; 
+          li.innerHTML = `<span class="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded bg-slate-800 ${colorClass} mt-0.5 text-xs">${bullet}</span> <span class="leading-relaxed sm:text-base break-words hyphens-auto min-w-0 flex-1">${item}</span>`;
+          el.appendChild(li);
         });
+      };
+
+      if (data.strengths && Array.isArray(data.strengths)) {
+        populateList('res-strengths', data.strengths, '✓', 'text-green-400', 'bg-green-500/10');
+      }
+      
+      if (data.risks && Array.isArray(data.risks)) {
+        populateList('res-risks', data.risks, '⚠', 'text-yellow-400', 'bg-yellow-500/10');
+      }
+
+      // 5. Benchmarks (Guarded Object Access)
+      setText('res-bench-total', data.benchmarks?.overall?.total_companies ?? "N/A");
+      setText('res-bench-overall-score', data.benchmarks?.overall?.score_percentile ?? "N/A");
+      setText('res-bench-overall-risk', data.benchmarks?.overall?.risk_percentile ?? "N/A");
+
+      if (data.benchmarks?.segment?.score_percentile) {
+        const s = data.benchmarks.segment;
+        setText('res-bench-seg-name', s.segment_name ?? "N/A");
+        setText('res-bench-seg-count', s.segment_company_count ?? "N/A");
+        setText('res-bench-seg-score', s.score_percentile ?? "N/A");
+        setText('res-bench-seg-risk', s.risk_percentile ?? "N/A");
+        const benchGrid = document.getElementById('res-bench-grid');
+        const segContainer = document.getElementById('res-bench-segment-container');
+        if (benchGrid) benchGrid.className = 'flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 w-full min-w-0';
+        if (segContainer) segContainer.classList.remove('hidden');
       } else {
-        const segList = document.getElementById('res-bench-segment-list');
-        const segMissing = document.getElementById('res-bench-segment-missing');
-        if (segList) segList.classList.add('hidden');
-        if (segMissing) segMissing.classList.remove('hidden');
+        const benchGrid = document.getElementById('res-bench-grid');
+        const segContainer = document.getElementById('res-bench-segment-container');
+        if (benchGrid) benchGrid.className = 'flex-1 grid grid-cols-1 gap-8 lg:gap-12 w-full min-w-0';
+        if (segContainer) segContainer.classList.add('hidden');
       }
-    }
 
-    // 6. Regulatory Analysis
-    if (data.regulatory_analysis) {
-      const a = data.regulatory_analysis;
-      const regList = document.getElementById('res-reg-list');
-      if (regList && a.regulations_required) {
-        regList.innerHTML = '';
-        a.regulations_required.forEach((reg: string) => {
-          let icon = '<span class="text-yellow-400 font-bold w-5 text-center">⚠</span>';
-          let status = 'Unclear';
-          let statusColor = 'text-slate-400';
-          if (a.regulations_likely_compliant?.includes(reg)) {
-            icon = '<span class="text-green font-bold w-5 text-center">✓</span>';
-            status = 'Compliant';
-            statusColor = 'text-green';
-          } else if (a.regulations_missing_or_unclear?.includes(reg)) {
-            icon = '<span class="text-red-400 font-bold w-5 text-center">✗</span>';
-            status = 'Missing';
-            statusColor = 'text-red-400';
+      // 6. Regulatory Analysis
+      if (data.regulatory_analysis) {
+        const a = data.regulatory_analysis;
+        const regList = document.getElementById('res-reg-list');
+        if (regList) {
+          regList.innerHTML = '';
+          const safeReqs = Array.isArray(a.regulations_required) ? a.regulations_required : [];
+          if (safeReqs.length === 0) {
+            console.warn("No regulatory requirements found for list");
           }
-          regList.innerHTML += `<li class="flex items-center gap-3 text-sm"><div class="shrink-0 w-5 text-center">${icon}</div><span class="text-slate-300 font-medium">${reg}</span><span class="${statusColor} text-xs ml-auto">${status}</span></li>`;
-        });
+          
+          const safeCompliant = Array.isArray(a.regulations_likely_compliant) ? a.regulations_likely_compliant : [];
+          const safeMissing = Array.isArray(a.regulations_missing_or_unclear) ? a.regulations_missing_or_unclear : [];
+
+          safeReqs.forEach((reg: string) => {
+            let dot = '<span class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.6)] flex-shrink-0"></span>';
+            let status = 'Unclear / Pend.';
+            let statusColor = 'text-yellow-400/70 border-yellow-400/20';
+            if (safeCompliant.includes(reg)) {
+              dot = '<span class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)] flex-shrink-0"></span>';
+              status = 'Likely Compliant';
+              statusColor = 'text-green-400 border-green-500/20';
+            } else if (safeMissing.includes(reg)) {
+              dot = '<span class="w-2.5 h-2.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] flex-shrink-0"></span>';
+              status = 'Missing Context';
+              statusColor = 'text-red-400 border-red-500/20';
+            }
+            regList.innerHTML += `<li class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 rounded-xl bg-slate-900/40 border border-slate-800/50 hover:bg-slate-800/50 transition-colors overflow-hidden gap-3 min-w-0 w-full mb-3">
+                <div class="flex items-start sm:items-center gap-4 min-w-0 w-full sm:w-auto flex-1">
+                  <div class="mt-1 sm:mt-0 flex-shrink-0">${dot}</div>
+                  <span class="text-slate-200 font-medium sm:text-base text-sm break-words hyphens-auto min-w-0">${reg}</span>
+                </div>
+                <div class="ml-0 sm:ml-4 flex-shrink-0 self-end sm:self-auto w-full sm:w-auto flex justify-end">
+                  <span class="px-3 py-1 rounded border ${statusColor} text-xs uppercase tracking-wider font-mono text-center whitespace-nowrap">${status}</span>
+                </div>
+              </li>`;
+          });
+        }
+        
+        if (a.gap_severity) {
+          setText('res-reg-gap-sev', a.gap_severity);
+          const sevEl = document.getElementById('res-reg-gap-sev');
+          if (sevEl) {
+            const sev = a.gap_severity.toLowerCase();
+            if (sev === 'none' || sev === 'low') sevEl.className = 'font-black tracking-wide text-green-400';
+            else if (sev === 'medium') sevEl.className = 'font-black tracking-wide text-yellow-400';
+            else sevEl.className = 'font-black tracking-wide text-red-400';
+          }
+        }
+        
+        if (a.gap_explanation) {
+          setText('res-reg-gap-desc', a.gap_explanation);
+        }
       }
-      setText('res-reg-gap-sev', a.gap_severity);
-      const sevEl = document.getElementById('res-reg-gap-sev');
-      if (sevEl) {
-        const sev = a.gap_severity?.toLowerCase();
-        if (sev === 'none' || sev === 'low') sevEl.className = 'font-bold text-green';
-        else if (sev === 'medium') sevEl.className = 'font-bold text-yellow-400';
-        else sevEl.className = 'font-bold text-red-500';
-      }
-      setText('res-reg-gap-desc', a.gap_explanation);
+
+      // 7. Final "Data-Ready" Reveal
+      revealContainer();
     }
 
-    // Reveal with fade-in + scroll
-    const container = document.getElementById('qualification-results');
-    if (container) {
-      container.classList.remove('hidden');
-      requestAnimationFrame(() => {
+    function revealContainer() {
+      const container = document.getElementById('qualification-results');
+      if (container) {
+        container.classList.remove('hidden');
         requestAnimationFrame(() => {
-          container.classList.remove('opacity-0');
-          container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          requestAnimationFrame(() => {
+            container.classList.remove('opacity-0', 'translate-y-12');
+            container.classList.add('translate-y-0');
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
         });
-      });
+      }
     }
   });
 </script>

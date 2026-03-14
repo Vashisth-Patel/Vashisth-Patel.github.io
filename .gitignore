@@ -10,6 +10,7 @@ dist/
 # Environment variables (Crucial for security!)
 .env
 .env.*
+!.env.example
 
 # OS metadata
 .DS_Store
@@ -17,3 +18,14 @@ Thumbs.db
 
 # Playwright/Cypress/Testing logs
 test-results/
+
+# Node logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Deployment artifacts
+.vercel/
+.netlify/
+.output/

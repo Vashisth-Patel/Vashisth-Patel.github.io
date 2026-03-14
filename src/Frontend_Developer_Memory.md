@@ -379,7 +379,7 @@ The result: Inconsistent decisions, missed revenue, and burned founder time.
 This engine combines AI classification with deterministic business rules and human oversight.
 
 **Flow:**
-Structured Intake → AI Analysis (Gemini) → Rule-Based Scoring → Human Review Checkpoint → Decision
+Structured Intake → AI Analysis → Rule-Based Scoring → Human Review Checkpoint → Decision
 
 The AI handles the heavy lifting—extracting insights, classifying segments, surfacing risks. The rule engine adds governance based on revenue stage, team size, and regulatory context. The human makes the final call with structured intelligence in front of them, not raw text.
 

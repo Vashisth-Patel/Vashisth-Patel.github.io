@@ -2,14 +2,17 @@
 // FintechForm.astro — Interactive partner qualification form
 ---
 
-<section class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
-  <div class="text-center mb-10">
-    <p class="font-mono text-green text-xs uppercase tracking-[0.2em] mb-4">Try it yourself</p>
-    <p class="text-slate-400 text-base leading-relaxed">See how your company would be evaluated by the engine.</p>
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-24 relative">
+  <!-- Subtle background transition -->
+  <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-transparent via-slate-900/20 to-slate-950 -z-10 pointer-events-none"></div>
+
+  <div class="text-center mb-12">
+    <p class="font-mono text-blue-500 text-xs uppercase tracking-[0.2em] mb-4">Try it yourself</p>
+    <p class="text-slate-500 text-base leading-relaxed">See how your company would be evaluated by the engine.</p>
   </div>
 
-  <div class="rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md p-8 sm:p-12">
-    <form id="fintech-form" class="space-y-8 relative">
+  <div class="rounded-3xl border border-slate-800/40 bg-slate-900/20 backdrop-blur-2xl p-8 sm:p-12 shadow-[0_0_40px_rgba(0,0,0,0.3)]">
+    <form id="fintech-form" class="space-y-10 relative" novalidate>
 
       <!-- HONEYPOT FIELD (BOT PROTECTION — DO NOT USE display:none) -->
       <input
@@ -22,8 +25,8 @@
       />
 
       <!-- Company Name -->
-      <div>
-        <label for="company_name" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="company_name" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           Company Name
         </label>
         <input
@@ -32,13 +35,14 @@
           name="company_name"
           required
           placeholder="e.g., PayFlow GmbH"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner"
         />
+        <p id="error-company_name" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
       </div>
 
       <!-- Website -->
-      <div>
-        <label for="website" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="website" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           Company Website
         </label>
         <input
@@ -47,13 +51,14 @@
           name="website"
           required
           placeholder="https://example.com"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner"
         />
+        <p id="error-website" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
       </div>
 
       <!-- Product Description -->
-      <div>
-        <label for="description" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="description" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           What does your company do?
         </label>
         <textarea
@@ -63,14 +68,17 @@
           minlength="50"
           rows="4"
           placeholder="Describe your product/service in 3-5 sentences"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
         ></textarea>
-        <p class="text-xs text-slate-600 mt-1.5 font-mono">Minimum 50 characters</p>
+        <div class="flex justify-between items-start mt-2">
+          <p class="text-xs text-slate-600 font-mono flex-1">Minimum 50 characters</p>
+          <p id="error-description" class="text-red-500 text-xs hidden ml-4 text-right" aria-live="polite"></p>
+        </div>
       </div>
 
       <!-- Pain Point -->
-      <div>
-        <label for="problem" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="problem" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           What problem are you solving and for whom?
         </label>
         <textarea
@@ -80,53 +88,58 @@
           minlength="50"
           rows="3"
           placeholder="Describe the pain point and your target customer"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
         ></textarea>
-        <p class="text-xs text-slate-600 mt-1.5 font-mono">Minimum 50 characters</p>
+        <div class="flex justify-between items-start mt-2">
+          <p class="text-xs text-slate-600 font-mono flex-1">Minimum 50 characters</p>
+          <p id="error-problem" class="text-red-500 text-xs hidden ml-4 text-right" aria-live="polite"></p>
+        </div>
       </div>
 
       <!-- ARR & Team Size -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label for="revenue" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div class="group relative">
+          <label for="revenue" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
             Annual Revenue / ARR
           </label>
           <select
             id="revenue"
             name="revenue"
             required
-            class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 cursor-pointer"
+            class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner cursor-pointer appearance-none"
           >
-            <option value="" disabled selected class="text-slate-600">Select range</option>
-            <option value="Pre-revenue">Pre-revenue</option>
-            <option value="<100k">&lt;100k</option>
-            <option value="100k-500k">100k–500k</option>
-            <option value="500k-1M">500k–1M</option>
-            <option value="1M+">1M+</option>
+            <option value="" disabled selected class="text-slate-500">Select range</option>
+            <option value="Pre-revenue" class="bg-white text-black">Pre-revenue</option>
+            <option value="<100k" class="bg-white text-black">&lt;100k</option>
+            <option value="100k-500k" class="bg-white text-black">100k–500k</option>
+            <option value="500k-1M" class="bg-white text-black">500k–1M</option>
+            <option value="1M+" class="bg-white text-black">1M+</option>
           </select>
+          <p id="error-revenue" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
         </div>
-        <div>
-          <label for="team_size" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+        <div class="group relative">
+          <label for="team_size" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
             Team Size
           </label>
           <select
             id="team_size"
             name="team_size"
             required
-            class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 cursor-pointer"
+            class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner cursor-pointer appearance-none"
           >
-            <option value="" disabled selected class="text-slate-600">Select size</option>
-            <option value="1-5">1–5</option>
-            <option value="6-20">6–20</option>
-            <option value="21-50">21–50</option>
-            <option value="50+">50+</option>
+            <option value="" disabled selected class="text-slate-500">Select size</option>
+            <option value="1-5" class="bg-white text-black">1–5</option>
+            <option value="6-20" class="bg-white text-black">6–20</option>
+            <option value="21-50" class="bg-white text-black">21–50</option>
+            <option value="50+" class="bg-white text-black">50+</option>
           </select>
+          <p id="error-team_size" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
         </div>
       </div>
 
       <!-- Partnership Goal -->
-      <div>
-        <label for="partnership_goal" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="partnership_goal" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           What are you looking for from this partnership?
         </label>
         <textarea
@@ -135,13 +148,14 @@
           required
           rows="3"
           placeholder="e.g., API integration, referral arrangement, white-label solution"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200 resize-y"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
         ></textarea>
+        <p id="error-partnership_goal" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
       </div>
 
       <!-- Regulatory Status -->
-      <div>
-        <label for="regulatory_context" class="block text-slate-300 mb-2 font-mono text-sm tracking-wide">
+      <div class="group relative">
+        <label for="regulatory_context" class="block text-slate-400 mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-blue-400">
           Regulatory Status <span class="text-slate-600">(optional)</span>
         </label>
         <input
@@ -149,24 +163,25 @@
           id="regulatory_context"
           name="regulatory_context"
           placeholder="e.g., BaFin licensed, pursuing PSD2 license, or 'Not regulated'"
-          class="w-full bg-slate-900/60 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 placeholder:text-slate-600 focus:border-green focus:ring-1 focus:ring-green focus:outline-none transition-all duration-200"
+          class="w-full bg-slate-950/30 border-b border-slate-800 rounded-t-xl px-5 py-4 text-black placeholder:text-slate-800 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-inner"
         />
+        <p id="error-regulatory_context" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
       </div>
 
       <!-- Submit -->
-      <div class="pt-2">
+      <div class="pt-6">
         <button
           type="submit"
           id="submit-btn"
-          class="w-full bg-green text-navy font-bold font-mono text-base py-4 rounded-lg hover:bg-green/90 hover:shadow-lg hover:shadow-green/20 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
+          class="w-full bg-slate-800 text-white font-bold font-mono text-base py-5 rounded-xl border border-slate-700 hover:border-blue-500 hover:bg-blue-600/20 hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
         >
           <span id="btn-text">Analyze My Company</span>
-          <svg id="btn-spinner" class="hidden animate-spin h-5 w-5 text-navy" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg id="btn-spinner" class="hidden animate-spin h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </button>
-        <p id="dynamic-message" class="text-center text-green font-mono text-sm mt-5 hidden h-5 transition-opacity duration-300"></p>
+        <p id="dynamic-message" class="text-center text-blue-400 font-mono text-sm mt-6 hidden h-5 transition-opacity duration-300"></p>
       </div>
     </form>
   </div>
@@ -185,7 +200,20 @@
     "Evaluating BaFin Regulatory Alignment..."
   ];
 
-  form?.addEventListener('submit', (e) => {
+  // Set up listeners to auto-clear red borders/errors on input
+  const allInputs = form?.querySelectorAll('input, select, textarea');
+  allInputs?.forEach(input => {
+    input.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+      const errorEl = document.getElementById(`error-${target.id}`);
+      if (errorEl) {
+        errorEl.classList.add('hidden');
+        target.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+      }
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(form);
@@ -195,64 +223,160 @@
 
     const data = Object.fromEntries(formData.entries());
 
-    // Activate loading state
-    if (submitBtn) submitBtn.disabled = true;
-    if (btnText) btnText.textContent = 'Analyzing...';
-    if (btnSpinner) btnSpinner.classList.remove('hidden');
+    // Strict Client-Side Validation Logic
+    let isValid = true;
+    const errors: Record<string, string> = {};
 
-    // Rotating status messages
-    let msgIndex = 0;
-    if (dynamicMessage) {
-      dynamicMessage.classList.remove('hidden');
-      dynamicMessage.textContent = messages[0];
-    }
-    const msgInterval = setInterval(() => {
-      msgIndex = (msgIndex + 1) % messages.length;
-      if (dynamicMessage) dynamicMessage.textContent = messages[msgIndex];
-    }, 3000);
-
-    // Mock response (TestPay GmbH spec data)
-    const mockResponse = {
-      company_name: String(data.company_name || 'TestPay GmbH'),
-      one_line_summary: "Provides instant payment processing infrastructure for European e-commerce SMEs with same-day settlement.",
-      fintech_segment: "Payments",
-      final_score: 8,
-      final_action: "Prioritize",
-      regulatory_risk_level: "Medium",
-      strengths: [
-        "Clear value proposition addressing specific SME cash flow pain points",
-        "Revenue bucket indicates demonstrated early traction",
-        "Clear partnership goal aligned with technical capabilities"
-      ],
-      risks: [
-        "Currently relying on agent model, full BaFin license still pending",
-        "Team size may bottleneck rapid scaling during major integrations"
-      ],
-      benchmarks: {
-        overall: { score_percentile: 78, risk_percentile: 65, total_companies: 100 },
-        segment: { score_percentile: 85, risk_percentile: 70, segment_name: "Payments", segment_company_count: 24 }
-      },
-      regulatory_analysis: {
-        risk_level: "Medium",
-        regulations_required: ["PSD2", "AML 5AMLD", "GDPR"],
-        regulations_likely_compliant: ["GDPR"],
-        regulations_missing_or_unclear: ["PSD2", "AML 5AMLD"],
-        gap_severity: "Medium",
-        gap_explanation: "Operating under agent model mitigates immediate risk, but a direct BaFin license is required for independent scaling."
+    const requiredFields = ['company_name', 'revenue', 'team_size', 'partnership_goal'];
+    requiredFields.forEach(field => {
+      if (!data[field] || String(data[field]).trim() === '') {
+        isValid = false;
+        errors[field] = "This field is required.";
       }
+    });
+
+    const website = String(data.website || '').trim();
+    if (!website || (!website.startsWith('http://') && !website.startsWith('https://'))) {
+      isValid = false;
+      errors['website'] = "Please enter a valid URL (e.g., https://example.com).";
+    }
+
+    const description = String(data.description || '').trim();
+    if (description.length < 50) {
+      isValid = false;
+      errors['description'] = "Please provide at least 50 characters for a high-quality AI analysis.";
+    }
+
+    const problem = String(data.problem || '').trim();
+    if (problem.length < 50) {
+      isValid = false;
+      errors['problem'] = "Please provide at least 50 characters for a high-quality AI analysis.";
+    }
+
+    if (!isValid) {
+      let firstInvalidId: string | null = null;
+      for (const [id, msg] of Object.entries(errors)) {
+        const errorEl = document.getElementById(`error-${id}`);
+        const inputEl = document.getElementById(id);
+        if (errorEl && inputEl) {
+          errorEl.textContent = msg;
+          errorEl.classList.remove('hidden');
+          inputEl.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+          if (!firstInvalidId) firstInvalidId = id;
+        }
+      }
+      
+      // Focus on the first invalid field
+      if (firstInvalidId) {
+        document.getElementById(firstInvalidId)?.focus();
+      }
+      
+      // Halt submission exactly as requested (do not trigger spinners)
+      return; 
+    }
+
+    const WEBHOOK_URL = import.meta.env.PUBLIC_N8N_WEBHOOK_URL;
+    const requestHeaders = { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     };
 
-    // After 9-second mock delay, fade out form and trigger results
-    setTimeout(() => {
-      clearInterval(msgInterval);
-      if (form) {
-        form.style.transition = 'opacity 0.5s ease';
-        form.style.opacity = '0';
-        setTimeout(() => {
-          form.closest('section')?.classList.add('hidden');
-          document.dispatchEvent(new CustomEvent('qualificationComplete', { detail: mockResponse }));
-        }, 500);
+    // Activate loading state
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = 'Generating Matrix Details...';
+    if (btnSpinner) btnSpinner.classList.remove('hidden');
+
+    // Timer and rotating messages
+    let msgIndex = 0;
+    let secondsRemaining = 60;
+
+    if (dynamicMessage) {
+      dynamicMessage.classList.remove('text-red-500');
+      dynamicMessage.classList.add('text-blue-400');
+      dynamicMessage.classList.remove('hidden');
+      dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[0]}`;
+    }
+    
+    const msgInterval = setInterval(() => {
+      secondsRemaining--;
+      if (secondsRemaining <= 0) {
+        if (dynamicMessage) dynamicMessage.textContent = 'Finalizing macro-market alignments...';
+      } else {
+        if (secondsRemaining % 3 === 0) {
+          msgIndex = (msgIndex + 1) % messages.length;
+        }
+        if (dynamicMessage) dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[msgIndex]}`;
       }
-    }, 9000);
+    }, 1000);
+
+    // Diagnostic Audit: View outbound payload & handshake
+    console.log("Attempting POST to:", WEBHOOK_URL);
+    console.log("Headers:", requestHeaders);
+    console.log("Payload being sent:", JSON.stringify(data, null, 2));
+
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        referrerPolicy: 'no-referrer',
+        headers: requestHeaders,
+        body: JSON.stringify(data),
+        signal: AbortSignal.timeout(65000) // 65s timeout to cover the full timer duration
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Webhook failed with status: ${response.status} ${response.statusText}`);
+        console.error(`Backend response (The Response Sifter): ${errorText}`);
+        throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+      }
+
+      // Robust Parsing & Debugging: "Raw First" Approach
+      const rawResponse = await response.text();
+      console.log("Network Status:", response.status);
+      console.log("Raw Response Body:", rawResponse);
+
+      if (!rawResponse || rawResponse.trim() === "") {
+        throw new Error("Handshake successful, but the response body is empty. Browser is receiving 'nothing'.");
+      }
+
+      const result = JSON.parse(rawResponse);
+      console.log("Successfully Parsed JSON:", result);
+
+      // Dispatch event to render QualificationResults (form remains visible)
+      document.dispatchEvent(new CustomEvent('qualificationComplete', { detail: result }));
+
+      // Success reveal: immediately clear timer and reset button
+      clearInterval(msgInterval);
+      if (dynamicMessage) dynamicMessage.classList.add('hidden');
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Analyze My Company';
+      if (btnSpinner) btnSpinner.classList.add('hidden');
+
+    } catch (error: any) {
+      console.error('Webhook error (Deep-Inference catch):');
+      console.dir(error);
+
+      // Show user feedback
+      if (dynamicMessage) {
+        if (error.name === 'TimeoutError') {
+          dynamicMessage.textContent = 'Connection timed out. The AI analysis took more than 60 seconds. Please try again.';
+        } else if (error.message && error.message.includes("response body is empty")) {
+          dynamicMessage.textContent = 'Connected to AI Engine, but no data was returned. This is likely a CORS or Webhook Response configuration issue.';
+        } else {
+          dynamicMessage.textContent = 'Something went wrong. Please check console for details or try again.';
+        }
+        dynamicMessage.classList.remove('text-blue-400');
+        dynamicMessage.classList.add('text-red-500');
+        dynamicMessage.classList.remove('hidden');
+      }
+
+      // Explicit error resetting
+      clearInterval(msgInterval);
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Analyze My Company';
+      if (btnSpinner) btnSpinner.classList.add('hidden');
+    }
   });
 </script>
