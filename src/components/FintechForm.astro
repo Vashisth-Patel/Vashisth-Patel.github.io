@@ -182,6 +182,9 @@
           </svg>
         </button>
         <p id="dynamic-message" class="text-center text-blue-400 font-mono text-sm mt-6 hidden h-5 transition-opacity duration-300"></p>
+        <p id="cold-start-note" class="text-[10px] text-slate-500 italic mt-2 text-center max-w-[280px] mx-auto hidden leading-relaxed">
+          Note: We use a compute-on-demand server that &ldquo;sleeps&rdquo; during inactivity. It may take up to 2 minutes to fully wake up for your first analysis.
+        </p>
       </div>
     </form>
   </div>
@@ -286,6 +289,10 @@
     if (btnText) btnText.textContent = 'Generating Matrix Details...';
     if (btnSpinner) btnSpinner.classList.remove('hidden');
 
+    // Show cold-start disclaimer
+    const coldStartNote = document.getElementById('cold-start-note');
+    if (coldStartNote) coldStartNote.classList.remove('hidden');
+
     // Timer and rotating messages
     let msgIndex = 0;
     let secondsRemaining = 120;
@@ -314,6 +321,10 @@
     console.log("Headers:", requestHeaders);
     console.log("Payload being sent:", JSON.stringify(data, null, 2));
 
+    // 120s AbortController timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
     try {
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
@@ -322,8 +333,9 @@
         referrerPolicy: 'no-referrer',
         headers: requestHeaders,
         body: JSON.stringify(data),
-        signal: AbortSignal.timeout(65000) // 65s timeout to cover the full timer duration
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -349,19 +361,21 @@
 
       // Success reveal: immediately clear timer and reset button
       clearInterval(msgInterval);
+      if (coldStartNote) coldStartNote.classList.add('hidden');
       if (dynamicMessage) dynamicMessage.classList.add('hidden');
       if (submitBtn) submitBtn.disabled = false;
       if (btnText) btnText.textContent = 'Analyze My Company';
       if (btnSpinner) btnSpinner.classList.add('hidden');
 
     } catch (error: any) {
+      clearTimeout(timeoutId);
       console.error('Webhook error (Deep-Inference catch):');
       console.dir(error);
 
       // Show user feedback
       if (dynamicMessage) {
-        if (error.name === 'TimeoutError') {
-          dynamicMessage.textContent = 'Connection timed out. The AI analysis took more than 60 seconds. Please try again.';
+        if (error.name === 'AbortError' || error.name === 'TimeoutError') {
+          dynamicMessage.textContent = 'The server is taking longer than expected to wake up. Please try refreshing in a moment.';
         } else if (error.message && error.message.includes("response body is empty")) {
           dynamicMessage.textContent = 'Connected to AI Engine, but no data was returned. This is likely a CORS or Webhook Response configuration issue.';
         } else {
@@ -374,6 +388,7 @@
 
       // Explicit error resetting
       clearInterval(msgInterval);
+      if (coldStartNote) coldStartNote.classList.add('hidden');
       if (submitBtn) submitBtn.disabled = false;
       if (btnText) btnText.textContent = 'Analyze My Company';
       if (btnSpinner) btnSpinner.classList.add('hidden');
