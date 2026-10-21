@@ -1,0 +1,270 @@
+---
+/**
+ * CLASSIC VIEW: the previous one-page site (v1), kept as a simple, direct alternative to the
+ * three worlds. Linked from the "Classic view" button on the landing page and in WorldNav.
+ * Personal documents (exam scorecards, degree scans, IELTS) were removed on purpose; only course
+ * certificates and the Dean's Honour List remain, with clean file names and stripped metadata.
+ */
+import Layout from '../../layouts/LegacyLayout.astro';
+import Navbar from '../../components/classic/Navbar.astro';
+import Hero from '../../components/classic/Hero.astro';
+import About from '../../components/classic/About.astro';
+import Experience from '../../components/classic/Experience.astro';
+import Path from '../../components/classic/Path.astro';
+import Competitions from '../../components/classic/Competitions.astro';
+import EducationModal from '../../components/classic/EducationModal.astro';
+import Contact from '../../components/classic/Contact.astro';
+import Footer from '../../components/legacy/Footer.astro';
+import Projects from '../../components/classic/Projects.astro';
+import ProfessionalCertifications from '../../components/classic/ProfessionalCertifications.astro';
+import CertificationModal from '../../components/classic/CertificationModal.astro';
+import { withBase } from '../../lib/url';
+
+const cert = (file: string) => withBase(`docs/certificates/${file}`);
+---
+
+<Layout title="Vashisth Patel | Classic view">
+  <div id="top"></div>
+  <Navbar />
+  <Hero />
+
+  <About />
+  <!-- Section 02: Experience -->
+  <Experience />
+  <!-- Section 03: Education -->
+  <Path />
+  <!-- Competitions & Awards (compact, unnumbered) -->
+  <Competitions />
+  <!-- Section 04: Built -->
+  <Projects />
+  <ProfessionalCertifications />
+  <Contact />
+  
+  <EducationModal 
+    modalId="education-modal-ebs"
+    degree="M.Sc. in Management"
+    university="EBS University for Business and Law"
+    location="Wiesbaden, Germany"
+    years="Aug 2024 — June 2027 (expected)"
+    bannerText="EBS University"
+    websiteUrl="https://www.ebs.edu"
+    duration="3 Years"
+    credits="120 ECTS"
+    faculty="EBS Business School"
+    mission="MSc in Management: operations management, strategic analysis, and technology-driven business transformation.\n\nCurrent thesis: Business Model Innovation in Technology-Driven Firms, using Amit & Zott's Activity System Framework."
+    globalCredentials={{
+      languages: [
+        {
+          language: "English",
+          level: "C1 - Business Fluent",
+          description: "Professional proficiency in business communication and technical documentation"
+        },
+        {
+          language: "German",
+          level: "B1 (University Certificate)",
+          description: "Telc B2 examination scheduled for September 2026. Active use through work and daily life in Wiesbaden."
+        }
+      ]
+    }}
+    clubs={[
+      {
+        name: "EBS Invest",
+        description: "Investment club focused on equity research and portfolio analysis. Competed in Quantathon 2026, securing second place overall in algorithmic trading model development."
+      },
+      {
+        name: "EBS Code",
+        description: "Technology and programming focused student community."
+      }
+    ]}
+    coreModules={[
+      "Operations & Technology Management",
+      "Strategy Analytics",
+      "Sustainable Strategy",
+      "Tools for Technology & Innovation Management",
+      "Strategic Entrepreneurship",
+      "Applied Qualitative Interviewing"
+    ]}
+    technicalSkills={[
+      "Excel (Advanced Modelling, Forecasting)",
+      "Power BI",
+      "Python",
+      "SQL",
+      "Process Mapping",
+      "KPI Dashboard Development"
+    ]}
+    documents={[]}
+  />
+  
+  <!-- Education Modal 2: SP Jain Institute -->
+  <EducationModal 
+    modalId="education-modal-spjain"
+    degree="Global Management Programme"
+    university="S P Jain Institute of Management and Research"
+    location="Mumbai, India"
+    years="Dec 2023 — June 2024"
+    bannerText="SP Jain Institute"
+    websiteUrl="https://www.spjimr.org"
+    duration="7 Months"
+    faculty="School of Management"
+    mission="General management curriculum across strategy, operations, and finance. GPA 3.4/4, ranked top 2 of cohort.\n\nCAT 2023: Quantitative Ability 99.7 percentile | Data Interpretation & Logical Reasoning 99.4 percentile"
+    projects={[
+      {
+        title: "Design Thinking — Dadar Vegetable Market",
+        description: "Conducted primary interviews and brainstorming sessions with vegetable vendors and customers at Dadar Vegetable Market, Mumbai. Identified market visibility challenges and consumer experience gaps. Proposed structured solutions based on direct stakeholder research.",
+        tools: ["Primary Research", "Design Thinking", "Stakeholder Interviews"],
+        outcomes: [
+          "Conducted interviews with vendors and customers",
+          "Identified market visibility and consumer experience challenges",
+          "Applied design thinking methodology to solution development",
+          "Created actionable recommendations for market improvement"
+        ]
+      },
+      {
+        title: "Digital Product Management — IRCTC App Redesign",
+        description: "Identified consumer pain points in IRCTC rail booking application. Applied value proposition canvas and customer journey mapping framework. Developed interactive Figma prototypes for proposed redesign.",
+        tools: ["Figma", "Value Proposition Canvas", "Customer Journey Mapping", "User Research"],
+        outcomes: [
+          "Identified key consumer pain points through user research",
+          "Applied Value Proposition Canvas methodology",
+          "Created customer journey maps highlighting friction points",
+          "Developed interactive Figma prototypes for proposed solutions"
+        ]
+      }
+    ]}
+    coreModules={[
+      "Operations & Global Supply Chain Management",
+      "Project Management",
+      "Design Thinking",
+      "Business Modelling & Data Visualization",
+      "Digital Technologies for Business",
+      "Intercultural & Organizational Change Management",
+      "Python for Data Science"
+    ]}
+    technicalSkills={[
+      "Python (Pandas, NumPy)",
+      "Excel (Macros, Financial Modelling)",
+      "Power BI",
+      "SQL",
+      "Figma Prototyping",
+      "Statistical Modelling",
+      "Process Optimisation"
+    ]}
+    documents={[
+      { title: "Dean's Honour List, Certificate of Merit (#2 Rank)", type: "Academic Achievement", href: cert('spjimr-deans-honour-list.pdf') }
+    ]}
+  />
+  
+  <!-- Education Modal 3: IIT Gandhinagar -->
+  <EducationModal 
+    modalId="education-modal-iit"
+    degree="B.Tech in Materials Science and Engineering"
+    university="Indian Institute of Technology (IIT) Gandhinagar"
+    location="Gandhinagar, India"
+    years="Aug 2019 — June 2023"
+    bannerText="IIT Gandhinagar"
+    websiteUrl="https://www.iitgn.ac.in"
+    duration="4 Years"
+    credits="160 Credits"
+    faculty="School of Engineering"
+    mission="B.Tech in Materials Science and Engineering, IIT Gandhinagar. Coursework in materials characterisation, mathematics, and computational methods: SEM/EBSD analysis, thermodynamics, numerical methods in MATLAB and Python.\n\nJEE Advanced Rank: 7060 | JEE Mains: 99.17 percentile\nCAT 2023: Quantitative Ability 99.7 percentile | Data Interpretation & Logical Reasoning 99.4 percentile"
+    researchExperience={{
+      title: "Undergraduate Research — Electrokinetic Energy Harvesting",
+      subtitle: "Under Prof. Gopinathan Kalon | IIT Gandhinagar",
+      description: "Contributed to early-stage exploratory research on streaming voltage-based energy generation materials. Conducted systematic literature review across 10-15 papers and developed theoretical framework mapping electrokinetic energy harvesting mechanisms and potential energy generation pathways.\n\nResearch exposure, working directly with a professor on a novel problem, not coursework. The project was exploratory and discontinued before publication stage."
+    }}
+    projects={[
+      {
+        title: "Cu/Nb Multilayer Composites via Accumulative Roll Bonding",
+        timeline: "MSE 307 | Under Prof. Pradipta Ghosh",
+        description: "Analysed microstructural evolution of copper-niobium multilayer composites processed across 7 ARB cycles. Studied Hall-Petch strengthening mechanisms, dislocation mechanics, KAM mapping, and SEM micrograph interpretation. Investigated tensile fracture morphology and crack propagation behaviour.",
+        tools: ["SEM Analysis", "EBSD", "Materials Characterisation", "Scientific Reporting"],
+        outcomes: [
+          "Analysed microstructural evolution across 7 ARB processing cycles",
+          "Studied Hall-Petch strengthening relationship between yield stress and layer thickness",
+          "Interpreted KAM maps for geometrically necessary dislocation density",
+          "Investigated tensile fracture morphology and crack propagation mechanisms"
+        ]
+      },
+      {
+        title: "Biomedical Implants Corrosion Analysis",
+        timeline: "MSE 302 | Under Prof. Sriharitha Rowthu",
+        description: "Investigated corrosion mechanisms in orthopaedic and dental implants operating in biological environments. Analysed passive layer formation, wear-corrosion interaction, and material selection strategies for Ti6Al4V and 316L stainless steel systems. Included market analysis of the growing biomedical implants sector.",
+        tools: ["Corrosion Analysis", "Materials Selection Frameworks", "Scientific Literature Review"],
+        outcomes: [
+          "Analysed corrosion failure modes in Ti6Al4V and 316L stainless steel implants",
+          "Investigated passive layer formation kinetics and regeneration mechanisms",
+          "Evaluated wear-corrosion interaction in biological fluid environments",
+          "Conducted market analysis: biomedical implants market projected $147B by 2027"
+        ]
+      },
+      {
+        title: "Graphene/CNT Metal Matrix Composites",
+        timeline: "MSE 305 | Under Prof. Superb Mishra",
+        description: "Studied interfacial bonding mechanisms between graphene/CNT reinforcements and metal matrices. Analysed strengthening mechanisms including second phase hardening, strain hardening (Orowan mechanism), and Hall-Petch grain boundary strengthening. Investigated physisorption vs chemisorption at metal-graphene interfaces.",
+        tools: ["Materials Science Analysis", "Scientific Literature Review", "Technical Reporting"],
+        outcomes: [
+          "Analysed physisorption and chemisorption mechanisms at metal-graphene interfaces",
+          "Studied three primary strengthening mechanisms in graphene-reinforced MMCs",
+          "Investigated effect of graphene dispersion and concentration on mechanical properties",
+          "Applied shear lag model to predict yield strength enhancement"
+        ]
+      },
+      {
+        title: "Numerical Analysis of Euler-Bernoulli Beams",
+        timeline: "MA 202 | Under Prof. Satyajit Pramanik",
+        description: "Developed numerical and analytical solutions for deflection of Euler-Bernoulli beam fixed at both ends under constant external load. Solved fourth-order differential equation using Finite Difference Method in MATLAB. Plotted deflection vs distance curves comparing analytical and numerical solutions.",
+        tools: ["MATLAB", "Finite Difference Method", "Numerical Analysis"],
+        outcomes: [
+          "Derived governing Euler-Bernoulli beam equation from first principles",
+          "Implemented Finite Difference Method in MATLAB for numerical solution",
+          "Applied Gaussian elimination to solve system of equations",
+          "Compared numerical and analytical solutions for validation"
+        ]
+      }
+    ]}
+    coreModules={[
+      "Advanced Calculus (4 Semesters)",
+      "Linear Algebra & Differential Equations",
+      "Materials Characterisation & Analysis",
+      "Thermodynamics & Kinetics of Materials",
+      "Corrosion Engineering",
+      "Advanced Materials & Composites",
+      "Programming & Data Structures (Python, C++)",
+      "Operations Research"
+    ]}
+    technicalSkills={[
+      "MATLAB Programming",
+      "Python Programming",
+      "Materials Characterisation (SEM, EBSD)",
+      "Numerical Methods",
+      "Statistical Analysis",
+      "Technical Report Writing",
+      "Scientific Literature Review"
+    ]}
+    documents={[]}
+  />
+  
+  <!-- Harvard Certifications Modal -->
+  <CertificationModal 
+    modalId="harvard-certifications-modal"
+    title="Harvard Business Publishing Certificates"
+    organization="Harvard Business Publishing"
+    certificates={[
+      { title: "Finance", file: cert('harvard-hbp-finance.pdf') },
+      { title: "Financial Accounting", file: cert('harvard-hbp-financial-accounting.pdf') },
+      { title: "Management Communication", file: cert('harvard-hbp-management-communication.pdf') },
+      { title: "Mathematics for Management", file: cert('harvard-hbp-mathematics-for-management.pdf') },
+      { title: "Quantitative Methods", file: cert('harvard-hbp-quantitative-methods.pdf') },
+      { title: "Spreadsheet Modeling", file: cert('harvard-hbp-spreadsheet-modeling.pdf') }
+    ]}
+  />
+  
+  <Footer />
+
+  <script>
+    import { track } from '../../lib/track';
+    document.querySelectorAll<HTMLElement>('[data-track]').forEach((el) =>
+      el.addEventListener('click', () => track(el.dataset.track!)),
+    );
+  </script>
+</Layout>

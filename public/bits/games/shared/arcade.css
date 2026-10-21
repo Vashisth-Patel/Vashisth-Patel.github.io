@@ -1,0 +1,131 @@
+/* Shared shell for the canvas games (Snake, Turtle Crossing). Each game sets --game-bg / --game-fg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--game-bg, #000);
+  color: var(--game-fg, #fff);
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--game-accent, #39ff88); outline-offset: 2px; }
+
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 760px;
+  padding: 10px 14px 8px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+.hud b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.hud-right { display: flex; align-items: center; gap: 14px; }
+.hud-dim { opacity: 0.6; }
+.mute {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 12px;
+  opacity: 0.7;
+}
+.mute:hover { opacity: 1; }
+
+.stage {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 0;
+  touch-action: none;
+}
+.stage canvas { display: block; }
+
+.msg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+.msg[hidden] { display: none; }
+.msg-title { font-size: clamp(26px, 7vw, 44px); font-weight: 700; letter-spacing: 0.08em; }
+.msg-sub { font-size: 14px; line-height: 1.5; opacity: 0.85; max-width: 34ch; margin: 0 auto; }
+.msg-key {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
+.toast.is-on { animation: toast 1.3s ease both; }
+@keyframes toast {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.96); }
+  15%, 75% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
+
+.foot {
+  width: 100%;
+  max-width: 760px;
+  padding: 8px 14px max(10px, env(safe-area-inset-bottom));
+  font-size: 11.5px;
+  line-height: 1.5;
+  text-align: center;
+  opacity: 0.62;
+}
+.foot a { color: inherit; }
+.in-overlay .back-link { display: none; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.shake { animation: shake 0.28s linear; }
+@keyframes shake {
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast.is-on { animation: none; opacity: 1; }
+  .shake { animation: none; }
+}

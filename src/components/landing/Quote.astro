@@ -1,0 +1,52 @@
+---
+import { quote } from '../../data/landing';
+---
+
+<section class="quote" aria-labelledby="quote-title">
+  <figure class="container">
+    <p class="eyebrow" id="quote-title" data-reveal>{quote.eyebrow}</p>
+    <blockquote>
+      {quote.paragraphs.map((p, i) => (
+        <p data-reveal style={`--delay:${i * 160}ms`} class={i === quote.paragraphs.length - 1 ? 'goal' : ''}>{p}</p>
+      ))}
+    </blockquote>
+    <figcaption data-reveal><span aria-hidden="true">✦</span> Vashisth</figcaption>
+  </figure>
+</section>
+
+<style>
+  .quote { position: relative; padding-block: clamp(80px, 13vw, 170px); }
+  figure { max-width: 980px; text-align: center; }
+  blockquote {
+    position: relative;
+    margin-top: 28px;
+    font-family: var(--font-display);
+    font-size: clamp(27px, 3.5vw, 46px);
+    line-height: 1.22;
+    letter-spacing: -0.005em;
+    color: var(--starlight);
+  }
+  blockquote::before {
+    content: '“';
+    position: absolute;
+    left: 50%;
+    top: -0.62em;
+    transform: translateX(-50%);
+    font-size: 4.2em;
+    line-height: 1;
+    color: rgba(244, 241, 234, 0.08);
+    pointer-events: none;
+  }
+  blockquote p { font-style: italic; }
+  blockquote p + p { margin-top: 0.7em; }
+  .goal { font-style: normal !important; color: #fff; }
+  figcaption {
+    margin-top: 32px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  figcaption span { color: #ffe7d2; margin-right: 6px; }
+</style>

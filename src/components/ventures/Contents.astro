@@ -1,0 +1,111 @@
+---
+/** Table of contents, set like a printed report: numeral, chapter, dot leader, project count. */
+import { chapters, pad } from '../../data/ventures';
+---
+
+<section id="contents" class="contents" aria-labelledby="contents-title">
+  <div class="container">
+    <div class="contents__head">
+      <h2 id="contents-title" class="contents__title" data-reveal>Contents</h2>
+      <div class="contents__rule" data-vx-line style="--delay:100ms"></div>
+    </div>
+
+    <ol class="contents__list">
+      {chapters.map((c, i) => (
+        <li data-reveal style={`--delay:${40 * i}ms`}>
+          <a href={`#ch-${c.n}`}>
+            <span class="contents__n">{pad(c.n)}</span>
+            <span class="contents__t">{c.title}</span>
+            <span class="contents__dots" aria-hidden="true"></span>
+            <span class="contents__count">
+              {c.projects.length} {c.projects.length === 1 ? 'project' : 'projects'}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .contents {
+    padding: clamp(48px, 8vh, 96px) 0 clamp(16px, 3vh, 32px);
+    scroll-margin-top: 64px;
+  }
+
+  .contents__head {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: clamp(20px, 3vh, 32px);
+  }
+  .contents__title {
+    font-family: var(--font-report);
+    font-weight: 400;
+    font-size: clamp(30px, 3.6vw, 44px);
+    letter-spacing: -0.015em;
+    line-height: 1;
+  }
+  .contents__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--fg);
+  }
+
+  .contents__list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    column-gap: clamp(28px, 4vw, 56px);
+  }
+  @media (min-width: 720px) {
+    .contents__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1240px) {
+    .contents__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, auto);
+      grid-auto-flow: column;
+    }
+  }
+
+  .contents__list a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--hair);
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .contents__n {
+    font-family: var(--font-report);
+    font-size: 15px;
+    color: var(--accent);
+    font-variant-numeric: lining-nums tabular-nums;
+    min-width: 2ch;
+  }
+  .contents__t {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-family: var(--font-report);
+    font-size: clamp(19px, 1.7vw, 22px);
+    letter-spacing: -0.005em;
+    transition: color 0.2s;
+  }
+  .contents__dots {
+    flex: 1;
+    min-width: 16px;
+    border-bottom: 1px dotted color-mix(in srgb, var(--fg) 35%, transparent);
+    translate: 0 -4px;
+  }
+  .contents__count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .contents__list a:hover .contents__t { color: var(--accent); }
+</style>

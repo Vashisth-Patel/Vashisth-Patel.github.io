@@ -1,0 +1,175 @@
+---
+/**
+ * Fixed background for the landing page: one Hubble photograph picked at random per visit
+ * (data/landing.ts), a legibility veil, and the live starfield on top. A small caption in the
+ * top-right corner names the image and carries its CC BY credit (ESA/Hubble requirement:
+ * visible, linked, not separated from the image). If images fail, a procedural nebula shows.
+ */
+import Starfield from '../common/Starfield.astro';
+import { spaceImages } from '../../data/landing';
+import { withBase } from '../../lib/url';
+
+const images = spaceImages.map((i) => ({ ...i, src: withBase(i.src) }));
+---
+
+<div class="backdrop" aria-hidden="true" data-backdrop>
+  <div class="nebula">
+    <span class="cloud c1"></span>
+    <span class="cloud c2"></span>
+    <span class="cloud c3"></span>
+    <span class="cloud c4"></span>
+  </div>
+  {images.length > 0 && <img class="photo" alt="" decoding="async" fetchpriority="low" data-space-photo />}
+  <div class="veil"></div>
+</div>
+<Starfield density={0.8} />
+
+{images.length > 0 && (
+  <aside class="caption" aria-label="About the background image" data-space-caption>
+    <p class="cap-title" data-cap-title></p>
+    <p class="cap-desc" data-cap-desc></p>
+    <p class="cap-credit">
+      <a href="#" target="_blank" rel="noopener noreferrer" data-cap-credit></a>
+    </p>
+  </aside>
+)}
+
+<script type="application/json" id="space-images" set:html={JSON.stringify(images)} />
+
+<style>
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: radial-gradient(120% 90% at 70% 10%, #0d1222 0%, var(--space-0) 60%);
+  }
+
+  /* Procedural nebula: shows until (or instead of) a photograph */
+  .nebula {
+    position: absolute;
+    inset: -20%;
+    filter: blur(60px) saturate(115%);
+    opacity: 0.85;
+    transition: opacity 1.6s var(--ease-out);
+  }
+  .has-photo .nebula { opacity: 0.25; }
+  .cloud {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    animation: drift 90s var(--ease-in-out) infinite alternate;
+  }
+  .c1 { width: 55vmax; height: 40vmax; left: 48%; top: 2%; background: radial-gradient(closest-side, rgba(120, 72, 190, 0.55), transparent); }
+  .c2 { width: 45vmax; height: 35vmax; left: 8%; top: 38%; background: radial-gradient(closest-side, rgba(40, 110, 170, 0.45), transparent); animation-duration: 120s; animation-delay: -30s; }
+  .c3 { width: 30vmax; height: 26vmax; left: 62%; top: 52%; background: radial-gradient(closest-side, rgba(232, 131, 58, 0.28), transparent); animation-duration: 140s; animation-delay: -60s; }
+  .c4 { width: 36vmax; height: 22vmax; left: 30%; top: 8%; background: radial-gradient(closest-side, rgba(70, 190, 180, 0.18), transparent); animation-duration: 110s; }
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+    to { transform: translate3d(-6%, 4%, 0) rotate(12deg) scale(1.12); }
+  }
+
+  .photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 1.8s var(--ease-out);
+    animation: kenburns 90s linear infinite alternate;
+  }
+  .photo.is-loaded { opacity: 0.7; }
+  @keyframes kenburns {
+    from { transform: scale(1.06) translate3d(0, 0, 0); }
+    to { transform: scale(1.16) translate3d(-2%, -1.5%, 0); }
+  }
+
+  .veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(5, 6, 10, 0.72) 0%, rgba(5, 6, 10, 0.25) 55%, rgba(5, 6, 10, 0.35) 100%),
+      linear-gradient(180deg, rgba(5, 6, 10, 0.15) 0%, rgba(5, 6, 10, 0.45) 60%, rgba(5, 6, 10, 0.8) 100%);
+  }
+
+  /* Caption: small, light, top-right. Scrolls away with the hero. */
+  .caption {
+    position: absolute;
+    top: max(18px, env(safe-area-inset-top));
+    right: var(--gutter);
+    z-index: 3;
+    width: min(300px, 62vw);
+    text-align: right;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 1.2s var(--ease-out) 0.6s, transform 1.2s var(--ease-out) 0.6s;
+    pointer-events: none;
+  }
+  .caption.is-in { opacity: 1; transform: none; pointer-events: auto; }
+  .cap-title {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.72);
+  }
+  .cap-title::before { content: '◉ '; color: rgba(244, 241, 234, 0.45); }
+  .cap-desc {
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.45;
+    color: rgba(244, 241, 234, 0.55);
+  }
+  .cap-credit { margin-top: 5px; font-size: 10.5px; line-height: 1.4; color: rgba(244, 241, 234, 0.38); }
+  .cap-credit a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(244, 241, 234, 0.18); }
+  .cap-credit a:hover { color: rgba(244, 241, 234, 0.8); }
+
+  @media (max-width: 600px) {
+    .cap-desc { display: none; }
+    .caption { width: min(210px, 56vw); }
+  }
+</style>
+
+<script>
+  interface Img {
+    src: string;
+    title: string;
+    description: string;
+    credit: string;
+    creditUrl: string;
+    position?: string;
+  }
+  const list = JSON.parse(document.getElementById('space-images')?.textContent || '[]') as Img[];
+  const img = document.querySelector<HTMLImageElement>('[data-space-photo]');
+  const cap = document.querySelector<HTMLElement>('[data-space-caption]');
+
+  if (img && list.length) {
+    const pick = list[Math.floor(Math.random() * list.length)];
+    const set = (sel: string, text: string) => {
+      const el = cap?.querySelector<HTMLElement>(sel);
+      if (el) el.textContent = text;
+    };
+    set('[data-cap-title]', pick.title);
+    set('[data-cap-desc]', pick.description);
+    const a = cap?.querySelector<HTMLAnchorElement>('[data-cap-credit]');
+    if (a) {
+      a.href = pick.creditUrl;
+      a.textContent = `Image: ${pick.credit} (CC BY 4.0)`;
+    }
+    if (pick.position) img.style.objectPosition = pick.position;
+    img.addEventListener(
+      'load',
+      () => {
+        img.classList.add('is-loaded');
+        document.querySelector('[data-backdrop]')?.classList.add('has-photo');
+        cap?.classList.add('is-in');
+      },
+      { once: true },
+    );
+    img.addEventListener('error', () => cap?.remove(), { once: true });
+    img.src = pick.src;
+  }
+</script>

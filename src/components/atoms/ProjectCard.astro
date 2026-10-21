@@ -1,0 +1,70 @@
+---
+/** One project as a plain card for the list view (recruiters, screen readers, no-JS). */
+import type { Project } from '../../data/atoms';
+
+interface Props { project: Project }
+const { project: p } = Astro.props;
+---
+
+<article class="pc" id={`list-${p.id}`}>
+  <p class="pc__code">{p.course}{p.courseName && <span> · {p.courseName}</span>}{p.year && <span> · {p.year}</span>}</p>
+  <h4 class="pc__title">{p.title}</h4>
+  <p class="pc__who">
+    {p.prof && <span>{p.prof}</span>}
+    <span>{p.team}</span>
+  </p>
+  {p.note && <p class="pc__note">{p.note}</p>}
+  <p class="pc__summary">{p.summary}</p>
+  {p.role && <p class="pc__role"><strong>His part:</strong> {p.role}</p>}
+
+  {p.phases && (
+    <ol class="pc__phases">
+      {p.phases.map((ph) => (
+        <li>
+          <strong>{ph.label}.</strong> {ph.summary}
+        </li>
+      ))}
+    </ol>
+  )}
+
+  <ul class="pc__chips">
+    {(p.phases ? p.phases.flatMap((ph) => ph.chips).filter((c, i, arr) => arr.findIndex((x) => x.n === c.n && x.l === c.l) === i) : p.chips).map((c) => (
+      <li><strong>{c.n}</strong> {c.l}</li>
+    ))}
+  </ul>
+</article>
+
+<style>
+  .pc {
+    position: relative;
+    padding: 22px 22px 20px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    background: var(--panel);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color 0.25s, transform 0.3s var(--ease-out);
+  }
+  .pc:hover { border-color: rgba(232, 131, 58, 0.5); }
+  .pc:target { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .pc__code { font: 500 11.5px/1.5 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .pc__code span { color: var(--muted); }
+  .pc__title { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.12; margin-top: 8px; }
+  .pc__who { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 8px; font-size: 13.5px; color: var(--muted); }
+  .pc__note { margin-top: 10px; font-size: 13px; color: var(--copper-soft); }
+  .pc__summary { margin-top: 12px; font-size: 15px; line-height: 1.6; color: color-mix(in srgb, var(--fg) 88%, transparent); }
+  .pc__role { margin-top: 10px; font-size: 14px; color: var(--muted); }
+  .pc__role strong { color: var(--fg); font-weight: 600; }
+  .pc__phases { margin: 14px 0 0; padding-left: 20px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.55; color: color-mix(in srgb, var(--fg) 85%, transparent); }
+  .pc__phases strong { color: var(--fg); font-weight: 600; }
+  .pc__phases li::marker { font-family: var(--font-mono); color: var(--accent); font-size: 12px; }
+  .pc__chips { list-style: none; padding: 0; margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pc__chips li {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 5px 10px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+  }
+  .pc__chips strong { font-family: var(--font-mono); font-weight: 600; color: var(--fg); }
+</style>

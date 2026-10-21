@@ -1,0 +1,254 @@
+---
+/**
+ * One stage in Nova's life: running head, numeral + title, a verified quote,
+ * Nova's (hypothetical) situation, then "When I did this for real" with the real projects.
+ */
+import type { Chapter } from '../../data/ventures';
+import { chapters, pad } from '../../data/ventures';
+import ProjectCard from './ProjectCard.astro';
+import NovaMark from './NovaMark.astro';
+
+interface Props { chapter: Chapter }
+const { chapter: c } = Astro.props;
+const total = pad(chapters.length);
+const big = c.projects.filter((p) => p.kind !== 'course');
+const small = c.projects.filter((p) => p.kind === 'course');
+const titleId = `ch-${c.n}-title`;
+---
+
+<section id={`ch-${c.n}`} class="ch" aria-labelledby={titleId} data-vx-chapter={c.n}>
+  <div class="ch__runner" aria-hidden="true">
+    <span>Nova</span>
+    <span>{pad(c.n)} / {total}</span>
+    <i data-vx-line></i>
+  </div>
+
+  <header class="ch__head">
+    <span class="ch__num" aria-hidden="true" data-reveal>{pad(c.n)}</span>
+    <div class="ch__heading" data-reveal style="--delay:80ms">
+      <p class="ch__kicker">Chapter {c.n}</p>
+      <h2 id={titleId} class="ch__title">{c.title}</h2>
+    </div>
+  </header>
+
+  <div class="ch__lead">
+    <figure class="ch__quote" data-reveal style="--delay:140ms">
+      <blockquote>
+        <p>“{c.quote.text}”</p>
+      </blockquote>
+      <figcaption>
+        <span class="ch__author">{c.quote.author}</span>
+        <span class="ch__work"><cite>{c.quote.work}</cite>, {c.quote.year}{c.quote.note && ` (${c.quote.note})`}</span>
+      </figcaption>
+    </figure>
+
+    <aside class="ch__nova" aria-label="Nova, hypothetical" data-reveal style="--delay:220ms">
+      <p class="ch__nova-label">
+        <span class="ch__nova-mark"><NovaMark /></span>
+        Nova · hypothetical
+      </p>
+      <p class="ch__nova-text">{c.nova}</p>
+    </aside>
+  </div>
+
+  <div class="ch__real">
+    <h3 class="ch__real-label" data-reveal>
+      <span>When I did this for real</span>
+      <i aria-hidden="true"></i>
+    </h3>
+
+    {big.length > 0 && (
+      <div class="ch__big">
+        {big.map((p, i) => <ProjectCard project={p} delay={0.06 * i} />)}
+      </div>
+    )}
+
+    {small.length > 0 && (
+      <div class:list={['ch__small', `ch__small--${Math.min(small.length, 3)}`]}>
+        {small.map((p, i) => <ProjectCard project={p} delay={0.08 * i} />)}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .ch {
+    position: relative;
+    padding: clamp(56px, 9vh, 104px) 0 clamp(72px, 12vh, 136px);
+    scroll-margin-top: 72px;
+  }
+  @media (max-width: 1099px) {
+    .ch { scroll-margin-top: 96px; }
+  }
+
+  /* Running head, like the top of a printed page */
+  .ch__runner {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ch__runner i {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--fg);
+  }
+
+  .ch__head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(16px, 3vw, 40px);
+    margin-top: clamp(28px, 5vh, 56px);
+  }
+  .ch__num {
+    font-family: var(--font-report);
+    font-weight: 300;
+    font-size: clamp(88px, 13vw, 184px);
+    line-height: 0.74;
+    letter-spacing: -0.05em;
+    color: var(--accent);
+    font-variant-numeric: lining-nums tabular-nums;
+    font-variation-settings: 'opsz' 144;
+    margin-left: -0.04em;
+  }
+  .ch__kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .ch__title {
+    font-family: var(--font-report);
+    font-weight: 380;
+    font-size: clamp(34px, 5vw, 66px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    font-variation-settings: 'opsz' 144;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 520px) {
+    .ch__head { grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
+  }
+
+  /* Quote + Nova */
+  .ch__lead {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    margin-top: clamp(36px, 6vh, 64px);
+  }
+  @media (min-width: 860px) {
+    .ch__lead {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .ch__quote { margin: 0; }
+  .ch__quote blockquote { margin: 0; }
+  .ch__quote p {
+    font-family: var(--font-report);
+    font-style: italic;
+    font-weight: 340;
+    font-size: clamp(22px, 2.5vw, 31px);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+    hanging-punctuation: first;
+  }
+  .ch__quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 18px;
+    padding-left: 14px;
+    border-left: 2px solid var(--accent);
+  }
+  .ch__author {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .ch__work { font-size: 13.5px; color: var(--muted); }
+  .ch__work cite { font-style: italic; font-family: var(--font-report); font-size: 14.5px; }
+
+  .ch__nova {
+    position: relative;
+    padding: 18px 0 0 20px;
+    border-left: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  @media (min-width: 860px) {
+    .ch__nova { margin-top: 6px; }
+  }
+  .ch__nova-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .ch__nova-mark { width: 12px; height: 12px; flex: none; }
+  .ch__nova-mark :global(.nova) { width: 100%; height: 100%; }
+  .ch__nova-text {
+    font-family: var(--font-report);
+    font-style: italic;
+    font-weight: 360;
+    font-size: 18px;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--fg) 82%, var(--bg));
+    text-wrap: pretty;
+  }
+
+  /* Real projects */
+  .ch__real { margin-top: clamp(48px, 8vh, 80px); }
+  .ch__real-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: clamp(20px, 3vh, 28px);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .ch__real-label i {
+    flex: 1;
+    height: 1px;
+    background: var(--hair);
+  }
+
+  .ch__big {
+    display: grid;
+    gap: clamp(20px, 3vw, 28px);
+  }
+  .ch__big + .ch__small { margin-top: clamp(36px, 5vh, 52px); }
+
+  .ch__small {
+    display: grid;
+    gap: 36px clamp(24px, 3vw, 40px);
+  }
+  .ch__small--1 { max-width: 720px; }
+  @media (min-width: 720px) {
+    .ch__small--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ch__small--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1100px) {
+    .ch__small--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

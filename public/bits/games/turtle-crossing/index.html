@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Turtle Crossing · Bits arcade · Vashisth Patel</title>
+    <meta name="robots" content="noindex" />
+    <link rel="stylesheet" href="../shared/arcade.css" />
+    <style>
+      :root { --game-bg: #f4f4f1; --game-fg: #111; --game-accent: #111; }
+      body { font-family: 'Courier New', Courier, ui-monospace, monospace; }
+      .hud { font-weight: 700; }
+      .board {
+        position: relative;
+        background: #fff;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 12px 40px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+      }
+      .msg { background: rgba(255, 255, 255, 0.72); color: #111; }
+      .msg-title { font-family: 'Courier New', Courier, monospace; }
+      .toast { background: #111; color: #fff; }
+      .tap-hint { display: none; margin: 8px 0 0; font-size: 13px; opacity: 0.7; }
+      @media (pointer: coarse) { .tap-hint { display: block; } }
+    </style>
+  </head>
+  <body>
+    <header class="hud">
+      <span>Level <b data-level>1</b></span>
+      <span class="hud-right">
+        <span class="hud-dim">Best <b data-best>1</b></span>
+        <button type="button" class="mute" data-mute aria-pressed="false">sound: on</button>
+      </span>
+    </header>
+
+    <main class="stage" data-stage>
+      <div class="board" data-board>
+        <canvas data-canvas role="img" aria-label="Turtle Crossing: a black turtle at the bottom of a white road, coloured cars driving left"></canvas>
+        <div class="msg" data-msg>
+          <div class="msg-title" data-msg-title>TURTLE CROSSING</div>
+          <p class="msg-sub" data-msg-sub></p>
+        </div>
+        <div class="toast" data-toast aria-hidden="true"></div>
+      </div>
+      <p class="tap-hint">Tap anywhere to move up</p>
+    </main>
+
+    <footer class="foot">
+      Turtle Crossing · original: Python turtle, 2022 · remastered for the browser, 2026
+      <a class="back-link" href="../../">← back to the terminal</a>
+    </footer>
+    <p class="sr-only" aria-live="polite" data-live></p>
+
+    <script src="../shared/arcade.js"></script>
+    <script src="turtle.js"></script>
+  </body>
+</html>

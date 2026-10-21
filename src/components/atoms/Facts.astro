@@ -1,0 +1,108 @@
+---
+/**
+ * Mount point + styles for the random fact bubbles (scripts/atoms/facts.ts builds them).
+ * Global styles because the bubbles are created at runtime.
+ */
+---
+
+<div class="atm-facts" id="facts"></div>
+
+<style is:global>
+  .atm-facts { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
+
+  .atm-fact {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: min(300px, calc(100vw - 32px));
+    padding: 20px 40px 18px 20px;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.45;
+    pointer-events: auto;
+    cursor: pointer;
+    transform-origin: var(--ox, 20%) 110%;
+  }
+  .atm-fact[data-in] { animation: atm-fact-in 0.55s var(--pop) both; }
+  .atm-fact[data-out] { animation: atm-fact-out 0.28s ease-in both; pointer-events: none; }
+  @keyframes atm-fact-in {
+    from { opacity: 0; transform: scale(0.3) rotate(-8deg); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes atm-fact-out { to { opacity: 0; transform: scale(0.85) translateY(6px); } }
+
+  .atm-fact__tag {
+    position: absolute;
+    top: -14px;
+    left: 14px;
+    font-family: var(--font-comic);
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 5px 9px 3px;
+    color: var(--ink);
+    background: var(--copper);
+    border: 2.5px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(-4deg);
+  }
+  .atm-fact__text { margin: 0; }
+  .atm-fact__close {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--ink);
+    transition: background 0.2s, transform 0.25s var(--pop);
+  }
+  .atm-fact__close svg { width: 11px; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+  .atm-fact__close:hover { background: rgba(20, 12, 8, 0.1); transform: rotate(90deg); }
+  .atm-fact__close:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .atm-fact__timer {
+    position: absolute;
+    left: 20px;
+    right: 22px;
+    bottom: 9px;
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(20, 12, 8, 0.12);
+    overflow: hidden;
+  }
+  .atm-fact__timer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--copper);
+    transform-origin: left;
+    animation: atm-fact-timer var(--life, 8s) linear both;
+  }
+  .atm-fact[data-hold] .atm-fact__timer::after { animation-play-state: paused; }
+  @keyframes atm-fact-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+  .atm-fact .atm-tail { left: 26px; bottom: -31px; }
+  .atm-fact[data-side='right'] .atm-tail { left: auto; right: 26px; transform: scaleX(-1); }
+  .atm-fact__speaker {
+    position: absolute;
+    left: 2px;
+    bottom: -64px;
+    width: 34px;
+    height: 34px;
+  }
+  .atm-fact[data-side='right'] .atm-fact__speaker { left: auto; right: 2px; }
+  .atm-fact__speaker svg { width: 100%; height: 100%; overflow: visible; }
+  .atm-fact__speaker .orb { fill: none; stroke: rgba(251, 242, 228, 0.6); stroke-width: 1.4; }
+  .atm-fact__speaker .nuc { fill: #ef8a3e; stroke: #140c08; stroke-width: 1.6; }
+  .atm-fact__speaker .el { fill: #fffaf2; stroke: #140c08; stroke-width: 1; }
+  .atm-fact__speaker .spin { transform-origin: 0 0; animation: atm-mini 2.4s linear infinite; }
+  .atm-fact__speaker .spin + .spin { animation-duration: 3.4s; animation-direction: reverse; }
+  @keyframes atm-mini { to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atm-fact[data-in], .atm-fact[data-out] { animation: none; }
+    .atm-fact__speaker .spin { animation: none; }
+  }
+</style>

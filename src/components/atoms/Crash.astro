@@ -1,0 +1,126 @@
+---
+/**
+ * The fake crash after choosing uranium as a radiation shield. Lives inside the page;
+ * navigation never actually breaks. Driven by scripts/atoms/crash.ts.
+ */
+---
+
+<div class="crash" id="crash" role="alertdialog" aria-modal="true" aria-labelledby="crash-title" aria-describedby="crash-desc" hidden>
+  <div class="crash__screen">
+    <div class="crash__inner">
+      <p class="crash__boom" data-text="BOOOM." aria-hidden="true">BOOOM.</p>
+      <p class="crash__l1" id="crash-title">The website is dead.</p>
+      <p class="crash__l2" id="crash-desc">You shielded radiation with... a radioactive element.</p>
+      <p class="crash__code" aria-hidden="true">FATAL 0x92 · U-238 · shield_material=fuel</p>
+      <button class="crash__reboot" id="crash-reboot" type="button">[ Reboot the universe ]</button>
+    </div>
+  </div>
+  <canvas class="crash__bang" aria-hidden="true"></canvas>
+  <div class="crash__flash" aria-hidden="true"></div>
+</div>
+
+<style>
+  .crash {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: grid;
+    place-items: center;
+    color: #f4f1ea;
+  }
+  .crash[hidden] { display: none; }
+  .crash__screen {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: #000;
+    transition: opacity 1.1s ease;
+  }
+  .crash__screen::after {
+    /* scanlines */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+  }
+  .crash__inner { position: relative; text-align: center; max-width: 34rem; }
+  .crash__inner > * { opacity: 0; }
+  .crash[data-step='1'] .crash__boom,
+  .crash[data-step='2'] .crash__boom, .crash[data-step='2'] .crash__l1,
+  .crash[data-step='3'] .crash__inner > *:not(.crash__reboot),
+  .crash[data-step='4'] .crash__inner > * { opacity: 1; }
+  .crash[data-step='4'] .crash__reboot { animation: crash-in 0.5s ease both; }
+  .crash[data-step='5'] .crash__inner { opacity: 0; transition: opacity 0.35s; }
+  .crash[data-step='5'] .crash__inner > * { opacity: 1; }
+
+  .crash__boom {
+    position: relative;
+    font-family: var(--font-comic);
+    font-size: clamp(76px, 18vw, 180px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: #fff;
+    animation: crash-jitter 2.4s steps(1) infinite;
+  }
+  .crash__boom::before,
+  .crash__boom::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .crash__boom::before { color: #ff2a55; transform: translate(-4px, 0); mix-blend-mode: screen; animation: crash-slice 1.7s steps(1) infinite; }
+  .crash__boom::after { color: #19e6ff; transform: translate(4px, 0); mix-blend-mode: screen; animation: crash-slice 1.3s steps(1) infinite reverse; }
+  @keyframes crash-slice {
+    0% { clip-path: inset(0 0 72% 0); }
+    20% { clip-path: inset(40% 0 38% 0); transform: translate(-7px, 0); }
+    40% { clip-path: inset(78% 0 2% 0); }
+    60% { clip-path: inset(12% 0 62% 0); transform: translate(5px, 0); }
+    80% { clip-path: inset(55% 0 20% 0); }
+    100% { clip-path: inset(0 0 100% 0); }
+  }
+  @keyframes crash-jitter {
+    0%, 100% { transform: none; }
+    31% { transform: translate(2px, -1px) skewX(-4deg); }
+    33% { transform: none; }
+    71% { transform: translate(-3px, 1px); }
+    73% { transform: none; }
+  }
+  .crash__l1 { font: 600 clamp(20px, 3vw, 28px)/1.3 var(--font-mono); margin-top: 22px; }
+  .crash__l2 { font: 400 clamp(15px, 2vw, 18px)/1.5 var(--font-mono); color: #b9b4ab; margin-top: 10px; }
+  .crash__code { font: 400 11.5px/1.4 var(--font-mono); color: #6f6a62; margin-top: 26px; letter-spacing: 0.06em; }
+  .crash__reboot {
+    margin-top: 34px;
+    font: 500 15px/1 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: #39ff88;
+    padding: 14px 18px;
+    border: 1px solid rgba(57, 255, 136, 0.45);
+    border-radius: 4px;
+    background: rgba(57, 255, 136, 0.06);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .crash__reboot:hover, .crash__reboot:focus-visible {
+    background: rgba(57, 255, 136, 0.14);
+    box-shadow: 0 0 24px rgba(57, 255, 136, 0.35);
+    outline: none;
+  }
+  .crash__reboot:focus-visible { outline: 2px solid #39ff88; outline-offset: 4px; }
+  @keyframes crash-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .crash__flash {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .crash__bang { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crash__boom, .crash__boom::before, .crash__boom::after { animation: none; }
+  }
+</style>

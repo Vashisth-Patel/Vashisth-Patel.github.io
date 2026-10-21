@@ -1,0 +1,54 @@
+---
+/**
+ * "Classic view" pill: leads to the previous one-page site at /classic/.
+ * Same shape as the WorldNav "orbit" pill so the two read as a pair; themes from world tokens.
+ */
+import { withBase } from '../../lib/url';
+import { classicPath } from '../../data/site';
+---
+
+<a class="classic-btn" href={withBase(classicPath)} data-warp title="The simple, one-page version of this site">
+  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+    <rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+    <path d="M8 8.5h8M8 12h8M8 15.5h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+  </svg>
+  <span>Classic<span class="long"> view</span></span>
+</a>
+
+<style>
+  .classic-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 11px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--fg);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .classic-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .classic-btn svg { transition: transform 0.4s var(--ease-out); }
+  .classic-btn:hover svg { transform: translateY(-1px) rotate(-6deg); }
+
+  @media (max-width: 420px) {
+    .long { display: none; }
+    .classic-btn { padding: 7px 11px 7px 9px; font-size: 12px; }
+  }
+</style>
+
+<script>
+  import { initWarpLinks } from '../../scripts/warp';
+  import { track } from '../../lib/track';
+  initWarpLinks();
+  document.querySelectorAll<HTMLElement>('.classic-btn').forEach((el) =>
+    el.addEventListener('click', () => track('nav-classic')),
+  );
+</script>

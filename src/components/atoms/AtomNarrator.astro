@@ -1,0 +1,121 @@
+---
+/**
+ * The narrator: a small atom with a face. Electrons are positioned by scripts/atoms/narrator.ts;
+ * moods (idle, talk, alarm, happy, worried) are CSS states on data-mood / data-mouth.
+ */
+interface Props { id?: string; class?: string }
+const { id, class: cls = '' } = Astro.props;
+
+// nucleons: [x, y, proton?]; drawn back to front
+const nucleons: [number, number, boolean][] = [
+  [0, -11, false], [9.5, -5.5, true], [-9.5, -5.5, true],
+  [9.5, 5.5, false], [-9.5, 5.5, false], [0, 11, true], [0, 0, true],
+];
+const orbits = [0, 60, 120];
+---
+
+<svg class:list={['atom', cls]} id={id} viewBox="-72 -72 144 144" aria-hidden="true" data-mood="idle" data-mouth="smile">
+  <defs>
+    <radialGradient id="atm-proton" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#ffd7b0" />
+      <stop offset="0.5" stop-color="#ef8a3e" />
+      <stop offset="1" stop-color="#9c4317" />
+    </radialGradient>
+    <radialGradient id="atm-neutron" cx="35%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#fffaf2" />
+      <stop offset="0.55" stop-color="#e3d2bd" />
+      <stop offset="1" stop-color="#9b8672" />
+    </radialGradient>
+    <radialGradient id="atm-glow">
+      <stop offset="0" stop-color="#e8833a" stop-opacity="0.55" />
+      <stop offset="0.6" stop-color="#e8833a" stop-opacity="0.08" />
+      <stop offset="1" stop-color="#e8833a" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <circle class="atom__glow" r="60" fill="url(#atm-glow)" />
+
+  <g class="atom__orbits">
+    {orbits.map((deg) => (
+      <ellipse rx="60" ry="21" transform={`rotate(${deg})`} />
+    ))}
+  </g>
+
+  <g class="atom__back"></g>
+
+  <g class="atom__nucleus">
+    {nucleons.map(([x, y, p]) => (
+      <circle cx={x} cy={y} r="9.6" fill={p ? 'url(#atm-proton)' : 'url(#atm-neutron)'} />
+    ))}
+
+    <g class="face">
+      <g class="eyes eyes--open">
+        <g class="eye"><ellipse cx="-5.6" cy="-1.5" rx="2.5" ry="3.6" /><circle cx="-4.7" cy="-2.8" r="0.95" class="glint" /></g>
+        <g class="eye"><ellipse cx="5.6" cy="-1.5" rx="2.5" ry="3.6" /><circle cx="6.5" cy="-2.8" r="0.95" class="glint" /></g>
+      </g>
+      <g class="eyes eyes--happy">
+        <path d="M-8.4 -0.6 Q-5.6 -5 -2.8 -0.6" />
+        <path d="M2.8 -0.6 Q5.6 -5 8.4 -0.6" />
+      </g>
+      <g class="eyes eyes--wide">
+        <circle cx="-5.8" cy="-2" r="4" class="white" /><circle cx="-5.8" cy="-1.6" r="1.6" />
+        <circle cx="5.8" cy="-2" r="4" class="white" /><circle cx="5.8" cy="-1.6" r="1.6" />
+      </g>
+      <path class="mouth mouth--smile" d="M-3.4 5.2 Q0 8.4 3.4 5.2" />
+      <ellipse class="mouth mouth--o" cx="0" cy="6.4" rx="2.3" ry="2.6" />
+      <path class="mouth mouth--flat" d="M-3 6.2 Q0 5.2 3 6.6" />
+      <path class="sweat" d="M13 -12 q3 5 0 7 q-3 -2 0 -7z" />
+    </g>
+  </g>
+
+  <g class="atom__front"></g>
+</svg>
+
+<style>
+  .atom { overflow: visible; }
+  .atom__glow { transform-box: fill-box; transform-origin: center; }
+  .atom__orbits ellipse {
+    fill: none;
+    stroke: rgba(251, 242, 228, 0.42);
+    stroke-width: 1.6;
+  }
+  .atom__nucleus circle:not(.white):not(.glint) { stroke: #140c08; stroke-width: 2.2; }
+  .face { pointer-events: none; }
+  .eyes ellipse, .eyes circle { fill: #140c08; stroke: none !important; }
+  .eyes .glint { fill: #fff; }
+  .eyes .white { fill: #fffaf2 !important; stroke: #140c08 !important; stroke-width: 1.2 !important; }
+  .eyes path, .mouth { fill: none; stroke: #140c08; stroke-width: 1.8; stroke-linecap: round; }
+  .mouth--o { fill: #140c08; stroke: none; }
+  .sweat { fill: #9fd6ff; stroke: #140c08; stroke-width: 1; opacity: 0; }
+
+  .eye { transform-box: fill-box; transform-origin: center; animation: atm-blink 5.2s infinite; }
+  .eye + .eye { animation-delay: 0.03s; }
+  @keyframes atm-blink {
+    0%, 93%, 100% { transform: scaleY(1); }
+    95.5% { transform: scaleY(0.1); }
+  }
+
+  .eyes--happy, .eyes--wide, .mouth--o, .mouth--flat { display: none; }
+  [data-mood='happy'] .eyes--open { display: none; }
+  [data-mood='happy'] .eyes--happy { display: inline; }
+  [data-mood='alarm'] .eyes--open,
+  [data-mood='worried'] .eyes--open { display: none; }
+  [data-mood='alarm'] .eyes--wide,
+  [data-mood='worried'] .eyes--wide { display: inline; }
+  [data-mood='alarm'] .sweat,
+  [data-mood='worried'] .sweat { opacity: 1; }
+
+  [data-mouth='o'] .mouth--smile, [data-mouth='flat'] .mouth--smile { display: none; }
+  [data-mouth='o'] .mouth--o { display: inline; }
+  [data-mouth='flat'] .mouth--flat { display: inline; }
+
+  [data-mood='alarm'] .atom__glow { animation: atm-alarm 0.5s ease-in-out infinite alternate; }
+  [data-mood='alarm'] .atom__orbits ellipse { stroke: rgba(255, 150, 120, 0.7); }
+  @keyframes atm-alarm {
+    from { transform: scale(0.9); opacity: 0.6; }
+    to { transform: scale(1.25); opacity: 1; }
+  }
+
+  :global(.atom .electron) { fill: #fffaf2; stroke: #140c08; stroke-width: 1.6; }
+  :global(.atom .electron-halo) { fill: rgba(255, 220, 180, 0.22); }
+</style>

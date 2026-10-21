@@ -1,0 +1,21 @@
+---
+/** Simplified v1 navbar: the old /#anchors no longer exist on the new home page. */
+import { withBase } from '../../lib/url';
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-navy/90 shadow-lg">
+  <div class="max-w-[1200px] mx-auto px-6 sm:px-12">
+    <div class="flex items-center justify-between h-16 sm:h-20">
+      <a href={withBase('')} class="text-green font-mono text-xl sm:text-2xl font-bold hover:text-green/80 transition-colors">VP</a>
+      <a
+        href={withBase('docs/Vashisth_Patel_CV.pdf')}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-4 py-2 border border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-all duration-300"
+      >
+        Download PDF
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="h-16 sm:h-20"></div>

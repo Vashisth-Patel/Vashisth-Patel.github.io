@@ -1,0 +1,44 @@
+---
+/**
+ * Content of one moon's card (rendered into a <template>, cloned into the card by system.ts).
+ * Styles are global under .atm-mc because the clone lives outside this component's scope.
+ */
+import type { Project, Phase } from '../../data/atoms';
+
+interface Props { project: Project; phase?: Phase }
+const { project: p, phase } = Astro.props;
+const phaseIndex = phase && p.phases ? p.phases.findIndex((x) => x.id === phase.id) + 1 : 0;
+const chips = phase?.chips ?? p.chips;
+---
+
+<article class="atm-mc">
+  <p class="atm-mc__code">
+    <span>{p.course}</span>
+    {phase && <span class="atm-mc__phase-n">Phase {phaseIndex} of {p.phases!.length} · {phase.label}</span>}
+  </p>
+  <h3 class="atm-mc__title" tabindex="-1">{phase ? phase.title : p.title}</h3>
+  {phase && <p class="atm-mc__parent">Part of <em>{p.title}</em></p>}
+  {p.courseName && <p class="atm-mc__course">{p.courseName}</p>}
+  {p.note && <p class="atm-mc__note">{p.note}</p>}
+
+  <dl class="atm-mc__meta">
+    {p.prof && <div><dt>Supervised by</dt><dd>{p.prof}</dd></div>}
+    <div><dt>Team</dt><dd>{p.team}</dd></div>
+    {p.year && <div><dt>Year</dt><dd>{p.year}</dd></div>}
+    {p.role && <div><dt>His part</dt><dd>{p.role}</dd></div>}
+  </dl>
+
+  <p class="atm-mc__summary">{phase ? phase.summary : p.summary}</p>
+
+  {chips.length > 0 && (
+    <ul class="atm-mc__chips">
+      {chips.map((c) => (
+        <li><strong>{c.n}</strong><span>{c.l}</span></li>
+      ))}
+    </ul>
+  )}
+
+  {p.fun && !phase && (
+    <p class="atm-mc__fun"><span class="atm-mc__fun-tag">Fun fact</span> {p.fun}</p>
+  )}
+</article>

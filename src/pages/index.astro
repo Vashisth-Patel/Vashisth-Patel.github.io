@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import SpaceBackdrop from '../components/landing/SpaceBackdrop.astro';
+import Hero from '../components/landing/Hero.astro';
+import Numbers from '../components/landing/Numbers.astro';
+import Doors from '../components/landing/Doors.astro';
+import Quote from '../components/landing/Quote.astro';
+import Trajectory from '../components/landing/Trajectory.astro';
+import SiteFooter from '../components/landing/SiteFooter.astro';
+import ClassicButton from '../components/common/ClassicButton.astro';
+---
+
+<Base
+  title="Vashisth Patel"
+  legalFooter={false}
+  description="Vashisth Patel: materials engineer, now studying management in Wiesbaden. Curious about how things work: atoms, code, companies, and the history in between."
+>
+  <SpaceBackdrop />
+  <div class="classic-corner"><ClassicButton /></div>
+  <main id="main" class="landing">
+    <Hero />
+    <Numbers />
+    <Doors />
+    <Quote />
+    <Trajectory />
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .landing { position: relative; z-index: 1; }
+  :global(.footer) { z-index: 1; }
+  .classic-corner {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    left: var(--gutter);
+    z-index: 50;
+  }
+</style>

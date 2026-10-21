@@ -1,0 +1,24 @@
+{
+  "name": "vashisthpatel-v2",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "build:staging": "SITE_BASE=/vashisthpatel-v2 SITE_URL=https://vashisthpatel.com PUBLIC_NOINDEX=true astro build",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/bangers": "^5.3.0",
+    "@fontsource/fira-code": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "astro": "^5.16.0",
+    "tailwindcss": "^3.4.17"
+  }
+}

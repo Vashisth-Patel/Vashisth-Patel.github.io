@@ -1,0 +1,268 @@
+---
+/**
+ * The cover of Nova's "annual report": eyebrow, title with a footnote star,
+ * the one-line framing, an at-a-glance box, then the two ways in.
+ */
+import NovaMark from './NovaMark.astro';
+import { allProjects } from '../../data/ventures';
+---
+
+<header class="hero">
+  <NovaMark class="hero__watermark" orbits />
+
+  <div class="container hero__inner">
+    <div class="hero__top" data-intro>
+      <p class="eyebrow">Ventures · World 03</p>
+      <p class="eyebrow hero__edition">A report in nine chapters</p>
+    </div>
+
+    <h1 class="hero__title" data-intro style="--delay:80ms">
+      <span class="hero__line">The life of a company<span class="hero__star"><NovaMark /></span></span>
+      <span class="hero__line">that <em>doesn’t exist.</em></span>
+    </h1>
+
+    <div class="hero__rule" data-intro="line" style="--delay:200ms"></div>
+
+    <div class="hero__body">
+      <p class="hero__lede" data-intro style="--delay:280ms">
+        Every company faces the same questions in roughly the same order. I have worked on most of
+        them, just not inside one company yet. So here is one I made up.
+      </p>
+
+      <aside class="glance" aria-label="Nova at a glance" data-intro style="--delay:360ms">
+        <p class="glance__label">At a glance</p>
+        <dl>
+          <div><dt>Company</dt><dd>Nova</dd></div>
+          <div><dt>Sector</dt><dd>Battery materials, Europe</dd></div>
+          <div><dt>Founded</dt><dd>Not yet</dd></div>
+          <div><dt>Real projects inside</dt><dd class="glance__num">{allProjects.length}</dd></div>
+        </dl>
+      </aside>
+    </div>
+
+    <p class="hero__note" data-intro style="--delay:440ms">
+      <span class="hero__note-star" aria-hidden="true"><NovaMark /></span>
+      Nova is named after a star that suddenly brightens.
+    </p>
+
+    <div class="hero__ways" data-intro style="--delay:500ms">
+      <a class="hero__cue" href="#contents">
+        <span class="hero__cue-line" aria-hidden="true"></span>
+        Start reading
+      </a>
+      <a class="hero__skip" href="#all-projects" data-vx-listview>
+        Skip the story, show all projects <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: min(100svh, 980px);
+    display: flex;
+    align-items: center;
+    padding: clamp(96px, 14vh, 140px) 0 clamp(56px, 8vh, 88px);
+  }
+
+  .hero :global(.hero__watermark) {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    right: max(-14vw, -200px);
+    width: min(78vw, 820px);
+    translate: 0 -50%;
+    opacity: 0.09;
+    pointer-events: none;
+  }
+
+  .hero__inner { position: relative; }
+
+  .hero__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(28px, 5vh, 56px);
+  }
+  .hero__top .eyebrow { color: var(--accent); }
+  .hero__top .hero__edition { color: var(--muted); }
+
+  .hero__title {
+    font-family: var(--font-report);
+    font-weight: 330;
+    font-size: clamp(44px, 8.2vw, 112px);
+    line-height: 0.98;
+    letter-spacing: -0.028em;
+    font-variation-settings: 'opsz' 144;
+    text-wrap: balance;
+  }
+  .hero__line { display: block; }
+  .hero__title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .hero__star {
+    display: inline-block;
+    width: 0.36em;
+    height: 0.36em;
+    margin-left: 0.06em;
+    vertical-align: 0.95em;
+  }
+  .hero__star :global(.nova) { width: 100%; height: 100%; }
+
+  .hero__rule {
+    height: 1px;
+    background: var(--fg);
+    margin: clamp(28px, 5vh, 52px) 0 clamp(24px, 4vh, 40px);
+  }
+
+  .hero__body {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 860px) {
+    .hero__body {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: clamp(40px, 6vw, 96px);
+      align-items: start;
+    }
+  }
+
+  .hero__lede {
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.55;
+    max-width: 34ch;
+    text-wrap: pretty;
+  }
+
+  .glance {
+    border-top: 2px solid var(--fg);
+    padding-top: 12px;
+    max-width: 420px;
+  }
+  .glance__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .glance dl { margin: 0; }
+  .glance dl > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .glance dt { font-size: 14px; color: var(--muted); }
+  .glance dd {
+    margin: 0;
+    font-family: var(--font-report);
+    font-size: 17px;
+    text-align: right;
+  }
+  .glance__num { font-variant-numeric: lining-nums tabular-nums; }
+
+  .hero__note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: clamp(28px, 5vh, 48px);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .hero__note-star { width: 12px; height: 12px; flex: none; }
+  .hero__note-star :global(.nova) { width: 100%; height: 100%; }
+
+  .hero__ways {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+    margin-top: clamp(28px, 4vh, 40px);
+  }
+
+  .hero__cue,
+  .hero__skip {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .hero__cue-line {
+    position: relative;
+    width: 1px;
+    height: 36px;
+    background: var(--hair);
+    overflow: hidden;
+  }
+  .hero__cue-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform-origin: top;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__cue-line::after { animation: cue 2.4s var(--ease-in-out) infinite; }
+  }
+  @keyframes cue {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  .hero__skip {
+    padding: 0 18px;
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out);
+  }
+  .hero__skip span { transition: transform 0.3s var(--ease-out); }
+  .hero__skip:hover { background: var(--fg); color: var(--bg); }
+  .hero__skip:hover span { transform: translateX(3px); }
+  .hero__cue:hover { color: var(--accent); }
+
+  /* The nova brightens once on arrival. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__star :global(.nova__burst),
+    .hero :global(.hero__watermark .nova__burst) {
+      animation: flare 1.8s var(--ease-out) 0.35s both;
+    }
+    .hero :global(.hero__watermark .nova__orbits) {
+      animation: orbits 2.4s var(--ease-out) 0.2s both;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+  }
+  @keyframes flare {
+    0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+    55% { transform: scale(1.14) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes orbits {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { align-items: flex-start; min-height: auto; }
+    .hero :global(.hero__watermark) { width: 120vw; right: -48vw; top: 34%; opacity: 0.07; }
+    .hero__ways { flex-direction: column; align-items: flex-start; }
+  }
+</style>

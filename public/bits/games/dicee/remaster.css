@@ -1,0 +1,52 @@
+/* 2026 remaster additions. styles.css is the original, untouched. */
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; padding: 8px 0 16px; min-height: 100vh; box-sizing: border-box; }
+.container { width: min(90%, 900px); }
+h1 { font-size: clamp(3.2rem, 11vw, 8rem); line-height: 1.1; }
+h2 { min-height: 1.3em; }
+img { max-width: 260px; transition: transform 0.15s; }
+.is-rolling img { transform: rotate(-6deg) scale(0.96); }
+.is-rolling .dice:nth-of-type(2) img { transform: rotate(7deg) scale(0.96); }
+
+.roll {
+  margin-top: 4px;
+  min-height: 48px;
+  padding: 0 28px;
+  border: 3px solid #4ECCA3;
+  border-radius: 12px;
+  background: transparent;
+  color: #4ECCA3;
+  font-family: 'Lobster', cursive;
+  font-size: 1.7rem;
+  text-shadow: 3px 0 #232931;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #232931;
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+}
+.roll:hover { background: rgba(78, 204, 163, 0.12); }
+.roll:active { transform: translateY(3px); box-shadow: 0 1px 0 #232931; }
+.roll:focus-visible { outline: 3px solid #EEEEEE; outline-offset: 4px; }
+.keys { margin: 10px 0 0; font-size: 1.2rem; opacity: 0.7; }
+
+footer { max-width: 60ch; margin: 5% auto 0; padding: 0 16px; font-size: 1rem; line-height: 1.5; }
+footer a { color: inherit; }
+.in-overlay .back-link { display: none; }
+
+@media (max-width: 600px) {
+  h1 { margin: 16px 0 8px; }
+  h2 { margin: 16px 0; font-size: 2.3rem; }
+  .dice { width: 45%; }
+  p { font-size: 1.5rem; margin: 8px 0; }
+  img { width: 90%; }
+  .keys { display: none; }
+}
+@media (max-height: 780px) and (min-width: 601px) {
+  h1 { font-size: 5rem; margin: 16px; }
+  h2 { margin: 14px; }
+  p { margin: 8px 0; }
+  img { max-width: 170px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  img { transition: none; }
+  .is-rolling img { transform: none; }
+}

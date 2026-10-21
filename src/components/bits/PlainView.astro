@@ -1,0 +1,361 @@
+---
+/**
+ * Plain view: every project and game as an ordinary page. Server-rendered from src/data/bits.ts,
+ * so it also works without JavaScript and for screen readers and recruiters in a hurry.
+ */
+import { projects, games, bugs, srcFiles, whoami, type Block } from '../../data/bits';
+import { site } from '../../data/site';
+import { withBase } from '../../lib/url';
+
+/** Turn a terminal command from a 'try' block into something a plain page can do. */
+function action(cmd: string): { label: string; href?: string; play?: string; ext?: boolean; run?: string } | null {
+  const [verb, arg = ''] = cmd.split(' ');
+  if (verb === 'play') {
+    const g = games.find((x) => x.id === arg && x.status === 'playable');
+    return g ? { label: `Play ${g.title}`, play: g.id } : null;
+  }
+  if (verb === 'open') {
+    const p = projects.find((x) => x.id === arg && x.link);
+    return p?.link ? { label: `Open the ${p.link.label}`, href: p.link.href, ext: true } : null;
+  }
+  if (verb === 'cat' && arg === 'bugs.log') return { label: 'Read bugs.log', href: '#plain-bugs' };
+  if (verb === 'cat' && srcFiles.some((f) => f.name === arg))
+    return { label: `Source: ${arg}`, href: withBase(`bits/src/${arg}`), run: cmd };
+  return null;
+}
+
+const strip = (u: string) => u.replace(/^https?:\/\//, '');
+const blocks = (b: Block[]) => b;
+---
+
+<section class="bits-plain" data-bits-plain aria-labelledby="bp-title">
+  <div class="bp-inner">
+    <header class="bp-head">
+      <p class="bp-eyebrow">~/bits · plain view</p>
+      <h1 id="bp-title" tabindex="-1" data-plain-heading>Bits: projects and arcade</h1>
+      <p class="bp-lede">
+        Vashisth's tech projects, each with a short plain-language summary, and the small games he wrote while learning
+        to code. Same content as the terminal, as a normal page.
+      </p>
+      <button type="button" class="bp-switch" data-view-toggle><span aria-hidden="true">›_</span> Back to the terminal</button>
+      <nav class="bp-toc" aria-label="On this page">
+        <a href="#plain-projects">Projects</a>
+        <a href="#plain-arcade">Arcade</a>
+        <a href="#plain-bugs">bugs.log</a>
+        <a href="#plain-contact">Contact</a>
+      </nav>
+    </header>
+
+    <h2 id="plain-projects" class="bp-h2">Projects</h2>
+    {
+      projects.map((p) => (
+        <article class="bp-card" id={`plain-${p.id}`}>
+          <h3 class="bp-h3">{p.title}</h3>
+          <p class="bp-meta">{p.meta}</p>
+          {blocks(p.body).map((b) => {
+            if (b.kind === 'tldr')
+              return (
+                <p class="bp-tldr">
+                  <strong>In short:</strong> {b.text}
+                </p>
+              );
+            if (b.kind === 'p') return <p>{b.text}</p>;
+            if (b.kind === 'h') return <h4 class="bp-h4">{b.text}</h4>;
+            if (b.kind === 'pre')
+              return (
+                <figure class="bp-fig">
+                  <pre aria-hidden="true">{b.text}</pre>
+                  <figcaption class="sr-only">{b.label}</figcaption>
+                </figure>
+              );
+            if (b.kind === 'kv')
+              return (
+                <dl class="bp-kv">
+                  {b.rows.map(([k, v]) => (
+                    <>
+                      <dt>{k}</dt>
+                      <dd>{v}</dd>
+                    </>
+                  ))}
+                </dl>
+              );
+            if (b.kind === 'bars') {
+              const max = Math.max(...b.rows.map((r) => r[1]));
+              return (
+                <table class="bp-bars">
+                  <caption class="sr-only">Scoring dimensions and their points</caption>
+                  <thead class="sr-only">
+                    <tr>
+                      <th scope="col">Dimension</th>
+                      <th scope="col">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {b.rows.map(([label, v]) => (
+                      <tr>
+                        <th scope="row">{label}</th>
+                        <td>
+                          <span class="bp-bar" aria-hidden="true" style={`--w:${(v / max) * 100}%`} />
+                          {v}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              );
+            }
+            if (b.kind === 'list')
+              return (
+                <ul>
+                  {b.items.map((i) => (
+                    <li>{i}</li>
+                  ))}
+                </ul>
+              );
+            if (b.kind === 'try') {
+              const acts = b.cmds.map(action).filter((a) => a !== null);
+              if (!acts.length) return null;
+              return (
+                <p class="bp-actions">
+                  {acts.map((a) =>
+                    a!.play ? (
+                      <button type="button" class="bp-btn" data-play={a!.play}>
+                        {a!.label}
+                      </button>
+                    ) : (
+                      <a
+                        class="bp-btn"
+                        href={a!.href}
+                        data-term-run={a!.run}
+                        target={a!.ext ? '_blank' : undefined}
+                        rel={a!.ext ? 'noopener noreferrer' : undefined}
+                      >
+                        {a!.label}
+                      </a>
+                    ),
+                  )}
+                </p>
+              );
+            }
+            return null;
+          })}
+        </article>
+      ))
+    }
+
+    <h2 id="plain-arcade" class="bp-h2">Arcade</h2>
+    <p>
+      Small games he wrote during his bachelors while learning to code, rebuilt for the browser in 2026. Optional, just
+      for fun. The originals had bugs, and the list is below.
+    </p>
+    <ul class="bp-games">
+      {
+        games.map((g) => (
+          <li class="bp-game">
+            <div class="bp-game-head">
+              <h3 class="bp-h3">{g.title}</h3>
+              <span class={g.status === 'playable' ? 'bp-status is-ok' : 'bp-status'}>
+                {g.status === 'playable' ? 'Playable' : 'Remaster in progress'}
+              </span>
+            </div>
+            <p class="bp-meta">Original: {g.original}</p>
+            <ul class="bp-diff" aria-label={`What the remaster changed in ${g.title}`}>
+              {g.diff
+                .filter((l) => l[0] === '+' || l[0] === '-')
+                .map((l) => (
+                  <li class={l[0] === '+' ? 'is-add' : 'is-del'}>
+                    <span class="sr-only">{l[0] === '+' ? 'Remaster: ' : 'Original: '}</span>
+                    <span aria-hidden="true">{l[0]} </span>
+                    {l.slice(1)}
+                  </li>
+                ))}
+            </ul>
+            <p class="bp-actions">
+              {g.status === 'playable' && (
+                <button type="button" class="bp-btn" data-play={g.id}>
+                  Play {g.title}
+                </button>
+              )}
+              {g.path && (
+                <a class="bp-link" href={withBase(g.path)}>
+                  Open as a page
+                </a>
+              )}
+              {g.src && (
+                <a class="bp-link" href={withBase(`bits/src/${g.src}`)} data-term-run={`cat ${g.src}`}>
+                  Original source ({g.src})
+                </a>
+              )}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 id="plain-bugs" class="bp-h2">bugs.log</h2>
+    <p>Real bugs from the originals. Most of them are fixed in the arcade.</p>
+    <ul class="bp-bugs">
+      {
+        bugs.map((b) => (
+          <li>
+            <p class="bp-bug-head">
+              <span class={`bp-badge is-${b.level.toLowerCase()}`}>{b.level}</span> <code>{b.file}</code>
+            </p>
+            {b.lines.map((l) => (
+              <p>{l}</p>
+            ))}
+            <p class="bp-meta">Status: {b.status}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 id="plain-contact" class="bp-h2">Contact</h2>
+    {whoami.slice(1).map((l) => <p>{l}</p>)}
+    <ul class="bp-contact">
+      <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li><a href={site.linkedin} target="_blank" rel="noopener noreferrer">{strip(site.linkedin)}</a></li>
+      <li><a href={site.github} target="_blank" rel="noopener noreferrer">{strip(site.github)}</a></li>
+      <li><a href={withBase('resume/')}>Résumé</a></li>
+    </ul>
+    <p class="bp-actions">
+      <button type="button" class="bp-btn" data-view-toggle>Back to the terminal</button>
+    </p>
+  </div>
+</section>
+
+<style>
+  .bits-plain {
+    display: none;
+    padding: calc(84px + env(safe-area-inset-top)) var(--gutter) 64px;
+    color: var(--fg);
+  }
+  :global(html[data-bits-view='plain']) .bits-plain,
+  :global(html:not(.bits-js)) .bits-plain { display: block; }
+
+  .bp-inner { max-width: 760px; margin: 0 auto; font-size: 16px; line-height: 1.65; }
+  .bp-inner :where(p, ul, dl, table, figure) { margin: 0 0 12px; }
+  .bp-head { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--hair); }
+  .bp-eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  h1 {
+    margin: 6px 0 10px;
+    font-family: var(--font-mono);
+    font-size: clamp(28px, 6vw, 40px);
+    line-height: 1.15;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  h1:focus { outline: none; }
+  h1:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .bp-lede { color: rgba(200, 255, 217, 0.8); max-width: 60ch; }
+  .bp-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    margin: 8px 0 18px;
+    padding: 0 16px;
+    border: 1px solid rgba(57, 255, 136, 0.35);
+    border-radius: 999px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+  .bp-switch:hover { background: rgba(57, 255, 136, 0.12); }
+  .bp-toc { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-mono); font-size: 14px; }
+  .bp-toc a { color: var(--accent); text-underline-offset: 3px; }
+
+  .bp-h2 {
+    margin: 44px 0 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    scroll-margin-top: 80px;
+  }
+  .bp-h3 { font-family: var(--font-mono); font-size: 19px; line-height: 1.3; color: #eafff1; }
+  .bp-h4 { margin: 18px 0 8px; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .bp-meta { font-family: var(--font-mono); font-size: 13.5px; color: rgba(200, 255, 217, 0.62); }
+  .bp-tldr {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    background: rgba(57, 255, 136, 0.06);
+    color: #eafff1;
+  }
+  .bp-tldr strong { color: var(--accent); font-family: var(--font-mono); font-size: 14px; }
+
+  .bp-card, .bp-game {
+    margin: 0 0 18px;
+    padding: 20px 22px;
+    border: 1px solid var(--hair);
+    border-radius: 12px;
+    background: rgba(57, 255, 136, 0.025);
+    scroll-margin-top: 80px;
+  }
+  .bp-fig { overflow-x: auto; }
+  .bp-fig pre {
+    width: max-content;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: #b9f5cf;
+  }
+  .bp-kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; }
+  .bp-kv dt { font-family: var(--font-mono); font-size: 14px; color: rgba(200, 255, 217, 0.62); }
+  .bp-kv dd { margin: 0; }
+  .bp-bars { border-collapse: collapse; width: 100%; max-width: 520px; }
+  .bp-bars th { text-align: left; font-weight: 400; padding: 3px 14px 3px 0; }
+  .bp-bars td { display: flex; align-items: center; gap: 10px; padding: 3px 0; font-family: var(--font-mono); font-size: 14px; }
+  .bp-bar { display: inline-block; height: 9px; width: calc(var(--w) * 1.6); max-width: 160px; background: var(--accent); border-radius: 2px; opacity: 0.85; }
+
+  .bp-actions { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 14px; }
+  .bp-btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .bp-btn:hover { background: var(--accent); color: var(--bg); }
+  .bp-link { color: var(--accent); font-family: var(--font-mono); font-size: 14px; text-underline-offset: 3px; }
+
+  .bp-games, .bp-bugs, .bp-contact { list-style: none; padding: 0; }
+  .bp-game-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+  .bp-status { font-family: var(--font-mono); font-size: 13px; color: #ffcf6e; }
+  .bp-status.is-ok { color: var(--accent); }
+  .bp-diff { list-style: none; padding: 0; margin-top: 10px; font-size: 15px; }
+  .bp-diff li { padding: 2px 10px; border-radius: 4px; }
+  .bp-diff .is-del { color: #ffb3ab; background: rgba(255, 138, 128, 0.07); }
+  .bp-diff .is-add { color: #c8ffd9; background: rgba(57, 255, 136, 0.06); }
+  .bp-diff li + li { margin-top: 3px; }
+
+  .bp-bugs li { padding: 14px 0; border-top: 1px dashed var(--hair); }
+  .bp-bugs p { margin: 0 0 4px; }
+  .bp-bug-head code { font-family: var(--font-mono); color: #eafff1; }
+  .bp-badge { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #ffcf6e; }
+  .bp-badge.is-crash { color: #ff8a80; }
+
+  .bp-contact { font-family: var(--font-mono); font-size: 15px; }
+  .bp-contact a { color: var(--accent); text-underline-offset: 3px; }
+  .bp-contact li + li { margin-top: 4px; }
+
+  @media (max-width: 520px) {
+    .bp-card, .bp-game { padding: 16px; }
+    .bp-kv { grid-template-columns: 1fr; gap: 0; }
+    .bp-kv dd { margin-bottom: 8px; }
+    .bp-fig pre { font-size: 11px; }
+  }
+</style>

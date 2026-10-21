@@ -1,0 +1,83 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site } from '../data/site';
+import { withBase } from '../lib/url';
+---
+
+<LegalLayout
+  title="Privacy notice"
+  description="Privacy notice (Datenschutzerklärung) for vashisthpatel.com: hosting, cookieless analytics, browser storage and the fintech demo."
+  updated="October 2026"
+>
+  <h1>Privacy notice</h1>
+  <p class="lede">Datenschutzerklärung. In short: no cookies, no advertising, no tracking across websites. Fonts, scripts and images are served from this website itself.</p>
+
+  <h2>1. Who is responsible</h2>
+  <address>
+    Vashisth Patel<br />
+    Nerotal 12, 65193 Wiesbaden, Germany<br />
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+  </address>
+
+  <h2>2. Hosting (GitHub Pages)</h2>
+  <p>
+    This website is hosted on GitHub Pages, a service of GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco,
+    CA 94107, USA. When you open a page, your browser sends GitHub technical data that every website receives: your IP
+    address, the page requested, the time, and your browser's identification. GitHub uses this to deliver the site and to
+    protect it against attacks, and may process it in the USA. The legal basis is Art. 6(1)(f) GDPR: a legitimate
+    interest in delivering the website securely. See
+    <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub's privacy statement</a>.
+  </p>
+
+  <h2>3. Visitor statistics (GoatCounter)</h2>
+  <p>
+    To learn which parts of the site are used, page views and a few named actions (for example which world was opened,
+    or which quiz answer was chosen) are counted with
+    <a href="https://www.goatcounter.com/" target="_blank" rel="noopener noreferrer">GoatCounter</a>, operated by
+    Martin Tournoij (Ireland), with data stored on servers in Finland and Germany. GoatCounter sets no cookies, stores
+    nothing on your device, and does not store your IP address. It records only aggregate figures: the page, the
+    referring site, browser and operating system type, screen width, language and the country derived from the IP
+    address. To avoid counting one visit twice, a hash of IP address, browser identification and a random value is kept
+    in memory for up to eight hours and never written to disk. The legal basis is Art. 6(1)(f) GDPR: a legitimate
+    interest in understanding how the site is used. You can object at any time (section 7). See
+    <a href="https://www.goatcounter.com/privacy" target="_blank" rel="noopener noreferrer">GoatCounter's privacy policy</a>.
+  </p>
+
+  <h2>4. Settings remembered in your browser</h2>
+  <p>
+    Some features remember small settings in your own browser, using the browser's session or local storage: whether you
+    have seen the Atoms introduction, list or orbit view, whether the arcade is unlocked, your terminal command history,
+    your Snake best score and whether game sounds are on. This information stays on your device and is never sent to me
+    or anyone else. It is used only to provide the features you use (§ 25(2) no. 2 TDDDG). You can delete it at any time
+    in your browser settings.
+  </p>
+
+  <h2>5. Fintech demo form</h2>
+  <p>
+    The <a href={withBase('projects/fintech-qualifier/')}>fintech qualification demo</a> sends the company details you
+    enter to an automated workflow (n8n) hosted by Render Services, Inc., USA, where they are analysed to produce the
+    score you see. Nothing is sent unless you press submit. Please enter only information about a company, not personal
+    data. Submissions are processed only to produce the result and are not stored afterwards.
+    The legal basis is Art. 6(1)(f) GDPR: a legitimate interest in providing the demo you asked to run.
+  </p>
+
+  <h2>6. Email and links to other sites</h2>
+  <p>
+    If you email me, I use your address and message only to reply. Links to LinkedIn, GitHub, esahubble.org and other
+    sites open those sites; their own privacy policies apply once you are there.
+  </p>
+
+  <h2>7. Your rights</h2>
+  <p>Under the GDPR you have the right to:</p>
+  <ul>
+    <li>access the data held about you (Art. 15)</li>
+    <li>have it corrected (Art. 16) or deleted (Art. 17)</li>
+    <li>restrict its processing (Art. 18) and receive it in a portable format (Art. 20)</li>
+    <li>object to processing based on legitimate interests (Art. 21)</li>
+    <li>
+      complain to a data protection authority (Art. 77), for example
+      <a href="https://datenschutz.hessen.de/" target="_blank" rel="noopener noreferrer">Der Hessische Beauftragte für Datenschutz und Informationsfreiheit</a>
+    </li>
+  </ul>
+  <p>To use these rights, email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+</LegalLayout>

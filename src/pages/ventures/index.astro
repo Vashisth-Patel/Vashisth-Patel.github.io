@@ -1,0 +1,102 @@
+---
+/**
+ * VENTURES · World 03: "The life of a company that doesn't exist."
+ * A hypothetical company, Nova, moves through nine stages; each pairs with real projects.
+ * Light "annual report" look (Fraunces + Inter on paper). Content: src/data/ventures.ts.
+ */
+import Base from '../../layouts/Base.astro';
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import Hero from '../../components/ventures/Hero.astro';
+import Contents from '../../components/ventures/Contents.astro';
+import ChapterRail from '../../components/ventures/ChapterRail.astro';
+import Chapter from '../../components/ventures/Chapter.astro';
+import ProjectList from '../../components/ventures/ProjectList.astro';
+import Epilogue from '../../components/ventures/Epilogue.astro';
+import { chapters } from '../../data/ventures';
+---
+
+<Base
+  title="Ventures · The life of a company that doesn’t exist · Vashisth Patel"
+  description="A hypothetical company, Nova, moves through nine business stages. Each stage is paired with Vashisth Patel’s real field, client and course projects."
+  world="ventures"
+>
+  <script is:inline slot="head">
+    (function () {
+      var d = document.documentElement;
+      try {
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('vx-anim');
+      } catch (e) {}
+      // Safety net: if the story script never runs, draw the lines rather than leave them hidden.
+      setTimeout(function () {
+        if (!d.classList.contains('vx-ready')) d.classList.remove('vx-anim');
+      }, 3000);
+    })();
+  </script>
+
+  <main id="main" class="vx">
+    <Hero />
+    <Contents />
+
+    <div class="container vx-story" data-vx-story>
+      <ChapterRail />
+      <div class="vx-chapters">
+        {chapters.map((c) => <Chapter chapter={c} />)}
+      </div>
+    </div>
+
+    <ProjectList />
+    <Epilogue />
+  </main>
+</Base>
+
+<script>
+  import { initVentures } from '../../scripts/ventures/story';
+  initVentures();
+</script>
+
+<style>
+  .vx {
+    position: relative;
+    /* Faint paper grain. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.10 0 0 0 0 0.09 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+  }
+
+  .vx-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 1100px) {
+    .vx-story {
+      grid-template-columns: 196px minmax(0, 1fr);
+      column-gap: clamp(40px, 5vw, 72px);
+    }
+  }
+</style>
+
+<style is:global>
+  /* Smooth in-page scrolling, switched on after the first interaction so a deep link
+     such as /ventures/#ch-2 lands instantly instead of scrolling past the hero. */
+  html[data-world='ventures'].vx-smooth { scroll-behavior: smooth; }
+  html[data-world='ventures'] ::selection { background: var(--accent); color: var(--panel); }
+
+  /* Plain fades use the shared [data-reveal] utility (scripts/reveal.ts + tokens.css).
+     Ventures adds one variant: hairlines that draw in from the left ([data-vx-line]). */
+  .vx-anim [data-vx-line] {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 1.3s var(--ease-out) var(--delay, 0ms);
+  }
+  .vx-anim [data-vx-line].is-drawn { transform: scaleX(1); }
+
+  /* Hero entrance: pure CSS so it never waits for the script. */
+  .vx-anim [data-intro] { animation: vx-rise 1.1s var(--ease-out) var(--delay, 0ms) both; }
+  .vx-anim [data-intro='line'] { animation-name: vx-draw; transform-origin: left center; }
+  @keyframes vx-rise { from { opacity: 0; transform: translate3d(0, 18px, 0); } }
+  @keyframes vx-draw { from { transform: scaleX(0); } }
+
+  @media print {
+    [data-reveal], [data-intro], [data-vx-line] { opacity: 1 !important; transform: none !important; animation: none !important; }
+    [data-world-nav], .vx-bar, .rail-wrap { display: none !important; }
+  }
+</style>

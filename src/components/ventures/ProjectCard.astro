@@ -1,0 +1,192 @@
+---
+/**
+ * One real project.
+ * - kind "field" | "role": the large card with key figures. The four client/field projects
+ *   (battery screening, KUKA, laundry, RAGUSE) and Physics Mindboggler all use this exact
+ *   layout so they carry equal visual weight.
+ * - kind "course": a compact card with metric chips.
+ */
+import type { Project } from '../../data/ventures';
+
+interface Props {
+  project: Project;
+  delay?: number;
+}
+const { project: p, delay = 0 } = Astro.props;
+const big = p.kind === 'field' || p.kind === 'role';
+const tag = p.kind === 'role' ? 'Working student role' : 'Field project';
+const titleId = `p-${p.id}`;
+---
+
+{big ? (
+  <article class="pc pc--big" aria-labelledby={titleId} data-reveal style={`--delay:${Math.round(delay * 1000)}ms`}>
+    <div class="pc__main">
+      <p class="pc__tag">{tag}</p>
+      <h4 id={titleId} class="pc__title">{p.title}</h4>
+      <p class="pc__context">{p.context}</p>
+      <p class="pc__summary">{p.summary}</p>
+      {p.team && <p class="pc__team">{p.team}</p>}
+    </div>
+    <dl class="pc__figures">
+      {p.figures.map((f) => (
+        <div class="pc__fig">
+          <dt>{f.label}</dt>
+          <dd>{f.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </article>
+) : (
+  <article class="pc pc--small" aria-labelledby={titleId} data-reveal style={`--delay:${Math.round(delay * 1000)}ms`}>
+    <p class="pc__context">{p.context}</p>
+    <h4 id={titleId} class="pc__title">{p.title}</h4>
+    <p class="pc__summary">{p.summary}</p>
+    {p.team && <p class="pc__team">{p.team}</p>}
+    <ul class="pc__chips" aria-label="Key points">
+      {p.figures.map((f) => (
+        <li><b>{f.value}</b>{' '}{f.label}</li>
+      ))}
+    </ul>
+  </article>
+)}
+
+<style>
+  .pc { position: relative; }
+
+  /* ---------- Large card ---------- */
+  .pc--big {
+    display: grid;
+    background: var(--panel);
+    border: 1px solid var(--hair);
+    border-top: 2px solid var(--accent);
+    box-shadow: 0 1px 0 rgba(27, 26, 23, 0.04), 0 18px 40px -28px rgba(27, 26, 23, 0.28);
+  }
+  @media (min-width: 760px) {
+    .pc--big { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+  }
+
+  .pc__main { padding: clamp(22px, 3vw, 36px); }
+
+  .pc__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .pc--big .pc__title {
+    font-family: var(--font-report);
+    font-weight: 420;
+    font-size: clamp(25px, 2.5vw, 32px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .pc__context {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .pc--big .pc__context { margin-top: 10px; }
+
+  .pc__summary {
+    font-size: 16px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+  .pc--big .pc__summary { margin-top: 18px; max-width: 62ch; }
+
+  .pc__team {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .pc--big .pc__team {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hair);
+  }
+
+  .pc__figures {
+    margin: 0;
+    display: grid;
+    grid-auto-rows: 1fr;
+    border-top: 1px solid var(--hair);
+  }
+  @media (min-width: 760px) {
+    .pc__figures { border-top: 0; border-left: 1px solid var(--hair); }
+  }
+  @media (min-width: 420px) and (max-width: 759px) {
+    .pc__figures { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); grid-auto-flow: column; }
+    .pc__fig + .pc__fig { border-left: 1px solid var(--hair); }
+  }
+  .pc__fig {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: clamp(16px, 2.2vw, 24px) clamp(20px, 2.6vw, 30px);
+  }
+  @media (max-width: 419px), (min-width: 760px) {
+    .pc__fig + .pc__fig { border-top: 1px solid var(--hair); }
+  }
+  .pc__fig dd {
+    margin: 0;
+    font-family: var(--font-report);
+    font-weight: 330;
+    font-size: clamp(34px, 3.8vw, 50px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+    white-space: nowrap;
+  }
+  .pc__fig dt {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  /* ---------- Small card ---------- */
+  .pc--small {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--fg);
+  }
+  .pc--small .pc__title {
+    font-family: var(--font-report);
+    font-weight: 450;
+    font-size: 21px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .pc--small .pc__summary { font-size: 15px; color: var(--fg); }
+
+  .pc__chips {
+    list-style: none;
+    padding: 0;
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pc__chips li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    padding: 5px 10px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--panel) 60%, transparent);
+  }
+  .pc__chips b { font-weight: 700; color: var(--fg); }
+</style>

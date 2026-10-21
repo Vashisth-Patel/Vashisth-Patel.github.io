@@ -1,0 +1,59 @@
+---
+/**
+ * Fixed full-screen starfield behind the page. One per page.
+ * Props are passed to scripts/starfield.ts via data attributes.
+ *   <Starfield />                                   landing default
+ *   <Starfield tint="232,131,58" density={0.7} />   Atoms (copper-tinted)
+ */
+interface Props {
+  density?: number;
+  tint?: string;          // "r,g,b"
+  parallax?: boolean;
+  shootingStars?: boolean;
+  speed?: number;
+  opacity?: number;
+}
+const { density = 1, tint = '', parallax = true, shootingStars = true, speed = 1, opacity = 1 } = Astro.props;
+---
+
+<canvas
+  class="starfield"
+  aria-hidden="true"
+  data-density={density}
+  data-tint={tint}
+  data-parallax={String(parallax)}
+  data-shooting={String(shootingStars)}
+  data-speed={speed}
+  style={`opacity:${opacity}`}
+></canvas>
+
+<style>
+  .starfield {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  import { mountStarfield } from '../../scripts/starfield';
+  const c = document.querySelector<HTMLCanvasElement>('canvas.starfield');
+  if (c) {
+    const d = c.dataset;
+    const tint = d.tint ? (d.tint.split(',').map(Number) as [number, number, number]) : null;
+    try {
+      mountStarfield(c, {
+        density: Number(d.density) || 1,
+        tint,
+        parallax: d.parallax !== 'false',
+        shootingStars: d.shooting !== 'false',
+        speed: Number(d.speed) || 1,
+      });
+    } catch {
+      /* canvas unsupported: page still works */
+    }
+  }
+</script>

@@ -1,0 +1,123 @@
+---
+/**
+ * Persistent navigation for the three worlds: "orbit" (home) on the left,
+ * a switcher between worlds on the right. Themes itself from the world tokens.
+ * Links carry data-warp so scripts/warp.ts can play the transition.
+ */
+import { withBase } from '../../lib/url';
+import { worlds, type WorldId } from '../../data/site';
+import ClassicButton from './ClassicButton.astro';
+
+interface Props { current?: WorldId }
+const { current } = Astro.props;
+---
+
+<header class="world-nav" data-world-nav>
+  <div class="left">
+    <a class="orbit" href={withBase('')} data-warp aria-label="Back to orbit (home)">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+        <ellipse cx="12" cy="12" rx="10" ry="4.2" fill="none" stroke="currentColor" stroke-width="1.3" transform="rotate(-24 12 12)" />
+      </svg>
+      <span>orbit</span>
+    </a>
+    <ClassicButton />
+  </div>
+
+  <nav aria-label="Worlds">
+    <ul>
+      {worlds.map((w) => (
+        <li>
+          <a
+            href={withBase(w.path)}
+            data-warp
+            aria-current={w.id === current ? 'page' : undefined}
+            data-track={`nav-${w.id}`}
+          >
+            {w.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .world-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: max(10px, env(safe-area-inset-top)) var(--gutter) 10px;
+    pointer-events: none;
+  }
+  .world-nav > * { pointer-events: auto; }
+  .left { display: flex; align-items: center; gap: 8px; }
+
+  .orbit,
+  nav ul {
+    background: var(--nav-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+  }
+
+  .orbit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px 7px 10px;
+    color: var(--fg);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .orbit svg { transition: transform 0.6s var(--ease-out); }
+  .orbit:hover { border-color: var(--accent); color: var(--accent); }
+  .orbit:hover svg { transform: rotate(-180deg); }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    padding: 4px;
+    gap: 2px;
+  }
+  nav a {
+    display: block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s, background 0.2s;
+  }
+  nav a:hover { color: var(--fg); }
+  nav a[aria-current='page'] {
+    color: var(--bg);
+    background: var(--accent);
+  }
+
+  @media (max-width: 420px) {
+    .orbit span { display: none; }
+    .orbit { padding: 8px; }
+    nav a { padding: 6px 9px; font-size: 11.5px; }
+  }
+</style>
+
+<script>
+  import { initWarpLinks } from '../../scripts/warp';
+  import { track } from '../../lib/track';
+  initWarpLinks();
+  document.querySelectorAll<HTMLElement>('[data-world-nav] [data-track]').forEach((el) => {
+    el.addEventListener('click', () => track(el.dataset.track!));
+  });
+</script>

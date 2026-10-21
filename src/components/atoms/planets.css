@@ -1,0 +1,139 @@
+/*
+  Planet and moon bodies, shared by the orrery, the planet view, the list view and the outro.
+  Each planet: a base gradient, a texture layer that drifts sideways (rotation illusion), and a
+  shading layer (highlight + terminator). Size with --size.
+*/
+
+.atm-pb {
+  --size: 44px;
+  --tint: #e8833a;
+  --glow: rgba(232, 131, 58, 0.45);
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 0 calc(var(--size) * 0.5) calc(var(--size) * -0.08) var(--glow);
+  transition: box-shadow 0.4s;
+}
+.atm-pb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-repeat: repeat;
+  animation: atm-pb-spin var(--spin, 26s) linear infinite;
+  opacity: 0.9;
+}
+.atm-pb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 27%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 26%),
+    radial-gradient(circle at 38% 34%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.72) 82%);
+  box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.25);
+}
+@keyframes atm-pb-spin {
+  to { background-position: var(--spin-x, -240px) 0; }
+}
+
+/* Forge: molten copper, lava bands */
+.atm-pb--forge {
+  --tint: #e8833a;
+  --glow: rgba(240, 120, 50, 0.6);
+  background: radial-gradient(circle at 40% 38%, #ffc27f 0%, #ef8a3e 30%, #b8421a 62%, #4d1306 100%);
+}
+.atm-pb--forge::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='22'%3E%3Cpath d='M0 7 Q10 1 20 7 T40 7' fill='none' stroke='%23ffe0a0' stroke-opacity='.7' stroke-width='1.6'/%3E%3Cpath d='M0 16 Q10 12 20 16 T40 16' fill='none' stroke='%23ff7a2a' stroke-opacity='.65' stroke-width='2.2'/%3E%3C/svg%3E");
+  background-size: 40px 22px;
+  --spin-x: -400px;
+  --spin: 30s;
+}
+
+/* Nano & Composites: graphite with a graphene honeycomb */
+.atm-pb--nano {
+  --tint: #3fd1bd;
+  --glow: rgba(63, 209, 189, 0.42);
+  background: radial-gradient(circle at 40% 36%, #79a7a1 0%, #34514f 40%, #172423 75%, #0a1110 100%);
+}
+.atm-pb--nano::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17.32' height='30' viewBox='0 0 17.32 30'%3E%3Cpath d='M8.66 0 L17.32 5 V15 L8.66 20 L0 15 V5 Z M8.66 20 V30' fill='none' stroke='%237ff5e2' stroke-opacity='.75' stroke-width='1.1'/%3E%3C/svg%3E");
+  background-size: 10.4px 18px;
+  --spin-x: -208px;
+  --spin: 34s;
+}
+
+/* Surfaces & Bio: brushed silver-blue */
+.atm-pb--bio {
+  --tint: #9cc0ff;
+  --glow: rgba(150, 190, 255, 0.4);
+  background: conic-gradient(from 210deg at 46% 42%, #eef4fb, #9fb3cc, #d6e2ef, #5f7796, #c3d2e4, #eef4fb);
+}
+.atm-pb--bio::before {
+  background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0 2px, rgba(40, 60, 90, 0.12) 2px 5px, transparent 5px 9px);
+  opacity: 0.8;
+  animation: none;
+}
+
+/* Energy: electric yellow-green with arcs */
+.atm-pb--energy {
+  --tint: #c8f23a;
+  --glow: rgba(200, 242, 58, 0.5);
+  background: radial-gradient(circle at 40% 36%, #faffc4 0%, #d4f545 34%, #7aa514 70%, #2a3d04 100%);
+  animation: atm-pb-zap 3.2s ease-in-out infinite;
+}
+.atm-pb--energy::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='18'%3E%3Cpath d='M0 9 L6 4 L11 12 L17 5 L22 11 L26 9' fill='none' stroke='white' stroke-opacity='.7' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 26px 18px;
+  --spin-x: -260px;
+  --spin: 18s;
+}
+@keyframes atm-pb-zap {
+  0%, 100% { box-shadow: 0 0 calc(var(--size) * 0.5) calc(var(--size) * -0.08) var(--glow); }
+  50% { box-shadow: 0 0 calc(var(--size) * 0.8) calc(var(--size) * -0.02) rgba(214, 255, 80, 0.65); }
+}
+
+/* Computation: violet grid */
+.atm-pb--comp {
+  --tint: #9a7bff;
+  --glow: rgba(154, 123, 255, 0.45);
+  background: radial-gradient(circle at 40% 36%, #cbb8ff 0%, #7a58ea 40%, #3a1f94 75%, #170a45 100%);
+}
+.atm-pb--comp::before {
+  background-image:
+    linear-gradient(rgba(235, 228, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(235, 228, 255, 0.5) 1px, transparent 1px);
+  background-size: 9px 9px;
+  --spin-x: -270px;
+  --spin: 30s;
+}
+
+/* ---------- Moons ---------- */
+.atm-moon-body {
+  --m: 24px;
+  display: block;
+  width: var(--m);
+  height: var(--m);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fffaf2 0%, color-mix(in srgb, var(--tint, #ccc) 55%, #d8d0c6) 42%, #241914 100%);
+  box-shadow: 0 0 14px -2px color-mix(in srgb, var(--tint, #fff) 60%, transparent);
+  transition: transform 0.35s var(--pop, ease), box-shadow 0.3s;
+}
+.atm-moon-body--worm {
+  --m: 30px;
+  background:
+    radial-gradient(circle, #000 0 30%, transparent 32%),
+    conic-gradient(from 0deg, #000, #e8833a, #fff1dc, #5b2a8a, #000, #e8833a, #000);
+  box-shadow: 0 0 18px rgba(232, 131, 58, 0.6), inset 0 0 6px #000;
+  animation: atm-worm 3s linear infinite;
+}
+@keyframes atm-worm { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .atm-pb::before, .atm-pb--energy, .atm-moon-body--worm { animation: none; }
+}

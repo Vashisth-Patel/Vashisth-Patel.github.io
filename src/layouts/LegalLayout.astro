@@ -1,0 +1,84 @@
+---
+/**
+ * Plain, readable layout for the legal pages (Impressum, privacy notice).
+ * No starfield or motion: these pages are for reading and must work everywhere.
+ */
+import Base from './Base.astro';
+import { withBase } from '../lib/url';
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+}
+const { title, description, updated } = Astro.props;
+---
+
+<Base title={`${title} · Vashisth Patel`} description={description} world="other">
+  <header class="legal-top">
+    <a class="back" href={withBase('')} data-warp>
+      <span aria-hidden="true">↩</span> vashisthpatel.com
+    </a>
+  </header>
+  <main id="main" class="legal">
+    <slot />
+    <p class="updated">Last updated: {updated}</p>
+  </main>
+  <script>import { initWarpLinks } from '../scripts/warp'; initWarpLinks();</script>
+</Base>
+
+<style>
+  .legal-top {
+    width: min(100% - 2 * var(--gutter), 760px);
+    margin: 0 auto;
+    padding: max(20px, env(safe-area-inset-top)) 0 0;
+  }
+  .back {
+    display: inline-flex;
+    gap: 8px;
+    padding: 7px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .back:hover { border-color: var(--fg); }
+
+  .legal {
+    width: min(100% - 2 * var(--gutter), 760px);
+    margin: 0 auto;
+    padding: 40px 0 24px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(244, 241, 234, 0.86);
+  }
+  .legal :global(h1) {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 7vw, 64px);
+    line-height: 1.05;
+    color: var(--fg);
+  }
+  .legal :global(.lede) { margin-top: 14px; color: var(--muted); }
+  .legal :global(h2) {
+    margin-top: 40px;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .legal :global(h3) { margin-top: 22px; font-size: 16px; font-weight: 600; color: var(--fg); }
+  .legal :global(p), .legal :global(ul), .legal :global(address) { margin-top: 12px; }
+  .legal :global(ul) { padding-left: 20px; }
+  .legal :global(li + li) { margin-top: 6px; }
+  .legal :global(address) { font-style: normal; }
+  .legal :global(a) { color: var(--fg); text-decoration-color: var(--hair); text-underline-offset: 3px; }
+  .legal :global(a:hover) { text-decoration-color: var(--fg); }
+  .updated {
+    margin-top: 48px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>

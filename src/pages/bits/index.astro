@@ -1,0 +1,30 @@
+---
+/**
+ * BITS world: the whole page is a terminal. Projects via `ls` / `cat`, an arcade behind a
+ * floating-point question, and a plain view for everyone who'd rather read a list.
+ */
+import Base from '../../layouts/Base.astro';
+import Terminal from '../../components/bits/Terminal.astro';
+import PlainView from '../../components/bits/PlainView.astro';
+import GameOverlay from '../../components/bits/GameOverlay.astro';
+---
+
+<Base
+  title="Bits · Vashisth Patel"
+  world="bits"
+  description="Vashisth Patel's tech side as a terminal: lead-scoring and screening pipelines, a hackathon prototype, and an arcade of the games he wrote while learning to code."
+>
+  <script is:inline slot="head">
+    document.documentElement.classList.add('bits-js');
+    if (location.hash === '#plain') document.documentElement.dataset.bitsView = 'plain';
+  </script>
+  <main id="main" class="bits-main">
+    <Terminal />
+    <PlainView />
+    <GameOverlay />
+  </main>
+</Base>
+
+<script>
+  import '../../scripts/bits/main';
+</script>

@@ -1,0 +1,397 @@
+---
+// FintechForm.astro — Interactive partner qualification form
+---
+
+<section class="max-w-4xl mx-auto px-4 sm:px-6 py-24 relative">
+  <!-- Subtle background transition -->
+  <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-transparent via-light-navy/20 to-navy -z-10 pointer-events-none"></div>
+
+  <div class="text-center mb-12">
+    <p class="font-mono text-green text-xs uppercase tracking-[0.2em] mb-4">Try it yourself</p>
+    <p class="text-slate text-base leading-relaxed">See how your company would be evaluated by the engine.</p>
+  </div>
+
+  <div class="rounded-3xl border border-lightest-navy/40 bg-light-navy/20 backdrop-blur-2xl p-8 sm:p-12 shadow-[0_0_40px_rgba(0,0,0,0.3)]">
+    <form id="fintech-form" class="space-y-10 relative" novalidate>
+
+      <!-- HONEYPOT FIELD (BOT PROTECTION — DO NOT USE display:none) -->
+      <input
+        type="text"
+        name="company_email"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+      />
+
+      <!-- Company Name -->
+      <div class="group relative">
+        <label for="company_name" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          Company Name
+        </label>
+        <input
+          type="text"
+          id="company_name"
+          name="company_name"
+          required
+          placeholder="e.g., PayFlow GmbH"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner"
+        />
+        <p id="error-company_name" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+      </div>
+
+      <!-- Website -->
+      <div class="group relative">
+        <label for="website" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          Company Website
+        </label>
+        <input
+          type="url"
+          id="website"
+          name="website"
+          required
+          placeholder="https://example.com"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner"
+        />
+        <p id="error-website" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+      </div>
+
+      <!-- Product Description -->
+      <div class="group relative">
+        <label for="description" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          What does your company do?
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          required
+          minlength="50"
+          rows="4"
+          placeholder="Describe your product/service in 3-5 sentences"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
+        ></textarea>
+        <div class="flex justify-between items-start mt-2">
+          <p class="text-xs text-slate font-mono flex-1">Minimum 50 characters</p>
+          <p id="error-description" class="text-red-500 text-xs hidden ml-4 text-right" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- Pain Point -->
+      <div class="group relative">
+        <label for="problem" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          What problem are you solving and for whom?
+        </label>
+        <textarea
+          id="problem"
+          name="problem"
+          required
+          minlength="50"
+          rows="3"
+          placeholder="Describe the pain point and your target customer"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
+        ></textarea>
+        <div class="flex justify-between items-start mt-2">
+          <p class="text-xs text-slate font-mono flex-1">Minimum 50 characters</p>
+          <p id="error-problem" class="text-red-500 text-xs hidden ml-4 text-right" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- ARR & Team Size -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div class="group relative">
+          <label for="revenue" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+            Annual Revenue / ARR
+          </label>
+          <select
+            id="revenue"
+            name="revenue"
+            required
+            class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner cursor-pointer appearance-none"
+          >
+            <option value="" disabled selected class="text-slate">Select range</option>
+            <option value="Pre-revenue" class="bg-white text-lightest-slate">Pre-revenue</option>
+            <option value="<100k" class="bg-white text-lightest-slate">&lt;100k</option>
+            <option value="100k-500k" class="bg-white text-lightest-slate">100k–500k</option>
+            <option value="500k-1M" class="bg-white text-lightest-slate">500k–1M</option>
+            <option value="1M+" class="bg-white text-lightest-slate">1M+</option>
+          </select>
+          <p id="error-revenue" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+        </div>
+        <div class="group relative">
+          <label for="team_size" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+            Team Size
+          </label>
+          <select
+            id="team_size"
+            name="team_size"
+            required
+            class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner cursor-pointer appearance-none"
+          >
+            <option value="" disabled selected class="text-slate">Select size</option>
+            <option value="1-5" class="bg-white text-lightest-slate">1–5</option>
+            <option value="6-20" class="bg-white text-lightest-slate">6–20</option>
+            <option value="21-50" class="bg-white text-lightest-slate">21–50</option>
+            <option value="50+" class="bg-white text-lightest-slate">50+</option>
+          </select>
+          <p id="error-team_size" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- Partnership Goal -->
+      <div class="group relative">
+        <label for="partnership_goal" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          What are you looking for from this partnership?
+        </label>
+        <textarea
+          id="partnership_goal"
+          name="partnership_goal"
+          required
+          rows="3"
+          placeholder="e.g., API integration, referral arrangement, white-label solution"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner resize-y"
+        ></textarea>
+        <p id="error-partnership_goal" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+      </div>
+
+      <!-- Regulatory Status -->
+      <div class="group relative">
+        <label for="regulatory_context" class="block text-slate mb-3 font-mono text-sm tracking-wide transition-colors group-focus-within:text-green">
+          Regulatory Status <span class="text-slate">(optional)</span>
+        </label>
+        <input
+          type="text"
+          id="regulatory_context"
+          name="regulatory_context"
+          placeholder="e.g., BaFin licensed, pursuing PSD2 license, or 'Not regulated'"
+          class="w-full bg-navy/30 border-b border-lightest-navy rounded-t-xl px-5 py-4 text-lightest-slate placeholder:text-lightest-navy focus:border-green/50 focus:ring-1 focus:ring-green/20 focus:outline-none transition-all duration-300 shadow-inner"
+        />
+        <p id="error-regulatory_context" class="text-red-500 text-xs mt-2 hidden" aria-live="polite"></p>
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-6">
+        <button
+          type="submit"
+          id="submit-btn"
+          class="w-full bg-lightest-navy text-lightest-slate font-bold font-mono text-base py-5 rounded-xl border border-lightest-navy hover:border-green hover:bg-green/10 hover:shadow-[0_0_30px_rgba(100,255,218,0.3)] transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+        >
+          <span id="btn-text">Analyze My Company</span>
+          <svg id="btn-spinner" class="hidden animate-spin h-5 w-5 text-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </button>
+        <p id="dynamic-message" class="text-center text-green font-mono text-sm mt-6 hidden h-5 transition-opacity duration-300"></p>
+        <p id="cold-start-note" class="text-[10px] text-slate italic mt-2 text-center max-w-[280px] mx-auto hidden leading-relaxed">
+          Note: We use a compute-on-demand server that &ldquo;sleeps&rdquo; during inactivity. It may take up to 2 minutes to fully wake up for your first analysis.
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('fintech-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const dynamicMessage = document.getElementById('dynamic-message');
+
+  const messages = [
+    "Parsing Product/Market Fit...",
+    "Consulting EU Benchmark Dataset...",
+    "Evaluating BaFin Regulatory Alignment..."
+  ];
+
+  // Set up listeners to auto-clear red borders/errors on input
+  const allInputs = form?.querySelectorAll('input, select, textarea');
+  allInputs?.forEach(input => {
+    input.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+      const errorEl = document.getElementById(`error-${target.id}`);
+      if (errorEl) {
+        errorEl.classList.add('hidden');
+        target.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+      }
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    // Honeypot check
+    if (formData.get('company_email')) return;
+
+    const data = Object.fromEntries(formData.entries());
+
+    // Strict Client-Side Validation Logic
+    let isValid = true;
+    const errors: Record<string, string> = {};
+
+    const requiredFields = ['company_name', 'revenue', 'team_size', 'partnership_goal'];
+    requiredFields.forEach(field => {
+      if (!data[field] || String(data[field]).trim() === '') {
+        isValid = false;
+        errors[field] = "This field is required.";
+      }
+    });
+
+    const website = String(data.website || '').trim();
+    if (!website || (!website.startsWith('http://') && !website.startsWith('https://'))) {
+      isValid = false;
+      errors['website'] = "Please enter a valid URL (e.g., https://example.com).";
+    }
+
+    const description = String(data.description || '').trim();
+    if (description.length < 50) {
+      isValid = false;
+      errors['description'] = "Please provide at least 50 characters for a high-quality AI analysis.";
+    }
+
+    const problem = String(data.problem || '').trim();
+    if (problem.length < 50) {
+      isValid = false;
+      errors['problem'] = "Please provide at least 50 characters for a high-quality AI analysis.";
+    }
+
+    if (!isValid) {
+      let firstInvalidId: string | null = null;
+      for (const [id, msg] of Object.entries(errors)) {
+        const errorEl = document.getElementById(`error-${id}`);
+        const inputEl = document.getElementById(id);
+        if (errorEl && inputEl) {
+          errorEl.textContent = msg;
+          errorEl.classList.remove('hidden');
+          inputEl.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+          if (!firstInvalidId) firstInvalidId = id;
+        }
+      }
+      
+      // Focus on the first invalid field
+      if (firstInvalidId) {
+        document.getElementById(firstInvalidId)?.focus();
+      }
+      
+      // Halt submission exactly as requested (do not trigger spinners)
+      return; 
+    }
+
+    const WEBHOOK_URL = "https://n8n-0028.onrender.com/webhook/fintech-qualifier";
+    const requestHeaders = { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    };
+
+    // Activate loading state
+    if (submitBtn) submitBtn.disabled = true;
+    if (btnText) btnText.textContent = 'Generating Matrix Details...';
+    if (btnSpinner) btnSpinner.classList.remove('hidden');
+
+    // Show cold-start disclaimer
+    const coldStartNote = document.getElementById('cold-start-note');
+    if (coldStartNote) coldStartNote.classList.remove('hidden');
+
+    // Timer and rotating messages
+    let msgIndex = 0;
+    let secondsRemaining = 120;
+
+    if (dynamicMessage) {
+      dynamicMessage.classList.remove('text-red-500');
+      dynamicMessage.classList.add('text-green');
+      dynamicMessage.classList.remove('hidden');
+      dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[0]}. Render (compute) may need a moment to wake up from idle.`;
+    }
+    
+    const msgInterval = setInterval(() => {
+      secondsRemaining--;
+      if (secondsRemaining <= 0) {
+        if (dynamicMessage) dynamicMessage.textContent = 'Finalizing macro-market alignments...';
+      } else {
+        if (secondsRemaining % 3 === 0) {
+          msgIndex = (msgIndex + 1) % messages.length;
+        }
+        if (dynamicMessage) dynamicMessage.textContent = `[${secondsRemaining}s] ${messages[msgIndex]}`;
+      }
+    }, 1000);
+
+    // Diagnostic Audit: View outbound payload & handshake
+    console.log("Attempting POST to:", WEBHOOK_URL);
+    console.log("Headers:", requestHeaders);
+    console.log("Payload being sent:", JSON.stringify(data, null, 2));
+
+    // 120s AbortController timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000);
+
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        referrerPolicy: 'no-referrer',
+        headers: requestHeaders,
+        body: JSON.stringify(data),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Webhook failed with status: ${response.status} ${response.statusText}`);
+        console.error(`Backend response (The Response Sifter): ${errorText}`);
+        throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+      }
+
+      // Robust Parsing & Debugging: "Raw First" Approach
+      const rawResponse = await response.text();
+      console.log("Network Status:", response.status);
+      console.log("Raw Response Body:", rawResponse);
+
+      if (!rawResponse || rawResponse.trim() === "") {
+        throw new Error("Handshake successful, but the response body is empty. Browser is receiving 'nothing'.");
+      }
+
+      const result = JSON.parse(rawResponse);
+      console.log("Successfully Parsed JSON:", result);
+
+      // Dispatch event to render QualificationResults (form remains visible)
+      document.dispatchEvent(new CustomEvent('qualificationComplete', { detail: result }));
+
+      // Success reveal: immediately clear timer and reset button
+      clearInterval(msgInterval);
+      if (coldStartNote) coldStartNote.classList.add('hidden');
+      if (dynamicMessage) dynamicMessage.classList.add('hidden');
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Analyze My Company';
+      if (btnSpinner) btnSpinner.classList.add('hidden');
+
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+      console.error('Webhook error (Deep-Inference catch):');
+      console.dir(error);
+
+      // Show user feedback
+      if (dynamicMessage) {
+        if (error.name === 'AbortError' || error.name === 'TimeoutError') {
+          dynamicMessage.textContent = 'The server is taking longer than expected to wake up. Please try refreshing in a moment.';
+        } else if (error.message && error.message.includes("response body is empty")) {
+          dynamicMessage.textContent = 'Connected to AI Engine, but no data was returned. This is likely a CORS or Webhook Response configuration issue.';
+        } else {
+          dynamicMessage.textContent = 'Something went wrong. Please check console for details or try again.';
+        }
+        dynamicMessage.classList.remove('text-green');
+        dynamicMessage.classList.add('text-red-500');
+        dynamicMessage.classList.remove('hidden');
+      }
+
+      // Explicit error resetting
+      clearInterval(msgInterval);
+      if (coldStartNote) coldStartNote.classList.add('hidden');
+      if (submitBtn) submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Analyze My Company';
+      if (btnSpinner) btnSpinner.classList.add('hidden');
+    }
+  });
+</script>

@@ -1,0 +1,47 @@
+---
+import { withBase } from '../../lib/url';
+// Hero section with growth/learning mindset content
+---
+
+<section id="hero" class="min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-6 sm:px-12 py-24">
+  <div class="space-y-5">
+    <!-- Line 1: Mono/Green -->
+    <p class="font-mono text-green text-base sm:text-lg">
+      Vashisth Patel
+    </p>
+
+    <!-- Line 2: Name/White -->
+    <h1 class="text-4xl sm:text-6xl font-bold text-lightest-slate tracking-tight">
+      Materials engineer working in operations and process improvement.
+    </h1>
+
+    <!-- Line 3: Bio/Grey -->
+    <div class="mt-6 max-w-xl space-y-4">
+      <p class="text-lg text-slate leading-relaxed">
+        Worked on-site with clients from a local laundry operation to <strong class="text-lightest-slate">KUKA Robotics</strong>, diagnosing process bottlenecks, mapping workflows, and building structured solutions.
+      </p>
+      <p class="text-lg text-slate leading-relaxed">
+        At an early-stage platform, took researcher conversion from <strong class="text-lightest-slate">1% to 30%</strong> by finding the actual cause of drop-off, then built the fix into a repeatable six-stage workflow with KPI tracking.
+      </p>
+      <p class="text-lg text-slate leading-relaxed">
+        Finishing an MSc in Management at EBS Wiesbaden in June 2027. Looking for a mandatory internship or working student role in operations, process improvement, or project management. Based in Wiesbaden, open to relocation.
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-12 flex flex-wrap items-center gap-4">
+      <a
+        href={withBase('resume')}
+        class="inline-block px-8 py-4 border-2 border-green text-green font-mono text-sm rounded hover:bg-green/10 transition-colors duration-300"
+      >
+        See my full résumé →
+      </a>
+      <a
+        href="#experience"
+        class="inline-block px-8 py-4 border border-lightest-navy text-slate font-mono text-sm rounded hover:border-green hover:text-green transition-colors duration-300"
+      >
+        View my work
+      </a>
+    </div>
+  </div>
+</section>

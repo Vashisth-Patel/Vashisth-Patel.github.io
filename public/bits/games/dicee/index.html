@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex">
+    <title>Dicee · Bits arcade · Vashisth Patel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="remaster.css">
+    <link href="../shared/fonts.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container">
+      <h1>Refresh Me</h1>
+
+      <div class="dice">
+        <p>Player 1</p>
+        <img class="img1" src="images/dice6.png" alt="Player 1 dice">
+      </div>
+
+      <div class="dice">
+        <p>Player 2</p>
+        <img class="img2" src="images/dice6.png" alt="Player 2 dice">
+      </div>
+
+      <div>
+        <h2 class="into" aria-live="polite"> </h2>
+      </div>
+
+      <!-- 2026: the original only re-rolled on page refresh -->
+      <button type="button" class="roll" data-roll>Roll again</button>
+      <p class="keys">or press Space</p>
+
+    </div>
+
+    <footer>
+      Dicee · App Brewery web-dev course project · original: HTML/CSS/JS, 2023 · remastered for the browser, 2026
+      <a class="back-link" href="../../">← back to the terminal</a>
+    </footer>
+
+  <script src="../shared/arcade.js"></script>
+  <script>
+    // The original script, wrapped in a function so it can run more than once.
+    function roll() {
+      var random_number = Math.floor(Math.random()*6)+1;
+      var second_number = Math.floor(Math.random()*6)+1;
+      var all_imagees=document.querySelectorAll("img");
+      var first_string = "images/dice"+random_number+".png";
+      all_imagees[0].src = first_string;
+      var second_string = "images/dice"+second_number+".png";
+      all_imagees[1].src = second_string;
+      all_imagees[0].alt = "Player 1 rolled a " + random_number;
+      all_imagees[1].alt = "Player 2 rolled a " + second_number;
+      if (random_number === second_number) {
+        document.querySelector(".into").innerHTML = "It is a tie"
+      } else if (random_number > second_number) {
+        document.querySelector(".into").innerHTML = "Player 1 wins"
+      } else {
+        document.querySelector(".into").innerHTML = "Player 2 wins"
+      }
+    }
+
+    // 2026 additions: a Roll again button, Space/Enter, and a short tumble before the result.
+    var rolling = false;
+    function rollAgain() {
+      if (rolling) return;
+      var imgs = document.querySelectorAll("img");
+      if (window.Arcade && window.Arcade.reducedMotion) { roll(); return; }
+      rolling = true;
+      document.body.classList.add("is-rolling");
+      document.querySelector(".into").innerHTML = "&nbsp;";
+      var frames = 0;
+      var timer = setInterval(function () {
+        imgs[0].src = "images/dice" + (Math.floor(Math.random()*6)+1) + ".png";
+        imgs[1].src = "images/dice" + (Math.floor(Math.random()*6)+1) + ".png";
+        if (++frames >= 7) {
+          clearInterval(timer);
+          roll();
+          document.body.classList.remove("is-rolling");
+          rolling = false;
+        }
+      }, 65);
+    }
+
+    // preload the faces so the tumble doesn't flicker
+    for (var f = 1; f <= 6; f++) { new Image().src = "images/dice" + f + ".png"; }
+
+    roll();
+    document.querySelector("[data-roll]").addEventListener("click", rollAgain);
+    document.addEventListener("keydown", function (e) {
+      if ((e.key === " " || e.key === "Enter" || e.key === "r" || e.key === "R") && !(e.target instanceof HTMLButtonElement)) {
+        e.preventDefault();
+        rollAgain();
+      }
+    });
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,297 @@
+---
+/**
+ * The illustrated inset panel for each quiz question. Purely decorative (aria-hidden at the call site).
+ * scripts/atoms/quiz.ts sets data-state="<answer id>" on the parent .scene to play each reaction.
+ */
+interface Props { id: 'einstein' | 'implant' | 'melt' }
+const { id } = Astro.props;
+
+// radiation trefoil, centred on 0,0
+function trefoil(r1 = 3.2, r2 = 11) {
+  const pt = (r: number, a: number) => `${(r * Math.cos(a)).toFixed(2)} ${(r * Math.sin(a)).toFixed(2)}`;
+  return [-90, 30, 150]
+    .map((c) => {
+      const a1 = ((c - 30) * Math.PI) / 180;
+      const a2 = ((c + 30) * Math.PI) / 180;
+      return `M${pt(r1, a1)} L${pt(r2, a1)} A${r2} ${r2} 0 0 1 ${pt(r2, a2)} L${pt(r1, a2)} A${r1} ${r1} 0 0 0 ${pt(r1, a1)} Z`;
+    })
+    .join(' ') + ` M${r1 * 0.55} 0 A${r1 * 0.55} ${r1 * 0.55} 0 1 1 ${-r1 * 0.55} 0 A${r1 * 0.55} ${r1 * 0.55} 0 1 1 ${r1 * 0.55} 0 Z`;
+}
+const tref = trefoil();
+
+const hairHead: [number, number, number][] = [
+  [86, 96, 14], [92, 78, 15], [108, 67, 15], [128, 64, 16], [146, 71, 15], [156, 88, 14],
+  [160, 106, 11], [80, 110, 11], [76, 80, 8], [164, 74, 8], [118, 54, 9], [140, 55, 7], [97, 57, 7],
+];
+const hairStone: [number, number, number][] = [
+  [90, 124, 10], [100, 112, 11], [116, 106, 12], [134, 107, 12], [149, 116, 11], [158, 130, 8],
+  [82, 136, 8], [124, 96, 7], [107, 98, 6], [145, 101, 6],
+];
+const moustache = (x: number, y: number) =>
+  `M${x - 17} ${y} q8 -9 17 -3 q9 -6 17 3 q-4 9 -17 5 q-13 4 -17 -5z`;
+---
+
+{id === 'einstein' && (
+  <svg class="sc sc--einstein" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <radialGradient id="sc-worm" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#fff3df" stop-opacity="0.9" />
+        <stop offset="0.25" stop-color="#e8833a" stop-opacity="0.55" />
+        <stop offset="0.7" stop-color="#5b2a8a" stop-opacity="0.25" />
+        <stop offset="1" stop-color="#000" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="sc-rock" x1="0" y1="0" x2="0.3" y2="1">
+        <stop offset="0" stop-color="#c3bdb4" />
+        <stop offset="1" stop-color="#6d6760" />
+      </linearGradient>
+    </defs>
+
+    <g class="worm">
+      <ellipse cx="120" cy="118" rx="110" ry="58" fill="url(#sc-worm)" />
+      <g class="worm__rings">
+        <ellipse cx="120" cy="118" rx="100" ry="44" />
+        <ellipse cx="120" cy="118" rx="78" ry="34" />
+        <ellipse cx="120" cy="118" rx="58" ry="25" />
+        <ellipse cx="120" cy="118" rx="38" ry="16" />
+      </g>
+    </g>
+
+    <g class="hazards">
+      <path class="hz hz--1" d={tref} transform="translate(30 44)" />
+      <path class="hz hz--2" d={tref} transform="translate(206 60) scale(0.8)" />
+      <path class="hz hz--3" d={tref} transform="translate(204 196) scale(1.1)" />
+      <path class="hz hz--4" d={tref} transform="translate(36 194) scale(0.7)" />
+    </g>
+
+    <g class="einstein">
+      <g class="hair">
+        {hairHead.map(([x, y, r]) => <circle cx={x} cy={y} r={r} class="hair-ink" />)}
+        {hairHead.map(([x, y, r]) => <circle cx={x} cy={y} r={r} class="hair-fill" />)}
+      </g>
+      <ellipse cx="96" cy="114" rx="6" ry="8" class="skin" />
+      <ellipse cx="144" cy="114" rx="6" ry="8" class="skin" />
+      <ellipse cx="120" cy="112" rx="25" ry="29" class="skin" />
+      <path d="M103 100 q7 -7 14 -1 M123 99 q7 -6 14 1" class="brow-ink" />
+      <path d="M103 100 q7 -7 14 -1 M123 99 q7 -6 14 1" class="brow" />
+      <circle cx="110" cy="107" r="2.3" class="ink" />
+      <circle cx="130" cy="107" r="2.3" class="ink" />
+      <path d="M120 108 q-4 10 0 14 q3 1 5 -1" class="line" />
+      <path d={moustache(120, 128)} class="stache" />
+      <path d="M114 135 q6 3 12 0" class="line" />
+    </g>
+
+    <g class="vapour">
+      <circle cx="96" cy="150" r="20" /><circle cx="124" cy="138" r="26" /><circle cx="152" cy="152" r="19" />
+      <circle cx="110" cy="112" r="16" /><circle cx="140" cy="108" r="14" />
+    </g>
+
+    <g class="stein">
+      <g class="hair">
+        {hairStone.map(([x, y, r]) => <circle cx={x} cy={y} r={r} class="hair-ink" />)}
+        {hairStone.map(([x, y, r]) => <circle cx={x} cy={y} r={r} class="hair-fill" />)}
+      </g>
+      <path class="rock" d="M60 176 C56 150 72 126 100 120 C126 113 160 118 176 136 C190 152 186 176 168 184 C140 194 88 194 60 176 Z" />
+      <path class="crack" d="M74 170 l10 -6 l4 6 M160 150 l-8 4 l2 7" />
+      <path d="M100 146 q6 4 12 0 M128 146 q6 4 12 0" class="line" />
+      <path d={moustache(120, 162)} class="stache" />
+      <text x="120" y="224" class="stein__label">ein Stein</text>
+    </g>
+  </svg>
+)}
+
+{id === 'implant' && (
+  <svg class="sc sc--implant" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="sc-metal" x1="0" y1="0" x2="1" y2="0.3">
+        <stop offset="0" stop-color="#8c96a0" />
+        <stop offset="0.45" stop-color="#eef2f5" />
+        <stop offset="1" stop-color="#7d8790" />
+      </linearGradient>
+      <radialGradient id="sc-ball" cx="38%" cy="32%" r="70%">
+        <stop offset="0" stop-color="#ffffff" />
+        <stop offset="0.5" stop-color="#c9d0d6" />
+        <stop offset="1" stop-color="#6f7881" />
+      </radialGradient>
+      <filter id="sc-blur"><feGaussianBlur stdDeviation="3" /></filter>
+    </defs>
+    <path class="bone" d="M118 40 C150 30 186 44 186 70 C186 92 164 96 156 108 C146 124 150 190 152 232 L88 232 C92 190 100 140 104 112 C106 90 92 52 118 40 Z" />
+    <g class="boom">
+      <polygon points="120,40 136,92 190,70 150,112 214,140 150,142 176,206 124,160 96,222 98,158 30,176 86,128 26,92 92,100" />
+    </g>
+    <g class="implant">
+      <path class="oxide" d="M146 80 L156 92 L140 114 C134 150 124 190 114 222 C110 228 102 226 102 220 C104 180 108 140 114 106 L126 92 Z" />
+      <path class="stem" d="M146 80 L156 92 L140 114 C134 150 124 190 114 222 C110 228 102 226 102 220 C104 180 108 140 114 106 L126 92 Z" />
+      <path class="collar" d="M122 96 L144 112" />
+      <circle class="oxide" cx="152" cy="66" r="25" />
+      <circle class="ball" cx="152" cy="66" r="25" />
+      <g class="rust">
+        <circle cx="126" cy="128" r="6" /><circle cx="118" cy="160" r="8" /><circle cx="130" cy="146" r="4" />
+        <circle cx="112" cy="196" r="6" /><circle cx="144" cy="58" r="7" /><circle cx="160" cy="76" r="5" />
+        <circle cx="122" cy="182" r="3.5" /><circle cx="138" cy="100" r="5" />
+      </g>
+    </g>
+    <g class="tag tag--ti"><path d="M164 150 L140 140" /><text x="166" y="154">oxide layer</text></g>
+    <g class="tag tag--fe"><path d="M164 150 L130 146" /><text x="166" y="154">rust</text></g>
+    <g class="tag tag--na"><text x="120" y="232">Na + H₂O</text></g>
+  </svg>
+)}
+
+{id === 'melt' && (
+  <svg class="sc sc--melt" viewBox="0 0 240 240" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="sc-ga" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f4f7fa" />
+        <stop offset="0.5" stop-color="#b8c1c9" />
+        <stop offset="1" stop-color="#7b858e" />
+      </linearGradient>
+    </defs>
+    <g class="hand">
+      <path class="thumb" d="M64 196 C44 182 34 160 40 150 C46 140 60 148 70 162 L86 182 Z" />
+      <rect class="finger" x="74" y="92" width="22" height="80" rx="11" />
+      <rect class="finger" x="98" y="78" width="22" height="92" rx="11" />
+      <rect class="finger" x="122" y="82" width="22" height="88" rx="11" />
+      <rect class="finger" x="146" y="100" width="21" height="74" rx="10.5" />
+      <path class="palm" d="M70 160 C68 140 84 134 120 134 C158 134 172 140 170 166 C168 204 150 228 120 230 C90 228 72 204 70 160 Z" />
+    </g>
+    <g class="puddle">
+      <ellipse cx="120" cy="192" rx="40" ry="12" />
+      <ellipse cx="108" cy="188" rx="12" ry="3" class="shine" />
+      <path class="drip" d="M156 196 q4 10 0 14 q-4 -4 0 -14z" />
+    </g>
+    <g class="cube">
+      <polygon class="top" points="120,150 144,162 120,174 96,162" />
+      <polygon class="left" points="96,162 120,174 120,202 96,190" />
+      <polygon class="right" points="120,174 144,162 144,190 120,202" />
+    </g>
+    <g class="heat">
+      <path d="M96 140 q-6 -10 0 -20 q6 -10 0 -20" /><path d="M120 134 q-6 -10 0 -20 q6 -10 0 -20" /><path d="M144 140 q-6 -10 0 -20 q6 -10 0 -20" />
+    </g>
+    <g class="temp">
+      <rect x="150" y="16" width="80" height="30" rx="15" />
+      <text x="190" y="36" class="temp-text">you: ~37 °C</text>
+    </g>
+  </svg>
+)}
+
+<style>
+  .sc { width: 100%; height: 100%; overflow: visible; }
+
+  /* ---------- Einstein ---------- */
+  .worm { transform-box: view-box; transform-origin: 120px 118px; transition: transform 0.7s var(--snap), opacity 0.6s; }
+  .worm__rings ellipse { fill: none; stroke: rgba(251, 242, 228, 0.5); stroke-width: 1.5; stroke-dasharray: 18 10; }
+  .worm__rings ellipse:nth-child(odd) { stroke: rgba(232, 131, 58, 0.75); }
+  .worm__rings ellipse { animation: sc-dash 6s linear infinite; }
+  .worm__rings ellipse:nth-child(2) { animation-duration: 4.5s; animation-direction: reverse; }
+  .worm__rings ellipse:nth-child(3) { animation-duration: 3.2s; }
+  .worm__rings ellipse:nth-child(4) { animation-duration: 2.2s; animation-direction: reverse; }
+  @keyframes sc-dash { to { stroke-dashoffset: -112; } }
+
+  .hz { fill: #d9ff4a; stroke: #140c08; stroke-width: 1.4; animation: sc-hz 1.2s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+  .hz--2 { animation-delay: -0.4s; }
+  .hz--3 { animation-delay: -0.8s; }
+  .hz--4 { animation-delay: -0.2s; }
+  @keyframes sc-hz { from { opacity: 0.45; } to { opacity: 1; } }
+
+  .hair-ink { fill: #140c08; stroke: #140c08; stroke-width: 6; }
+  .hair-fill { fill: #fbf7f0; }
+  .skin { fill: #f1c9a5; stroke: #140c08; stroke-width: 2.6; }
+  .ink { fill: #140c08; }
+  .line { fill: none; stroke: #140c08; stroke-width: 2; stroke-linecap: round; }
+  .brow-ink { fill: none; stroke: #140c08; stroke-width: 8; stroke-linecap: round; }
+  .brow { fill: none; stroke: #fbf7f0; stroke-width: 4.5; stroke-linecap: round; }
+  .stache { fill: #fbf7f0; stroke: #140c08; stroke-width: 2.4; stroke-linejoin: round; }
+  .rock { fill: url(#sc-rock); stroke: #140c08; stroke-width: 3; }
+  .crack { fill: none; stroke: rgba(20, 12, 8, 0.55); stroke-width: 1.6; }
+  .stein__label { font-family: var(--font-display); font-style: italic; font-size: 26px; fill: var(--paper); text-anchor: middle; }
+
+  .einstein { transform-box: view-box; transform-origin: 120px 118px; animation: sc-bob 2.6s ease-in-out infinite; transition: transform 0.45s var(--snap), opacity 0.35s; }
+  @keyframes sc-bob { 50% { transform: translateY(-4px) rotate(-1.5deg); } }
+  .stein { opacity: 0; transform-box: view-box; transform-origin: 120px 160px; transform: scale(0.4); }
+  .vapour circle { fill: rgba(240, 236, 230, 0.85); stroke: #140c08; stroke-width: 2; }
+  .vapour { opacity: 0; transform-box: view-box; transform-origin: 120px 140px; }
+
+  :global(.scene[data-state='boron']) .worm { transform: scale(0.2); opacity: 0; }
+  :global(.scene[data-state='boron']) .hazards { opacity: 0; transition: opacity 0.5s; }
+  :global(.scene[data-state='boron']) .einstein { animation: none; transform: scale(0.3); opacity: 0; }
+  :global(.scene[data-state='boron']) .stein { animation: sc-stein 0.7s 0.25s var(--pop) both; }
+  @keyframes sc-stein {
+    from { opacity: 0; transform: scale(0.4) rotate(-8deg); }
+    to { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  :global(.scene[data-state='iron']) .vapour { animation: sc-vapour 2.4s ease-out both; }
+  @keyframes sc-vapour {
+    0% { opacity: 0; transform: scale(0.3); }
+    25% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0; transform: translateY(-40px) scale(1.35); }
+  }
+  :global(.scene[data-state='uranium']) .hz { animation-duration: 0.12s; fill: #f3ff7a; }
+  :global(.scene[data-state='uranium']) .einstein { animation: sc-panic 0.12s linear infinite; }
+  @keyframes sc-panic { 50% { transform: translate(2px, -2px); } }
+
+  /* ---------- Implant ---------- */
+  .bone { fill: rgba(251, 242, 228, 0.06); stroke: rgba(251, 242, 228, 0.22); stroke-width: 2; stroke-dasharray: 5 6; }
+  .stem { fill: url(#sc-metal); stroke: #140c08; stroke-width: 3; stroke-linejoin: round; }
+  .ball { fill: url(#sc-ball); stroke: #140c08; stroke-width: 3; }
+  .collar { stroke: #140c08; stroke-width: 2; }
+  .oxide { fill: none; stroke: #7fe0ff; stroke-width: 9; opacity: 0; filter: url(#sc-blur); }
+  .rust circle { fill: #a5451b; stroke: #5c2209; stroke-width: 1.2; opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0); }
+  .boom { opacity: 0; transform-box: view-box; transform-origin: 120px 130px; }
+  .boom polygon { fill: #ffcf4a; stroke: #140c08; stroke-width: 3; stroke-linejoin: round; }
+  .implant { transform-box: view-box; transform-origin: 120px 130px; }
+  .tag { opacity: 0; transition: opacity 0.4s 0.4s; }
+  .tag path { stroke: var(--paper); stroke-width: 1.5; fill: none; }
+  .tag text { font-family: var(--font-mono); font-size: 12px; fill: var(--paper); }
+  .tag--na text { text-anchor: middle; font-size: 13px; }
+
+  :global(.scene[data-state='titanium']) .oxide { animation: sc-oxide 2.4s ease-in-out infinite; }
+  :global(.scene[data-state='titanium']) .tag--ti { opacity: 1; }
+  @keyframes sc-oxide { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.95; } }
+  :global(.scene[data-state='iron']) .rust circle { animation: sc-rust 0.5s var(--pop) both; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(2) { animation-delay: 0.15s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(3) { animation-delay: 0.3s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(4) { animation-delay: 0.45s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(5) { animation-delay: 0.6s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(6) { animation-delay: 0.75s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(7) { animation-delay: 0.9s; }
+  :global(.scene[data-state='iron']) .rust circle:nth-child(8) { animation-delay: 1.05s; }
+  :global(.scene[data-state='iron']) .tag--fe { opacity: 1; }
+  @keyframes sc-rust { from { opacity: 0; transform: scale(0); } to { opacity: 0.95; transform: scale(1); } }
+  :global(.scene[data-state='sodium']) .boom { animation: sc-boom 0.9s var(--pop) both; }
+  :global(.scene[data-state='sodium']) .implant { animation: sc-jolt 0.5s linear; }
+  :global(.scene[data-state='sodium']) .tag--na { opacity: 1; }
+  @keyframes sc-boom { 0% { opacity: 0; transform: scale(0.2) rotate(-20deg); } 60% { opacity: 1; transform: scale(1.08) rotate(4deg); } 100% { opacity: 0.9; transform: scale(1) rotate(0); } }
+  @keyframes sc-jolt { 20% { transform: translate(-6px, 3px); } 40% { transform: translate(6px, -4px); } 60% { transform: translate(-4px, 2px); } 80% { transform: translate(3px, -1px); } }
+
+  /* ---------- Melt ---------- */
+  .finger, .palm, .thumb { fill: #f1c9a5; stroke: #140c08; stroke-width: 2.6; }
+  .cube polygon { stroke: #140c08; stroke-width: 2.4; stroke-linejoin: round; }
+  .cube .top { fill: #f2f5f7; }
+  .cube .left { fill: #aab3bb; }
+  .cube .right { fill: #7f8890; }
+  .cube { transform-box: view-box; transform-origin: 120px 202px; }
+  .puddle ellipse { fill: url(#sc-ga); stroke: #140c08; stroke-width: 2.4; }
+  .puddle .shine { fill: #fff; stroke: none; opacity: 0.8; }
+  .puddle .drip { fill: url(#sc-ga); stroke: #140c08; stroke-width: 1.6; }
+  .puddle { opacity: 0; transform-box: view-box; transform-origin: 120px 192px; transform: scale(0.3, 0.6); }
+  .heat path { fill: none; stroke: rgba(255, 157, 85, 0.85); stroke-width: 2.4; stroke-linecap: round; opacity: 0; }
+  .temp rect { fill: var(--paper); stroke: #140c08; stroke-width: 2.4; }
+  .temp-text { font-family: var(--font-mono); font-size: 12px; font-weight: 700; fill: #140c08; text-anchor: middle; }
+
+  :global(.scene[data-state='gallium']) .cube { animation: sc-melt 1.2s 0.1s ease-in both; }
+  :global(.scene[data-state='gallium']) .puddle { animation: sc-puddle 0.9s 0.8s var(--pop) both; }
+  :global(.scene[data-state='gallium']) .drip { animation: sc-drip 1.6s 1.6s ease-in infinite; }
+  @keyframes sc-melt {
+    0% { transform: none; opacity: 1; }
+    60% { transform: scale(1.15, 0.45); opacity: 1; }
+    100% { transform: scale(1.4, 0.1); opacity: 0; }
+  }
+  @keyframes sc-puddle { from { opacity: 0; transform: scale(0.3, 0.6); } to { opacity: 1; transform: none; } }
+  @keyframes sc-drip { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(26px); opacity: 0; } }
+  :global(.scene[data-state='tungsten']) .heat path,
+  :global(.scene[data-state='aluminium']) .heat path { animation: sc-heat 1.4s ease-in-out infinite; }
+  :global(.scene[data-state='tungsten']) .cube,
+  :global(.scene[data-state='aluminium']) .cube { animation: sc-jolt 0.4s linear; }
+  @keyframes sc-heat { 0% { opacity: 0; transform: translateY(6px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px); } }
+  .heat path:nth-child(2) { animation-delay: 0.3s !important; }
+  .heat path:nth-child(3) { animation-delay: 0.6s !important; }
+</style>

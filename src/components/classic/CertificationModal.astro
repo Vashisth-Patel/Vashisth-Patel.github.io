@@ -1,0 +1,110 @@
+---
+// Certification Modal component for displaying multiple certificates in a popup
+interface Props {
+  modalId: string;
+  title: string;
+  organization: string;
+  certificates: Array<{
+    title: string;
+    file: string;
+  }>;
+}
+
+const { modalId, title, organization, certificates } = Astro.props;
+---
+
+<!-- Modal Overlay -->
+<div id={modalId} class="hidden fixed inset-0 z-50 items-center justify-center bg-navy/90 backdrop-blur-sm p-4 overflow-y-auto modal-overlay">
+  <!-- Modal Container -->
+  <div class="relative bg-light-navy rounded-lg shadow-2xl w-full max-w-3xl my-8 modal-content border border-lightest-navy">
+    
+    <!-- Close Button -->
+    <button class="absolute top-4 right-4 z-10 text-slate hover:text-green transition-colors text-2xl font-bold p-2 hover:bg-navy/50 rounded" data-close-modal={modalId}>
+      ✕
+    </button>
+
+    <!-- Scrollable Content -->
+    <div class="overflow-y-auto max-h-[85vh]">
+      
+      <!-- Header -->
+      <div class="p-8 border-b border-lightest-navy">
+        <h2 class="text-3xl font-bold text-lightest-slate mb-2">
+          {title}
+        </h2>
+        <p class="text-green font-mono text-base">
+          {organization}
+        </p>
+      </div>
+
+      <!-- Certificates Grid -->
+      <div class="p-8">
+        <h3 class="text-xl font-bold text-lightest-slate mb-6 flex items-center gap-2">
+          <span class="text-green">▹</span> Certificates
+        </h3>
+        
+        <div class="grid sm:grid-cols-2 gap-4">
+          {certificates.map((cert) => (
+            <a 
+              href={cert.file}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group p-4 bg-navy/50 rounded-lg border border-lightest-navy hover:border-green transition-all hover:-translate-y-1"
+            >
+              <div class="flex items-start gap-3">
+                <span class="text-green text-2xl mt-1 group-hover:scale-110 transition-transform">📄</span>
+                <div class="flex-1">
+                  <h4 class="text-lightest-slate font-semibold text-sm mb-1 group-hover:text-green transition-colors">
+                    {cert.title}
+                  </h4>
+                  <p class="text-slate text-xs">
+                    Harvard Certificate
+                  </p>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <!-- Privacy Note -->
+        <div class="mt-6 p-4 bg-navy/30 rounded-lg border border-slate/20">
+          <p class="text-slate text-xs leading-relaxed">
+            <span class="text-green font-semibold">Privacy Note:</span> All certificates are provided as flattened, redacted copies to protect PII. Original unredacted versions are available for verification during the interview process.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal JavaScript -->
+<script define:vars={{ modalId }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById(modalId);
+    const closeBtn = modal?.querySelector(`[data-close-modal="${modalId}"]`);
+    const overlay = modal?.querySelector('.modal-overlay');
+    
+    // Close modal function
+    const closeModal = () => {
+      modal?.classList.add('hidden');
+      modal?.classList.remove('flex');
+    };
+    
+    // Close button click
+    closeBtn?.addEventListener('click', closeModal);
+    
+    // Click outside modal
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+    
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('flex')) {
+        closeModal();
+      }
+    });
+  });
+</script>

@@ -1,0 +1,137 @@
+---
+/** Bottom of ATOMS: one line, then doors to the other two worlds (with the warp transition). */
+import { withBase } from '../../lib/url';
+---
+
+<section class="outro" aria-labelledby="outro-line">
+  <div class="container">
+    <p class="outro__line" id="outro-line">Engineering is one third of the story.</p>
+    <ul class="portals" role="list">
+      <li>
+        <a class="portal portal--bits" href={withBase('bits/')} data-warp data-track="atoms-outro-bits">
+          <span class="portal__screen" aria-hidden="true">
+            <span class="term"><span class="term__p">vashisth@bits:~$</span> play<span class="term__cursor"></span></span>
+          </span>
+          <span class="portal__text">
+            <span class="portal__name">Bits</span>
+            <span class="portal__desc">Terminal and arcade.</span>
+          </span>
+          <span class="portal__go" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a class="portal portal--ventures" href={withBase('ventures/#ch-2')} data-warp data-track="atoms-outro-ventures">
+          <span class="portal__screen" aria-hidden="true">
+            <span class="paper"><span class="paper__ch">Chapter 2</span><span class="paper__t">Batteries</span><span class="paper__rule"></span></span>
+          </span>
+          <span class="portal__text">
+            <span class="portal__name">Ventures</span>
+            <span class="portal__desc">A business story. Opens at the battery chapter: 626 firms screened.</span>
+          </span>
+          <span class="portal__go" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .outro { position: relative; z-index: 1; padding: clamp(90px, 14vh, 160px) 0 clamp(70px, 10vh, 110px); }
+  .outro__line {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 5vw, 60px);
+    line-height: 1.05;
+    text-align: center;
+    letter-spacing: -0.01em;
+    max-width: 18ch;
+    margin: 0 auto;
+  }
+  .portals {
+    list-style: none;
+    padding: 0;
+    margin: 48px auto 0;
+    max-width: 920px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .portal {
+    position: relative;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr;
+    gap: 18px 12px;
+    padding: 14px 14px 20px;
+    border: 1px solid var(--hair);
+    border-radius: 20px;
+    background: var(--panel);
+    text-decoration: none;
+    color: var(--fg);
+    transition: transform 0.45s var(--pop), border-color 0.3s, box-shadow 0.4s;
+  }
+  .portal:hover { transform: translateY(-5px); }
+  .portal--bits:hover { border-color: rgba(57, 255, 136, 0.5); box-shadow: 0 24px 60px -24px rgba(57, 255, 136, 0.35); }
+  .portal--ventures:hover { border-color: rgba(243, 238, 228, 0.5); box-shadow: 0 24px 60px -24px rgba(243, 238, 228, 0.25); }
+  .portal__screen {
+    grid-column: 1 / -1;
+    height: 132px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .portal__text { display: grid; gap: 4px; padding: 0 6px; align-self: end; }
+  .portal__name { font-family: var(--font-display); font-size: 34px; line-height: 1; }
+  .portal__desc { font-size: 14.5px; color: var(--muted); line-height: 1.45; }
+  .portal__go {
+    align-self: end;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--hair);
+    font-size: 18px;
+    transition: transform 0.4s var(--pop), background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .portal:hover .portal__go { transform: translateX(4px) rotate(-8deg); background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  /* Bits preview: CRT */
+  .portal--bits .portal__screen {
+    background: radial-gradient(ellipse at center, #062a14, #010402 75%);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
+  }
+  .portal--bits .portal__screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.32) 0 1px, transparent 1px 3px);
+    pointer-events: none;
+  }
+  .term { font: 500 14px/1 var(--font-mono); color: #39ff88; text-shadow: 0 0 8px rgba(57, 255, 136, 0.7); }
+  .term__p { color: #1f9a54; text-shadow: none; }
+  .term__cursor { display: inline-block; width: 8px; height: 15px; margin-left: 4px; vertical-align: -2px; background: #39ff88; animation: outro-blink 1s steps(1) infinite; }
+  @keyframes outro-blink { 50% { opacity: 0; } }
+
+  /* Ventures preview: paper */
+  .portal--ventures .portal__screen { background: #f3eee4; color: #1b1a17; }
+  .paper { display: grid; justify-items: center; gap: 4px; }
+  .paper__ch { font: 500 10.5px/1 var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; color: #b4372b; }
+  .paper__t { font-family: var(--font-display); font-size: 34px; line-height: 1; font-style: italic; }
+  .paper__rule { width: 46px; height: 2px; background: #b4372b; margin-top: 6px; transition: width 0.5s var(--pop); }
+  .portal--ventures:hover .paper__rule { width: 90px; }
+
+  @media (max-width: 640px) {
+    .portals { grid-template-columns: 1fr; }
+    .portal__screen { height: 112px; }
+  }
+</style>
+
+<script>
+  import { track } from '../../lib/track';
+  document.querySelectorAll<HTMLElement>('.portal[data-track]').forEach((el) =>
+    el.addEventListener('click', () => track(el.dataset.track!)),
+  );
+</script>

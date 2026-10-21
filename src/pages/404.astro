@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import Starfield from '../components/common/Starfield.astro';
+import { withBase } from '../lib/url';
+---
+
+<Base title="Lost in space · Vashisth Patel" description="This page drifted off.">
+  <Starfield density={0.8} speed={2.5} />
+  <main id="main" class="lost">
+    <p class="eyebrow">Error 404</p>
+    <h1>Lost in space.</h1>
+    <p class="sub">This page drifted out of orbit. Or it never existed. Space is like that.</p>
+    <a href={withBase('')} data-warp class="home">Return to orbit <span aria-hidden="true">→</span></a>
+  </main>
+  <script>import { initWarpLinks } from '../scripts/warp'; initWarpLinks();</script>
+</Base>
+
+<style>
+  .lost {
+    position: relative;
+    z-index: 1;
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    padding: var(--gutter);
+  }
+  h1 {
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(56px, 11vw, 140px);
+    line-height: 1;
+  }
+  .sub { margin-top: 18px; color: var(--muted); max-width: 40ch; }
+  .home {
+    margin-top: 32px;
+    padding: 12px 22px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .home:hover { border-color: var(--fg); background: rgba(255, 255, 255, 0.06); }
+</style>

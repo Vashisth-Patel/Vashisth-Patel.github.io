@@ -1,0 +1,295 @@
+---
+/**
+ * First screen: who he is, plus a small constellation of interests. Hovering, focusing
+ * or tapping a star shows its note in the readout (aria-live) under the constellation.
+ */
+import { hero, interests } from '../../data/landing';
+
+const lines: [number, number][] = [
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [3, 0],
+  [0, 2],
+];
+---
+
+<section class="hero" id="top">
+  <div class="intro">
+    <p class="eyebrow" data-reveal>
+      {hero.eyebrow}<span class="clock" data-clock></span>
+    </p>
+    <h1 class="name" data-reveal>
+      {hero.name.split(' ').map((w) => <span class="word">{w}</span>)}
+    </h1>
+    <p class="line" data-reveal>{hero.line}</p>
+  </div>
+
+  <div class="sky" data-reveal>
+    <div class="constellation" data-constellation>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {lines.map(([a, b], i) => (
+          <line
+            x1={interests[a].x}
+            y1={interests[a].y}
+            x2={interests[b].x}
+            y2={interests[b].y}
+            style={`--i:${i}`}
+            pathLength="1"
+          />
+        ))}
+      </svg>
+      {interests.map((it, i) => (
+        <button
+          type="button"
+          class="star"
+          style={`left:${it.x}%;top:${it.y}%;--d:${i * 0.7}s`}
+          data-interest={it.id}
+          aria-describedby="interest-readout"
+          aria-pressed="false"
+        >
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label">{it.label}</span>
+        </button>
+      ))}
+    </div>
+    <p class="readout" id="interest-readout" aria-live="polite" data-readout>
+      <span class="readout-label">Four things I keep coming back to.</span>
+      <span class="readout-hint">Pick a star.</span>
+    </p>
+  </div>
+
+  <a class="scroll-cue" href="#numbers" aria-label="Scroll to the next section">
+    <span>scroll</span>
+    <i aria-hidden="true"></i>
+  </a>
+</section>
+
+<script type="application/json" id="interest-data" set:html={JSON.stringify(interests)} />
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    width: min(100% - 2 * var(--gutter), var(--max));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: clamp(24px, 5vw, 72px);
+    padding-block: 96px 120px;
+  }
+
+  .eyebrow { color: rgba(244, 241, 234, 0.6); }
+  .clock::before { content: ' · '; }
+  .clock:empty::before { content: ''; }
+
+  .name {
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(60px, 10.5vw, 164px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--starlight);
+    text-shadow: 0 0 60px rgba(160, 170, 255, 0.15);
+  }
+  .word { display: block; }
+  .word:last-child { font-style: italic; padding-left: 0.35em; }
+
+  .line {
+    margin-top: 28px;
+    max-width: 34ch;
+    font-size: clamp(17px, 1.55vw, 21px);
+    line-height: 1.55;
+    color: rgba(244, 241, 234, 0.78);
+  }
+
+  /* ---- constellation ---- */
+  .sky { justify-self: end; width: min(100%, 460px); }
+  .constellation {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+  .constellation svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .constellation line {
+    stroke: rgba(244, 241, 234, 0.28);
+    stroke-width: 0.24;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.6s var(--ease-out) forwards;
+    animation-delay: calc(0.6s + var(--i) * 0.18s);
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .constellation.has-active line { stroke: rgba(244, 241, 234, 0.16); }
+
+  .star {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 999px;
+    color: var(--starlight);
+  }
+  .dot {
+    position: relative;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px 2px rgba(200, 215, 255, 0.85), 0 0 26px 6px rgba(150, 170, 255, 0.35);
+    animation: twinkle 3.4s ease-in-out infinite;
+    animation-delay: var(--d);
+    transition: transform 0.35s var(--ease-out);
+  }
+  .dot::after {
+    content: '';
+    position: absolute;
+    inset: -9px;
+    border: 1px solid rgba(244, 241, 234, 0.35);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.35s, transform 0.5s var(--ease-out);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.72);
+    transition: color 0.25s;
+  }
+  .star:hover .dot,
+  .star[aria-pressed='true'] .dot { transform: scale(1.5); }
+  .star:hover .dot::after,
+  .star[aria-pressed='true'] .dot::after { opacity: 1; transform: scale(1); }
+  .star:hover .label,
+  .star[aria-pressed='true'] .label { color: #fff; }
+
+  .readout {
+    margin-top: 8px;
+    min-height: 5.2em;
+    padding: 16px 18px;
+    border: 1px solid var(--hair);
+    border-radius: var(--radius);
+    background: var(--panel);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(244, 241, 234, 0.86);
+  }
+  .readout :global(.readout-label) {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .readout-hint { color: var(--muted); }
+
+  /* ---- scroll cue ---- */
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.5);
+  }
+  .scroll-cue i {
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(to bottom, rgba(244, 241, 234, 0.6), transparent);
+    transform-origin: top;
+    animation: cue 2.4s var(--ease-in-out) infinite;
+  }
+  @keyframes cue {
+    0% { transform: scaleY(0); opacity: 1; }
+    60% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 0; }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding-block: 96px 110px;
+      align-content: center;
+    }
+    .sky { justify-self: stretch; width: 100%; max-width: 420px; margin-inline: auto; }
+    .constellation { aspect-ratio: 1.25 / 1; }
+  }
+  @media (max-width: 420px) {
+    .label { font-size: 11px; letter-spacing: 0.1em; }
+  }
+</style>
+
+<script>
+  import { track } from '../../lib/track';
+
+  // Local time in Wiesbaden, a small sign of life.
+  const clock = document.querySelector<HTMLElement>('[data-clock]');
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', hour: '2-digit', minute: '2-digit' });
+    const tick = () => (clock.textContent = `${fmt.format(new Date())} local`);
+    tick();
+    setInterval(tick, 30_000);
+  }
+
+  const data = JSON.parse(document.getElementById('interest-data')?.textContent || '[]') as {
+    id: string;
+    label: string;
+    note: string;
+  }[];
+  const sky = document.querySelector<HTMLElement>('[data-constellation]');
+  const readout = document.querySelector<HTMLElement>('[data-readout]');
+  const stars = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-interest]'));
+  const seen = new Set<string>();
+
+  function activate(id: string | null) {
+    stars.forEach((s) => s.setAttribute('aria-pressed', String(s.dataset.interest === id)));
+    sky?.classList.toggle('has-active', id !== null);
+    if (!readout) return;
+    const item = data.find((d) => d.id === id);
+    if (!item) return;
+    readout.innerHTML = '';
+    const label = document.createElement('span');
+    label.className = 'readout-label';
+    label.textContent = item.label;
+    readout.append(label, document.createTextNode(item.note));
+    if (!seen.has(item.id)) {
+      seen.add(item.id);
+      track(`home-interest-${item.id}`);
+    }
+  }
+
+  stars.forEach((s) => {
+    const id = s.dataset.interest!;
+    s.addEventListener('mouseenter', () => activate(id));
+    s.addEventListener('focus', () => activate(id));
+    s.addEventListener('click', () => activate(id));
+  });
+</script>

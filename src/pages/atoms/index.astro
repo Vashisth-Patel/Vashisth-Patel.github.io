@@ -1,0 +1,46 @@
+---
+/**
+ * ATOMS: Vashisth's engineering world. Intro narrator, quiz, random fact bubbles,
+ * the planet system (projects as moons) with a list view, and doors to the other worlds.
+ */
+import Base from '../../layouts/Base.astro';
+import '@fontsource/bangers/400.css';
+import Starfield from '../../components/common/Starfield.astro';
+import Stage from '../../components/atoms/Stage.astro';
+import System from '../../components/atoms/System.astro';
+import Outro from '../../components/atoms/Outro.astro';
+import Crash from '../../components/atoms/Crash.astro';
+import Facts from '../../components/atoms/Facts.astro';
+import '../../components/atoms/manga.css';
+import '../../components/atoms/planets.css';
+---
+
+<Base
+  title="Atoms · Vashisth Patel"
+  description="Vashisth Patel's materials science and engineering work at IIT Gandhinagar: a short quiz, five planets and eight projects, from ferromanganese to nickel nanoparticles."
+  world="atoms"
+>
+  <Starfield tint="232,131,58" density={0.6} />
+  <main id="main" tabindex="-1">
+    <Stage />
+    <System />
+    <Outro />
+  </main>
+  <Facts />
+  <Crash />
+
+  <noscript>
+    <style>
+      [data-js-only], #intro-skip, .stage__center, .intro-ui, #intro-replay { display: none !important; }
+    </style>
+  </noscript>
+
+  <script>
+    import '../../scripts/atoms/main';
+  </script>
+</Base>
+
+<style>
+  /* overflow-x: clip keeps decorative bursts/glows from widening the page on phones (no scroll container, sticky still works). */
+  main { position: relative; z-index: 1; outline: none; overflow-x: clip; }
+</style>

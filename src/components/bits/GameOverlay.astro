@@ -1,0 +1,122 @@
+---
+/** Game overlay: title bar + iframe. Opened by scripts/bits/overlay.ts. */
+---
+
+<div class="bits-overlay" data-bits-overlay hidden role="dialog" aria-modal="true" aria-labelledby="bo-title">
+  <div class="bo-win">
+    <header class="bo-bar">
+      <p id="bo-title" class="bo-title">
+        <span class="bo-name" data-name>game</span><span class="bo-hint"> — [Esc] back to terminal</span>
+      </p>
+      <button type="button" class="bo-close" data-close aria-label="Close the game and go back to the terminal">
+        <span aria-hidden="true">✕</span><span class="bo-close-label">close</span>
+      </button>
+    </header>
+    <div class="bo-stage">
+      <p class="bo-loading" data-loading>loading …</p>
+      <iframe class="bo-frame" data-frame title="Game" src="about:blank" allow="autoplay; fullscreen"></iframe>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  html.bits-overlay-open,
+  html.bits-overlay-open body { overflow: hidden; }
+
+  .bits-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom))
+      max(20px, env(safe-area-inset-left));
+    background: rgba(1, 5, 3, 0.8);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: bo-fade 0.2s var(--ease-out) both;
+  }
+  .bits-overlay[hidden] { display: none; }
+  .bits-overlay.is-closing { animation: bo-fade 0.18s ease reverse both; }
+  .bits-overlay.is-closing .bo-win { animation: bo-pop 0.18s ease reverse both; }
+
+  .bo-win {
+    width: min(100%, 1040px);
+    height: min(100%, 800px);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+    border: 1px solid rgba(57, 255, 136, 0.32);
+    border-radius: 14px;
+    background: #000;
+    box-shadow:
+      0 0 0 1px #000,
+      0 40px 120px rgba(0, 0, 0, 0.85),
+      0 0 70px rgba(57, 255, 136, 0.16);
+    animation: bo-pop 0.3s var(--ease-out) both;
+  }
+  @keyframes bo-fade { from { opacity: 0; } }
+  @keyframes bo-pop { from { opacity: 0; transform: scale(0.965) translateY(6px); } }
+
+  .bo-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 0 8px 0 16px;
+    border-bottom: 1px solid rgba(57, 255, 136, 0.18);
+    background: linear-gradient(#08140d, #040a07);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--fg);
+  }
+  .bo-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bo-name { color: var(--accent); font-weight: 700; }
+  .bo-hint { color: rgba(200, 255, 217, 0.62); }
+  .bo-close {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid rgba(57, 255, 136, 0.3);
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .bo-close:hover { background: rgba(57, 255, 136, 0.13); border-color: var(--accent); }
+
+  .bo-stage { position: relative; min-height: 0; background: #000; }
+  .bo-frame { display: block; width: 100%; height: 100%; border: 0; background: transparent; opacity: 0; transition: opacity 0.25s; }
+  .bits-overlay.is-loaded .bo-frame { opacity: 1; }
+  .bo-loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: rgba(200, 255, 217, 0.62);
+  }
+  .bo-loading[hidden] { display: none; }
+
+  @media (max-width: 720px), (max-height: 560px) {
+    .bits-overlay { padding: 0; background: #000; }
+    .bo-win { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none; }
+    .bo-bar {
+      min-height: calc(46px + env(safe-area-inset-top));
+      padding: env(safe-area-inset-top) max(8px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
+    }
+  }
+  @media (max-width: 420px) {
+    .bo-hint { display: none; }
+    .bo-close { min-height: 38px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bits-overlay, .bo-win, .bits-overlay.is-closing, .bits-overlay.is-closing .bo-win { animation: none !important; }
+  }
+</style>

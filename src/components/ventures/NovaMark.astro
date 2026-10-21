@@ -1,0 +1,46 @@
+---
+/**
+ * Nova's mark: a four-point sparkle with a smaller diagonal one behind it.
+ * variant="solid" (default) is the bright star; "outline" is the faded one in the epilogue.
+ * Decorative only; always aria-hidden.
+ */
+interface Props {
+  variant?: 'solid' | 'outline';
+  class?: string;
+  orbits?: boolean;
+}
+const { variant = 'solid', class: className = '', orbits = false } = Astro.props;
+const big = 'M0 -46 C3 -11 11 -3 46 0 C11 3 3 11 0 46 C-3 11 -11 3 -46 0 C-11 -3 -3 -11 0 -46 Z';
+---
+
+<svg
+  class:list={['nova', `nova--${variant}`, className]}
+  viewBox="-50 -50 100 100"
+  aria-hidden="true"
+  focusable="false"
+>
+  {orbits && (
+    <g class="nova__orbits" fill="none" stroke="currentColor" stroke-width="0.18">
+      <circle r="24" />
+      <circle r="36" />
+      <circle r="48" stroke-dasharray="0.6 1.4" />
+    </g>
+  )}
+  <g class="nova__burst">
+    <path class="nova__minor" d={big} transform="rotate(45) scale(0.42)" />
+    <path class="nova__major" d={big} />
+  </g>
+</svg>
+
+<style>
+  .nova { display: block; overflow: visible; color: var(--accent); }
+  .nova__burst { transform-box: fill-box; transform-origin: center; }
+  .nova--solid path { fill: currentColor; }
+  .nova--solid .nova__minor { opacity: 0.55; }
+  .nova--outline path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 0.9;
+    vector-effect: non-scaling-stroke;
+  }
+</style>

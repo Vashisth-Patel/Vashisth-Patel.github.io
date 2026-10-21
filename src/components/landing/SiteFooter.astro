@@ -1,0 +1,75 @@
+---
+import { site } from '../../data/site';
+import { withBase } from '../../lib/url';
+---
+
+<footer class="footer" aria-labelledby="hello-title">
+  <div class="container">
+    <h2 id="hello-title" data-reveal>Say hello.</h2>
+    <a class="mail" href={`mailto:${site.email}`} data-reveal data-track="home-email">{site.email}</a>
+    <ul class="links" data-reveal>
+      <li><a href={site.linkedin} target="_blank" rel="noopener noreferrer" data-track="home-linkedin">LinkedIn ↗</a></li>
+      <li><a href={site.github} target="_blank" rel="noopener noreferrer" data-track="home-github">GitHub ↗</a></li>
+    </ul>
+    <div class="base">
+      <p>© {new Date().getFullYear()} {site.name} · <a href={withBase('impressum/')}>Impressum</a> · <a href={withBase('datenschutz/')}>Privacy</a></p>
+      <p>Stars drawn live in your browser. Built with Astro, hosted on GitHub Pages.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    padding-block: clamp(80px, 12vw, 150px) 48px;
+    border-top: 1px solid var(--hair);
+    background: linear-gradient(180deg, transparent, rgba(5, 6, 10, 0.7));
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(56px, 10vw, 150px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .mail {
+    display: inline-block;
+    margin-top: 22px;
+    font-size: clamp(18px, 2.4vw, 28px);
+    color: var(--starlight);
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) left bottom / 100% 1px no-repeat;
+    padding-bottom: 4px;
+    transition: background-size 0.5s var(--ease-out);
+    overflow-wrap: anywhere;
+  }
+  .mail:hover { background-size: 0% 1px; background-position: right bottom; }
+  .links { list-style: none; padding: 0; margin-top: 24px; display: flex; gap: 24px; }
+  .links a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .links a:hover { color: var(--fg); }
+  .base a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--hair); }
+  .base a:hover { color: var(--fg); }
+  .base {
+    margin-top: clamp(56px, 8vw, 100px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: rgba(154, 160, 180, 0.7);
+  }
+</style>
+
+<script>
+  import { track } from '../../lib/track';
+  document.querySelectorAll<HTMLElement>('.footer [data-track]').forEach((el) =>
+    el.addEventListener('click', () => track(el.dataset.track!)),
+  );
+</script>

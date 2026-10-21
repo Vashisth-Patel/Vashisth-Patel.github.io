@@ -1,0 +1,130 @@
+---
+/** A short strip of numbers, counted up when they scroll into view. */
+import { stats } from '../../data/landing';
+---
+
+<section class="numbers" id="numbers" aria-labelledby="numbers-title">
+  <div class="container">
+    <h2 class="eyebrow" id="numbers-title" data-reveal>A few numbers</h2>
+    <ul class="grid">
+      {stats.map((s, i) => {
+        const final = s.display ?? `${s.prefix ?? ''}${s.value.toFixed(s.decimals)}${s.suffix ?? ''}`;
+        return (
+          <li class="stat" data-reveal style={`--delay:${i * 90}ms`}>
+            <p class="value">
+              <span
+                data-count={s.value}
+                data-decimals={s.decimals}
+                data-prefix={s.prefix ?? ''}
+                data-suffix={s.suffix ?? ''}
+                aria-hidden="true"
+              >
+                {final}
+              </span>
+              <span class="sr-only">{final}</span>
+            </p>
+            <p class="label">{s.label}</p>
+            <p class="detail">{s.detail}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .numbers {
+    position: relative;
+    padding-block: clamp(72px, 12vw, 140px);
+  }
+  .grid {
+    list-style: none;
+    padding: 0;
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--hair);
+  }
+  .stat {
+    padding: 28px 24px 8px 0;
+    border-right: 1px solid var(--hair);
+    padding-left: 24px;
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: 0; }
+
+  .value {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 6.4vw, 92px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--starlight);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .label {
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.8);
+  }
+  .detail {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 24ch;
+  }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat { border-bottom: 1px solid var(--hair); padding: 24px 16px 24px 0; }
+    .stat:nth-child(2n) { border-right: 0; padding-left: 16px; }
+    .stat:nth-child(2n + 1) { padding-left: 0; }
+    .stat:nth-last-child(-n + 2) { border-bottom: 0; }
+  }
+  @media (max-width: 380px) {
+    .value { font-size: 42px; }
+  }
+</style>
+
+<script>
+  import { prefersReducedMotion } from '../../lib/motion';
+
+  const els = document.querySelectorAll<HTMLElement>('[data-count]');
+  const ease = (t: number) => 1 - Math.pow(2, -10 * t);
+
+  function render(el: HTMLElement, v: number) {
+    const d = Number(el.dataset.decimals || 0);
+    el.textContent = `${el.dataset.prefix ?? ''}${v.toFixed(d)}${el.dataset.suffix ?? ''}`;
+  }
+
+  if (!prefersReducedMotion() && 'IntersectionObserver' in window) {
+    // Count up only the real numbers; tiny values like "Top 2" just appear.
+    els.forEach((el) => Number(el.dataset.count) >= 10 && render(el, 0));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          const el = e.target as HTMLElement;
+          const target = Number(el.dataset.count);
+          if (target < 10) return;
+          const start = performance.now();
+          const dur = 1600;
+          const step = (now: number) => {
+            const t = Math.min(1, (now - start) / dur);
+            render(el, target * ease(t));
+            if (t < 1) requestAnimationFrame(step);
+            else render(el, target);
+          };
+          requestAnimationFrame(step);
+        });
+      },
+      { threshold: 0.6 },
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>

@@ -1,0 +1,11 @@
+dist/
+.astro/
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+npm-debug.log*
+
+# Local tooling config (dev-server presets), not part of the site
+.claude/

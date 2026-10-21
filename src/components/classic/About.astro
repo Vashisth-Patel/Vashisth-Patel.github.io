@@ -1,0 +1,91 @@
+---
+import { withBase } from '../../lib/url';
+// About section - Engineering × Management narrative
+---
+
+<section id="about" class="max-w-[1000px] mx-auto px-6 sm:px-12 py-24">
+  <!-- Section Heading -->
+  <div class="flex items-center gap-4 mb-12">
+    <h2 class="text-3xl font-bold text-lightest-slate font-mono whitespace-nowrap">
+      <span class="text-green">01.</span> About Me
+    </h2>
+    <div class="h-[1px] bg-lightest-navy w-full max-w-xs"></div>
+  </div>
+
+  <!-- Grid Layout: Text Left, Image Right -->
+  <div class="grid md:grid-cols-[2fr_1fr] gap-12 items-start">
+    <!-- Text Content -->
+    <div class="space-y-5">
+      <p class="text-slate leading-relaxed">
+        B.Tech in Materials Science and Engineering, IIT Gandhinagar. MSc in Management, EBS Wiesbaden, expected June 2027.
+      </p>
+
+      <p class="text-slate leading-relaxed">
+        Materials science trains you not to treat a symptom as the problem. A material doesn't fail randomly, it fails at a specific interface or under a specific condition, and you find that condition first. That's the instinct behind the Physics Mindboggler diagnosis below: asking researchers why, not sending more emails.
+      </p>
+
+      <p class="text-slate leading-relaxed">
+        Default is to quantify before deciding. Throughput analysis, KPI frameworks, scoring models, and breakeven calculations turn up across most of what follows.
+      </p>
+
+      <!-- Divider -->
+      <div class="pt-4 border-t border-lightest-navy/50"></div>
+
+      <!-- Skill Areas -->
+      <div class="space-y-6 pt-2">
+
+        <div>
+          <h3 class="text-green font-mono text-[13px] mb-3 uppercase tracking-widest">Engineering Foundation</h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Materials Science & Engineering</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Materials Characterisation (SEM, EBSD)</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Numerical Methods & MATLAB</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Thermodynamics & Kinetics</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Corrosion & Composites Analysis</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-green font-mono text-[13px] mb-3 uppercase tracking-widest">Operations & Process</h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Process Mapping & Bottleneck Analysis</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Supply Chain & Circular Design</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> KPI Framework Design</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Workflow Design & Systematisation</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Primary Research & Stakeholder Interviews</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-green font-mono text-[13px] mb-3 uppercase tracking-widest">Analytical & Technical Tools</h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Python & SQL</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Excel (Advanced Modelling)</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Power BI & Tableau</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> n8n & Gemini API</li>
+            <li class="flex items-center gap-2 text-slate font-mono"><span class="text-green">▹</span> Statistical Modelling</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Image with Green Tint Overlay -->
+    <div class="relative group max-w-[300px] mx-auto md:mx-0">
+      <!-- Border that shifts on hover -->
+      <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-green rounded group-hover:bottom-0 group-hover:right-0 transition-all duration-300 z-0"></div>
+      
+      <!-- Image Container -->
+      <div class="relative overflow-hidden rounded z-10">
+        <img 
+          src={withBase('img/me.jpeg')} 
+          alt="Vashisth Patel"
+          class="relative z-10 rounded grayscale hover:grayscale-0 transition-all duration-300"
+        />
+        <!-- Green Tint Overlay that fades on hover -->
+        <div class="absolute inset-0 bg-green/40 mix-blend-multiply group-hover:bg-transparent transition-all duration-300 z-20"></div>
+      </div>
+    </div>
+  </div>
+</section>

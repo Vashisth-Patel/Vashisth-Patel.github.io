@@ -1,0 +1,696 @@
+---
+/**
+ * The planet system: a sun (IIT Gandhinagar) and five planets on tilted orbits, a zoomed planet
+ * view with orbiting moons, moon cards (side panel on desktop, bottom sheet on mobile), and a plain
+ * list view. Behaviour: scripts/atoms/system.ts. Without JS the list view is what shows.
+ */
+import { planets, projects, sunLabel, projectsFor } from '../../data/atoms';
+import { withBase } from '../../lib/url';
+import MoonCard from './MoonCard.astro';
+import ProjectCard from './ProjectCard.astro';
+
+const total = Object.keys(projects).length;
+const words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const moonTitle = (m: (typeof planets)[number]['moons'][number]) => {
+  if (m.href) return m.linkTitle ?? m.label;
+  const p = projects[m.project!];
+  const ph = m.phase ? p.phases?.find((x) => x.id === m.phase) : undefined;
+  return ph ? `${p.course} · ${ph.label}` : `${p.course} · ${p.title}`;
+};
+---
+
+<section class="system" id="system" data-view="list" aria-labelledby="system-title">
+  <div class="container system__head">
+    <div class="system__intro">
+      <p class="eyebrow">The system</p>
+      <h2 id="system-title" tabindex="-1">Five planets, {words[total] ?? total} projects</h2>
+      <p class="lede">Each planet is a field he studied at IIT Gandhinagar. Each moon is a project. Pick a planet.</p>
+    </div>
+    <div class="viewtoggle" role="group" aria-label="How to show the projects" data-js-only>
+      <button type="button" data-set-view="orbit" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.2" /><ellipse cx="8" cy="8" rx="7" ry="3" /></svg>
+        Orbit
+      </button>
+      <button type="button" data-set-view="list" aria-pressed="true">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" /></svg>
+        List view
+      </button>
+    </div>
+  </div>
+
+  <div class="orrery" id="orrery">
+    <svg class="orrery__orbits" id="orrery-orbits" aria-hidden="true"></svg>
+    <div class="sun" id="sun">
+      <span class="sun__corona" aria-hidden="true"></span>
+      <span class="sun__core" aria-hidden="true"></span>
+      <svg class="sun__ring" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><path id="sun-path" d="M100 100 m-82 0 a82 82 0 1 1 164 0 a82 82 0 1 1 -164 0" /></defs>
+        <text><textPath href="#sun-path" startOffset="0">{sunLabel.toUpperCase()} · {sunLabel.toUpperCase()} ·</textPath></text>
+      </svg>
+      <p class="sun__label">{sunLabel}</p>
+    </div>
+    <ul class="planets" role="list">
+      {planets.map((p, i) => (
+        <li class="planet-item" data-planet={p.id} style={`--i:${i}`}>
+          <button class="planet" type="button" data-open-planet={p.id} aria-label={`${p.name}, ${p.field}. ${p.moons.length} ${p.moons.length === 1 ? 'moon' : 'moons'}.`}>
+            <span class={`atm-pb atm-pb--${p.id} planet__body`} aria-hidden="true"></span>
+            <span class="planet__text" aria-hidden="true">
+              <span class="planet__name">{p.name}</span>
+              <span class="planet__meta">{p.moons.length} {p.moons.length === 1 ? 'moon' : 'moons'}</span>
+              <span class="planet__blurb">{p.blurb}</span>
+            </span>
+            <svg class="planet__chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="listview container" id="listview">
+    {planets.map((p) => (
+      <section class="lv-group" aria-labelledby={`lv-${p.id}`}>
+        <header class="lv-group__head">
+          <span class={`atm-pb atm-pb--${p.id}`} style="--size:30px" aria-hidden="true"></span>
+          <h3 id={`lv-${p.id}`}>{p.name}</h3>
+          <p>{p.field}</p>
+        </header>
+        <div class="lv-cards">
+          {projectsFor(p).map((pr) => <ProjectCard project={pr} />)}
+          {p.moons.filter((m) => m.href).map((m) => (
+            <a class="lv-worm" href={withBase(m.href!)} data-warp data-track="atoms-moon-wormhole">
+              <span class="atm-moon-body atm-moon-body--worm" aria-hidden="true"></span>
+              <span><strong>{m.linkTitle}</strong> {m.linkText}</span>
+              <span class="arr" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var v = 'orbit';
+    try { v = sessionStorage.getItem('atoms-view') || 'orbit'; } catch (e) {}
+    var s = document.getElementById('system');
+    if (s) s.dataset.view = v;
+  })();
+</script>
+
+<!-- Planet view -->
+<div class="pview" id="pview" role="dialog" aria-modal="true" aria-labelledby="pview-title" hidden>
+  <div class="pview__bar">
+    <button class="pview__back" type="button" id="pview-back">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+      <span>Back to the system</span>
+    </button>
+    <button class="pview__esc" type="button" id="pview-esc" aria-label="Close (Esc key)"><kbd>Esc</kbd></button>
+  </div>
+
+  <h2 class="sr-only" id="pview-title">Planet</h2>
+
+  {planets.map((p, i) => (
+    <div class="pv" data-pv={p.id} hidden>
+      <div class="pv__world">
+        <div class="pv__orbit" data-orbit={p.id}>
+          <svg class="pv__ring" aria-hidden="true"><ellipse /></svg>
+          <span class={`atm-pb atm-pb--${p.id} pv__planet`} aria-hidden="true"></span>
+          {p.moons.map((m) =>
+            m.href ? (
+              <a class="moon moon--worm" href={withBase(m.href)} data-warp data-moon={m.id} tabindex="-1" aria-hidden="true">
+                <span class="atm-moon-body atm-moon-body--worm"></span>
+                <span class="moon__label">{m.label}</span>
+              </a>
+            ) : (
+              <button class="moon" type="button" data-moon={m.id} tabindex="-1" aria-hidden="true">
+                <span class="atm-moon-body"></span>
+                <span class="moon__label">{m.label}</span>
+              </button>
+            ),
+          )}
+        </div>
+      </div>
+
+      <div class="pv__info">
+        <p class="eyebrow">Planet {i + 1} of {planets.length} · {p.field}</p>
+        <h3 class="pv__title" tabindex="-1" data-pv-title>{p.name}</h3>
+        <p class="pv__blurb">{p.blurb}</p>
+        <p class="pv__prompt">{p.moons.length === 1 ? 'One moon. Open it.' : `${p.moons.length} moons. Pick one.`}</p>
+        <ul class="chips" role="list">
+          {p.moons.map((m) => (
+            <li>
+              {m.href ? (
+                <a class="chip chip--worm" href={withBase(m.href)} data-warp data-chip={m.id}>
+                  <span class="atm-moon-body atm-moon-body--worm" style="--m:16px" aria-hidden="true"></span>
+                  <span class="chip__text"><strong>{m.linkTitle}</strong><span>Wormhole to Ventures</span></span>
+                  <span class="chip__arr" aria-hidden="true">→</span>
+                </a>
+              ) : (
+                <button class="chip" type="button" data-open-moon={m.id} data-chip={m.id}>
+                  <span class="atm-moon-body" style="--m:14px" aria-hidden="true"></span>
+                  <span class="chip__text"><strong>{moonTitle(m)}</strong>{m.phase && <span>{projects[m.project!].title}</span>}</span>
+                  <span class="chip__arr" aria-hidden="true">→</span>
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  ))}
+
+  <div class="card-scrim" id="card-scrim" hidden></div>
+  <aside class="card" id="card" aria-label="Project" hidden>
+    <div class="card__grab" id="card-grab" aria-hidden="true"><span></span></div>
+    <button class="card__close" id="card-close" type="button" aria-label="Close project card">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+    </button>
+    <div class="card__body" id="card-body"></div>
+    <nav class="card__nav" aria-label="Other moons of this planet">
+      <button type="button" id="card-prev"><span aria-hidden="true">←</span> <span class="lbl">Previous</span></button>
+      <span class="card__pos" id="card-pos"></span>
+      <button type="button" id="card-next"><span class="lbl">Next</span> <span aria-hidden="true">→</span></button>
+    </nav>
+  </aside>
+
+  {planets.flatMap((p) => p.moons.filter((m) => m.project).map((m) => {
+    const pr = projects[m.project!];
+    const ph = m.phase ? pr.phases?.find((x) => x.id === m.phase) : undefined;
+    return (
+      <template data-card={m.id} data-planet={p.id}>
+        <MoonCard project={pr} phase={ph} />
+      </template>
+    );
+  }))}
+</div>
+
+<style>
+  /* ---------- Section head ---------- */
+  .system { position: relative; z-index: 1; padding: clamp(80px, 12vh, 140px) 0 40px; scroll-margin-top: 40px; }
+  .system__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .system__intro .eyebrow { color: var(--accent); }
+  .system h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(38px, 5.4vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-top: 10px;
+    outline: none;
+  }
+  .lede { margin-top: 14px; color: var(--muted); max-width: 46ch; }
+
+  .viewtoggle {
+    display: inline-flex;
+    padding: 4px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .viewtoggle button {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font: 500 12.5px/1 var(--font-mono);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s, background 0.25s;
+  }
+  .viewtoggle svg { width: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+  .viewtoggle button:hover { color: var(--fg); }
+  .viewtoggle button[aria-pressed='true'] { color: var(--bg); background: var(--accent); }
+
+  .system[data-view='list'] .orrery { display: none; }
+  .system[data-view='orbit'] .listview { display: none; }
+
+  /* ---------- Orrery (desktop) ---------- */
+  .orrery {
+    position: relative;
+    width: min(100% - 2 * var(--gutter), 1240px);
+    margin: 28px auto 0;
+    height: var(--orrery-h, 600px);
+    touch-action: pan-y;
+  }
+  .orrery__orbits { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .orrery__orbits :global(ellipse) {
+    fill: none;
+    stroke: rgba(246, 237, 228, 0.13);
+    stroke-width: 1;
+    transition: stroke 0.35s, stroke-width 0.35s;
+  }
+  .orrery__orbits :global(ellipse[data-hot]) { stroke: var(--hot, var(--accent)); stroke-width: 1.6; stroke-opacity: 0.85; }
+
+  .sun {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 0 -60px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+  }
+  .sun__core {
+    position: absolute;
+    inset: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 42% 38%, #fffaf0 0%, #ffe2b8 22%, #f6a052 52%, #c8561c 80%, #7a2a0c 100%);
+    box-shadow: 0 0 40px 8px rgba(255, 170, 90, 0.55), 0 0 120px 30px rgba(232, 131, 58, 0.28);
+  }
+  .sun__corona {
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 200, 140, 0.5), rgba(232, 131, 58, 0) 70%);
+    animation: atm-corona 5s ease-in-out infinite;
+  }
+  @keyframes atm-corona { 50% { transform: scale(1.18); opacity: 0.7; } }
+  .sun__ring { position: absolute; inset: -18px; width: calc(100% + 36px); height: calc(100% + 36px); animation: atm-ring 80s linear infinite; }
+  .sun__ring text { font: 600 8.6px var(--font-mono); letter-spacing: 0.16em; fill: var(--copper-soft); }
+  @keyframes atm-ring { to { transform: rotate(360deg); } }
+  .sun__label { display: none; }
+
+  .planets { list-style: none; padding: 0; margin: 0; position: absolute; inset: 0; pointer-events: none; }
+  .planet-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    pointer-events: auto;
+    will-change: transform;
+  }
+  .planet {
+    position: relative;
+    display: block;
+    border-radius: 50%;
+    color: var(--fg);
+    padding: 0;
+  }
+  .planet__body { transition: transform 0.4s var(--pop); }
+  .planet-item[data-planet='forge'] .planet__body { --size: 56px; }
+  .planet-item[data-planet='nano'] .planet__body { --size: 44px; }
+  .planet-item[data-planet='bio'] .planet__body { --size: 40px; }
+  .planet-item[data-planet='energy'] .planet__body { --size: 48px; }
+  .planet-item[data-planet='comp'] .planet__body { --size: 42px; }
+
+  .planet__text {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 10px);
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .planet__name { font: 500 12px/1.2 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.25s; }
+  .planet__meta { font-size: 11.5px; color: var(--muted); opacity: 0.8; }
+  .planet__blurb, .planet__chev { display: none; }
+  .planet:hover .planet__body, .planet:focus-visible .planet__body { transform: scale(1.14); }
+  .planet:hover .planet__name, .planet:focus-visible .planet__name { color: var(--accent); }
+  .planet:focus-visible { outline-offset: 8px; border-radius: 50%; }
+  .planet::after {
+    /* larger hit area */
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+  }
+
+  /* ---------- Orrery (mobile: a vertical stack) ---------- */
+  @media (max-width: 760px) {
+    .orrery { height: auto !important; margin-top: 30px; display: flex; flex-direction: column; align-items: stretch; }
+    .orrery__orbits { display: none; }
+    .sun { position: relative; left: auto; top: auto; margin: 0 auto 8px; width: 104px; height: 104px; }
+    .sun__core { inset: 26px; }
+    .sun__ring { inset: -10px; width: calc(100% + 20px); height: calc(100% + 20px); }
+    .sun__ring text { font-size: 9.4px; }
+    .planets { position: relative; inset: auto; display: grid; gap: 12px; padding: 18px 0 0; }
+    .planets::before {
+      content: '';
+      position: absolute;
+      left: 39px;
+      top: -6px;
+      bottom: 30px;
+      border-left: 1px dashed rgba(246, 237, 228, 0.2);
+    }
+    .planet-item { position: relative; transform: none !important; opacity: 1 !important; z-index: 1 !important; }
+    .planet {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px 14px 12px;
+      border-radius: 16px;
+      text-align: left;
+      border: 1px solid var(--hair);
+      background: var(--panel);
+    }
+    .planet::after { display: none; }
+    .planet__body { justify-self: center; }
+    .planet-item .planet__body { --size: 44px !important; }
+    .planet-item[data-planet='forge'] .planet__body { --size: 52px !important; }
+    .planet__text { position: static; transform: none; justify-items: start; white-space: normal; gap: 3px; }
+    .planet__name { font-size: 12.5px; }
+    .planet__blurb { display: block; font-size: 14px; color: var(--muted); line-height: 1.4; }
+    .planet__meta { order: 3; font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
+    .planet__chev { display: block; width: 16px; fill: none; stroke: var(--muted); stroke-width: 1.6; }
+    .planet:focus-visible { border-radius: 16px; outline-offset: 2px; }
+    .planet:active { transform: scale(0.98); }
+  }
+
+  /* ---------- List view ---------- */
+  .listview { margin-top: 40px; display: grid; gap: 52px; }
+  .lv-group__head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px; }
+  .lv-group__head h3 { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 1; }
+  .lv-group__head p { font: 500 11.5px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .lv-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+  .lv-worm {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 20px;
+    border: 1px dashed rgba(232, 131, 58, 0.45);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.5;
+    transition: border-color 0.2s, color 0.2s;
+    align-self: start;
+  }
+  .lv-worm strong { color: var(--fg); font-weight: 600; display: block; }
+  .lv-worm .arr { margin-left: auto; color: var(--accent); transition: transform 0.3s var(--pop); }
+  .lv-worm:hover { border-color: var(--accent); color: var(--fg); }
+  .lv-worm:hover .arr { transform: translateX(4px); }
+
+  /* ---------- Planet view ---------- */
+  .pview {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background:
+      radial-gradient(ellipse 60% 70% at 32% 55%, color-mix(in srgb, var(--pv-tint, #e8833a) 16%, transparent), transparent 70%),
+      rgba(9, 6, 5, 0.94);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    overflow: hidden;
+  }
+  .pview[hidden] { display: none; }
+  .pview[data-pv='forge'] { --pv-tint: #e8833a; }
+  .pview[data-pv='nano'] { --pv-tint: #3fd1bd; }
+  .pview[data-pv='bio'] { --pv-tint: #9cc0ff; }
+  .pview[data-pv='energy'] { --pv-tint: #c8f23a; }
+  .pview[data-pv='comp'] { --pv-tint: #9a7bff; }
+
+  .pview__bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: max(12px, env(safe-area-inset-top)) var(--gutter) 12px;
+    position: relative;
+    z-index: 5;
+  }
+  .pview__back {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px 9px 12px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--nav-bg);
+    font: 500 12.5px/1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .pview__back svg { width: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s var(--pop); }
+  .pview__back:hover { border-color: var(--accent); color: var(--accent); }
+  .pview__back:hover svg { transform: translateX(-3px); }
+  .pview__esc { display: inline-flex; align-items: center; min-height: 36px; padding: 0 2px; }
+  .pview__esc kbd {
+    font: 500 11px/1 var(--font-mono); padding: 5px 7px 4px;
+    border: 1px solid var(--hair); border-bottom-width: 2px; border-radius: 5px; color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .pview__esc:hover kbd { border-color: var(--accent); color: var(--accent); }
+
+  .pv {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    align-items: center;
+    gap: 24px;
+    width: min(100% - 2 * var(--gutter), 1240px);
+    margin: 0 auto;
+    min-height: 0;
+    transition: grid-template-columns 0.6s var(--snap);
+  }
+  .pv[hidden] { display: none; }
+  .pv__world { position: relative; height: 100%; min-height: 420px; display: grid; place-items: center; }
+  .pv__orbit { position: relative; width: var(--orbit-w, 560px); height: var(--orbit-h, 420px); }
+  .pv__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .pv__ring ellipse { fill: none; stroke: rgba(246, 237, 228, 0.16); stroke-dasharray: 3 7; }
+  .pv__planet {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    --size: var(--big, 240px);
+    margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+    z-index: 2;
+    --spin: 60s;
+  }
+  .moon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 6px;
+    margin: -18px 0 0 -18px;
+    border-radius: 999px;
+    color: var(--fg);
+    text-decoration: none;
+    will-change: transform;
+  }
+  .moon .atm-moon-body { --tint: var(--pv-tint); }
+  .moon__label {
+    font: 500 11.5px/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(9, 6, 5, 0.6);
+    transition: color 0.2s, background 0.2s;
+  }
+  .moon:hover .atm-moon-body, .moon[data-hot] .atm-moon-body { transform: scale(1.3); }
+  .moon:hover .moon__label, .moon[data-hot] .moon__label { color: var(--bg); background: var(--accent); }
+  .moon[data-active] .moon__label { color: var(--bg); background: var(--fg); }
+
+  .pv__info { align-self: center; padding-bottom: 40px; }
+  .pv__info .eyebrow { color: var(--accent); }
+  .pv__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 5.4vw, 72px); line-height: 0.98; margin-top: 10px; outline: none; }
+  .pv__blurb { color: var(--muted); font-size: 17px; margin-top: 12px; max-width: 34ch; }
+  .pv__prompt { font: 500 12px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 28px; }
+  .chips { list-style: none; padding: 0; margin-top: 14px; display: grid; gap: 10px; max-width: 460px; }
+  .chip {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    text-align: left;
+    text-decoration: none;
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    background: rgba(26, 17, 12, 0.55);
+    transition: border-color 0.2s, background 0.2s, transform 0.3s var(--pop);
+  }
+  .chip .atm-moon-body { --tint: var(--pv-tint); }
+  .chip__text { display: grid; gap: 2px; min-width: 0; }
+  .chip__text strong { font-weight: 600; font-size: 14.5px; line-height: 1.3; }
+  .chip__text span { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+  .chip__arr { color: var(--muted); transition: transform 0.3s var(--pop), color 0.2s; }
+  .chip:hover, .chip[data-active] { border-color: color-mix(in srgb, var(--pv-tint) 60%, transparent); background: rgba(40, 26, 18, 0.7); }
+  .chip:hover .chip__arr { transform: translateX(4px); color: var(--accent); }
+  .chip[data-active] .chip__arr { color: var(--accent); }
+  .chip--worm { border-style: dashed; border-color: rgba(232, 131, 58, 0.4); }
+
+  /* card open: info column gives way to the card */
+  .pview[data-card] .pv { grid-template-columns: minmax(0, 1fr) min(460px, 42vw); }
+  .pview[data-card] .pv__info { visibility: hidden; }
+
+  .card {
+    position: absolute;
+    z-index: 6;
+    top: 64px;
+    bottom: 24px;
+    right: max(var(--gutter), calc((100vw - 1240px) / 2));
+    width: min(460px, 42vw);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: #140d09;
+    border: 1px solid rgba(232, 131, 58, 0.32);
+    border-radius: 20px;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+  }
+  .card[hidden] { display: none; }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 140px;
+    background-image: var(--tone-copper);
+    background-size: 7px 7px;
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+    mask-image: linear-gradient(to bottom, #000, transparent);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .card__grab { display: none; }
+  .card__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--hair);
+    background: rgba(13, 9, 7, 0.7);
+    transition: border-color 0.2s, transform 0.3s var(--pop);
+  }
+  .card__close svg { width: 14px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+  .card__close:hover { border-color: var(--accent); transform: rotate(90deg); }
+  .card__body { overflow-y: auto; padding: 30px 30px 24px; overscroll-behavior: contain; position: relative; }
+  .card__nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid var(--hair);
+    background: rgba(9, 6, 5, 0.5);
+  }
+  .card__nav button {
+    display: inline-flex; gap: 6px; align-items: center;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font: 500 12px/1 var(--font-mono);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s, background 0.2s;
+  }
+  .card__nav button:hover { color: var(--fg); background: rgba(255, 255, 255, 0.04); }
+  .card__nav button:disabled { opacity: 0.3; pointer-events: none; }
+  .card__pos { font: 500 11.5px/1 var(--font-mono); color: var(--muted); letter-spacing: 0.1em; }
+  .card-scrim { display: none; }
+
+  /* ---------- Planet view: mobile ---------- */
+  @media (max-width: 760px) {
+    .pview { overflow-y: auto; overscroll-behavior: contain; display: block; }
+    .pview__bar { position: sticky; top: 0; background: linear-gradient(rgba(9, 6, 5, 0.95), rgba(9, 6, 5, 0)); }
+    .pview__esc { display: none; }
+    .pv { grid-template-columns: 1fr !important; gap: 0; padding-bottom: 40px; }
+    .pv__world { min-height: 0; height: auto; padding: 6px 0 4px; }
+    .pv__info { padding-bottom: 0; visibility: visible !important; }
+    .pv__title { font-size: 46px; }
+    .pv__prompt { margin-top: 22px; }
+    .moon { pointer-events: none; }
+
+    .card-scrim {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      background: rgba(0, 0, 0, 0.55);
+    }
+    .card-scrim[hidden] { display: none; }
+    .card {
+      position: fixed;
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-height: 86dvh;
+      z-index: 7;
+      border-radius: 22px 22px 0 0;
+      border-bottom: 0;
+      padding-bottom: env(safe-area-inset-bottom);
+      touch-action: pan-y;
+    }
+    .card__grab { display: grid; place-items: center; height: 26px; cursor: grab; touch-action: none; }
+    .card__grab span { width: 44px; height: 5px; border-radius: 3px; background: rgba(246, 237, 228, 0.3); }
+    .card__close { top: 12px; right: 12px; }
+    .card__body { padding: 6px 20px 20px; }
+  }
+</style>
+
+<style is:global>
+  /* Moon card content (cloned from templates, so global, prefixed .atm-mc) */
+  .atm-mc__code {
+    display: flex; flex-wrap: wrap; gap: 4px 12px;
+    font: 500 12px/1.4 var(--font-mono);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent);
+    padding-right: 44px;
+  }
+  .atm-mc__phase-n { color: var(--muted); }
+  .atm-mc__title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(30px, 3vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    margin-top: 12px;
+    outline: none;
+  }
+  .atm-mc__parent, .atm-mc__course { margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .atm-mc__parent em { font-style: normal; color: var(--fg); }
+  .atm-mc__note {
+    display: inline-block;
+    margin-top: 12px;
+    font: 500 11.5px/1.3 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--copper-soft);
+    padding: 5px 9px;
+    border: 1px solid rgba(232, 131, 58, 0.35);
+    border-radius: 6px;
+  }
+  .atm-mc__meta { margin: 20px 0 0; display: grid; gap: 0; border-top: 1px solid var(--hair); }
+  .atm-mc__meta div { display: grid; grid-template-columns: 112px 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+  .atm-mc__meta dt { font: 500 11px/1.6 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .atm-mc__meta dd { margin: 0; font-size: 14.5px; line-height: 1.45; }
+  .atm-mc__summary { margin-top: 18px; font-size: 16px; line-height: 1.62; }
+  .atm-mc__chips { list-style: none; padding: 0; margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .atm-mc__chips li {
+    display: grid; gap: 4px;
+    padding: 12px 14px 13px;
+    border: 1px solid rgba(232, 131, 58, 0.3);
+    border-radius: 12px;
+    background: linear-gradient(160deg, rgba(232, 131, 58, 0.1), rgba(232, 131, 58, 0.02));
+  }
+  .atm-mc__chips strong { font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1; color: var(--copper-soft); }
+  .atm-mc__chips span { font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+  .atm-mc__fun { margin-top: 22px; font-size: 14.5px; line-height: 1.55; color: color-mix(in srgb, var(--fg) 86%, transparent); }
+  .atm-mc__fun-tag {
+    display: inline-block;
+    font-family: var(--font-comic);
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: var(--accent);
+    padding: 3px 7px 1px;
+    margin-right: 6px;
+    transform: rotate(-3deg);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/LegacyLayout.astro';
+import Navbar from '../../components/legacy/Navbar.astro';
+import Footer from '../../components/legacy/Footer.astro';
+import FintechForm from '../../components/legacy/FintechForm.astro';
+import QualificationResults from '../../components/legacy/QualificationResults.astro';
+import ArchitectureCarousel from '../../components/legacy/ArchitectureCarousel.astro';
+import { withBase } from '../../lib/url';
+---
+
+<Layout title="AI-Powered VC Qualification Engine | Vashisth Patel">
+  <Navbar />
+
+  <main class="min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-20 pb-8 md:pb-12">
+      <!-- Hero Section -->
+      <section class="text-center mb-10 md:mb-16">
+        <p class="font-mono text-green text-xs uppercase tracking-[0.2em] mb-4">// project showcase — from my <a href={withBase('resume')} class="underline hover:text-green">résumé</a></p>
+
+        <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-lightest-slate tracking-tight leading-tight mb-5 max-w-4xl mx-auto">
+          AI-Powered VC Qualification Engine
+        </h1>
+
+        <p class="text-slate text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+          Automating first-pass startup screening for a VC firm — hybrid AI + regulatory-compliance logic, benchmarked against 100+ stored companies. Try the live FinTech-partner-triage build below.
+        </p>
+      </section>
+
+      <!-- Divider -->
+      <div class="w-16 h-px bg-lightest-navy mx-auto mb-10 md:mb-14"></div>
+
+      <!-- App Interface (Form & Results toggle) -->
+      <div class="relative mb-10 md:mb-16">
+        <FintechForm />
+        <QualificationResults />
+      </div>
+    </div>
+
+    <!-- Deep Dive Section -->
+    <div class="w-full relative bg-navy/80 border-t border-lightest-navy">
+      <div class="absolute inset-0 bg-gradient-to-b from-navy/10 to-transparent pointer-events-none"></div>
+      <ArchitectureCarousel />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

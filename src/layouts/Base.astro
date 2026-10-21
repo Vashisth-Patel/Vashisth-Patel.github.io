@@ -1,0 +1,89 @@
+---
+/**
+ * Base layout for every new page (landing + the three worlds + 404).
+ * - Sets data-world on <html> so styles/tokens.css themes the page.
+ * - Loads the self-hosted fonts (Instrument Serif, Inter, JetBrains Mono); pages import any extra family
+ *   themselves (Atoms: Bangers, Ventures: Fraunces). Nothing is requested from Google.
+ * - Adds noindex on staging and the GoatCounter script when configured.
+ * - Renders WorldNav for world pages (pass `nav={false}` to hide it).
+ */
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/tokens.css';
+import WorldNav from '../components/common/WorldNav.astro';
+import LegalFooter from '../components/common/LegalFooter.astro';
+import { withBase } from '../lib/url';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  world?: 'home' | 'atoms' | 'bits' | 'ventures' | 'other';
+  nav?: boolean;
+  ogImage?: string;
+  /** Impressum + privacy links at the end of the page. The landing page has its own footer with them. */
+  legalFooter?: boolean;
+}
+
+const {
+  title,
+  description = 'Vashisth Patel: materials engineer, management student, curious about how things work. Atoms, bits and ventures.',
+  world = 'home',
+  nav = world !== 'home' && world !== 'other',
+  ogImage = 'img/og.jpg',
+  legalFooter = true,
+} = Astro.props;
+
+
+const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
+const goatcounter = import.meta.env.PROD ? import.meta.env.PUBLIC_GOATCOUNTER || site.goatcounter : '';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogUrl = new URL(withBase(ogImage), Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-world={world}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <meta name="theme-color" content={world === 'ventures' ? '#f3eee4' : '#05060a'} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+
+    {goatcounter && (
+      <script
+        is:inline
+        async
+        data-goatcounter={`https://${goatcounter}.goatcounter.com/count`}
+        src="https://gc.zgo.at/count.js"
+      ></script>
+    )}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {nav && <WorldNav current={world as 'atoms' | 'bits' | 'ventures'} />}
+    <slot />
+    {legalFooter && <LegalFooter />}
+    <script>import '../scripts/reveal';</script>
+  </body>
+</html>

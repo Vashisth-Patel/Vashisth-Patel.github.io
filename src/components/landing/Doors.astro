@@ -1,0 +1,307 @@
+---
+/** The three doors. Each is a celestial object; clicking warps into that world. */
+import { withBase } from '../../lib/url';
+
+const doors = [
+  {
+    id: 'atoms',
+    n: '01',
+    name: 'Atoms',
+    tagline: 'materials & physics',
+    teaser: 'Save Einstein from a radiation leak, then tour five planets of materials science.',
+    accent: '232, 131, 58',
+    path: 'atoms/',
+  },
+  {
+    id: 'bits',
+    n: '02',
+    name: 'Bits',
+    tagline: 'terminal & games',
+    teaser: 'A terminal with my tech projects, and an arcade of games I wrote in 2022. Bugs included.',
+    accent: '57, 255, 136',
+    path: 'bits/',
+  },
+  {
+    id: 'ventures',
+    n: '03',
+    name: 'Ventures',
+    tagline: 'a company story',
+    teaser: 'Nine chapters in the life of a company that doesn’t exist, and the real projects behind each one.',
+    accent: '255, 196, 150',
+    path: 'ventures/',
+  },
+];
+---
+
+<section class="doors" id="worlds" aria-labelledby="worlds-title">
+  <div class="container">
+    <header class="head" data-reveal>
+      <p class="eyebrow">Three worlds</p>
+      <h2 id="worlds-title">Pick a world.</h2>
+      <p class="sub">Each one is a different side of the same person. Start anywhere.</p>
+    </header>
+
+    <ul class="cards">
+      {doors.map((d, i) => (
+        <li data-reveal style={`--delay:${i * 110}ms`}>
+          <a class={`door door-${d.id}`} href={withBase(d.path)} data-warp data-door={d.id} style={`--door:${d.accent}`}>
+            <div class="object" aria-hidden="true">
+              {d.id === 'atoms' && (
+                <svg viewBox="0 0 200 200">
+                  <defs>
+                    <radialGradient id="planet-copper" cx="35%" cy="32%" r="75%">
+                      <stop offset="0%" stop-color="#ffd3ad" />
+                      <stop offset="38%" stop-color="#e8833a" />
+                      <stop offset="78%" stop-color="#7a3512" />
+                      <stop offset="100%" stop-color="#2a1006" />
+                    </radialGradient>
+                  </defs>
+                  <g class="ring-back">
+                    <ellipse cx="100" cy="100" rx="86" ry="22" fill="none" stroke="rgba(242,176,125,0.45)" stroke-width="3" transform="rotate(-18 100 100)" />
+                  </g>
+                  <circle cx="100" cy="100" r="46" fill="url(#planet-copper)" />
+                  <path class="ring-front" d="M 18.2 126.6 A 86 22 -18 0 0 181.8 73.4" fill="none" stroke="rgba(255,214,180,0.85)" stroke-width="3" />
+                  <g class="moon"><circle cx="100" cy="22" r="6" fill="#f4f1ea" /></g>
+                </svg>
+              )}
+              {d.id === 'bits' && (
+                <svg viewBox="0 0 200 200">
+                  <g class="sat">
+                    <rect x="18" y="86" width="44" height="28" rx="2" fill="rgba(57,255,136,0.08)" stroke="rgba(57,255,136,0.7)" stroke-width="1.5" />
+                    <path d="M33 86v28M47 86v28M18 100h44" stroke="rgba(57,255,136,0.45)" stroke-width="1" />
+                    <rect x="138" y="86" width="44" height="28" rx="2" fill="rgba(57,255,136,0.08)" stroke="rgba(57,255,136,0.7)" stroke-width="1.5" />
+                    <path d="M153 86v28M167 86v28M138 100h44" stroke="rgba(57,255,136,0.45)" stroke-width="1" />
+                    <path d="M62 100h14M124 100h14" stroke="rgba(57,255,136,0.7)" stroke-width="2" />
+                    <rect x="76" y="70" width="48" height="60" rx="8" fill="#03140a" stroke="#39ff88" stroke-width="2" />
+                    <text x="84" y="104" fill="#39ff88" font-family="JetBrains Mono, monospace" font-size="16">&gt;</text>
+                    <rect class="cursor" x="98" y="92" width="9" height="15" fill="#39ff88" />
+                    <path d="M100 70V54" stroke="rgba(57,255,136,0.7)" stroke-width="1.5" />
+                    <circle class="beacon" cx="100" cy="51" r="3.5" fill="#39ff88" />
+                  </g>
+                </svg>
+              )}
+              {d.id === 'ventures' && (
+                <svg viewBox="0 0 200 200">
+                  <defs>
+                    <radialGradient id="nova-core" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#ffffff" />
+                      <stop offset="22%" stop-color="#ffe7d2" />
+                      <stop offset="55%" stop-color="rgba(255,170,120,0.35)" />
+                      <stop offset="100%" stop-color="rgba(255,140,90,0)" />
+                    </radialGradient>
+                    <linearGradient id="spike-v" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="rgba(255,231,210,0)" />
+                      <stop offset="50%" stop-color="rgba(255,240,228,0.95)" />
+                      <stop offset="100%" stop-color="rgba(255,231,210,0)" />
+                    </linearGradient>
+                  </defs>
+                  <g class="nova">
+                    <circle cx="100" cy="100" r="64" fill="url(#nova-core)" class="halo" />
+                    <g class="spikes">
+                      <rect x="98.6" y="14" width="2.8" height="172" fill="url(#spike-v)" />
+                      <rect x="98.6" y="14" width="2.8" height="172" fill="url(#spike-v)" transform="rotate(60 100 100)" />
+                      <rect x="98.6" y="14" width="2.8" height="172" fill="url(#spike-v)" transform="rotate(120 100 100)" />
+                      <rect x="99.2" y="44" width="1.6" height="112" fill="url(#spike-v)" transform="rotate(90 100 100)" opacity="0.7" />
+                    </g>
+                    <circle cx="100" cy="100" r="9" fill="#fff" />
+                  </g>
+                </svg>
+              )}
+            </div>
+
+            <div class="meta">
+              <span class="n">{d.n}</span>
+              <span class="tagline">{d.tagline}</span>
+            </div>
+            <h3>{d.name}</h3>
+            <p class="teaser">{d.teaser}</p>
+            <span class="enter">Enter <span aria-hidden="true">→</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .doors { position: relative; padding-block: clamp(72px, 12vw, 150px); }
+
+  .head h2 {
+    margin-top: 12px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(44px, 6.5vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .sub { margin-top: 14px; color: var(--muted); font-size: 17px; }
+
+  .cards {
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(32px, 5vw, 56px);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 24px);
+  }
+
+  .door {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 22px 24px 26px;
+    border-radius: 22px;
+    border: 1px solid rgba(var(--door), 0.22);
+    background:
+      radial-gradient(120% 70% at 50% 0%, rgba(var(--door), 0.14), transparent 60%),
+      rgba(8, 10, 16, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--starlight);
+    text-decoration: none;
+    overflow: hidden;
+    transition: transform 0.5s var(--ease-out), border-color 0.3s, box-shadow 0.5s var(--ease-out);
+  }
+  .door::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), rgba(var(--door), 0.16), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .door:hover,
+  .door:focus-visible {
+    transform: translateY(-6px);
+    border-color: rgba(var(--door), 0.7);
+    box-shadow: 0 30px 80px -30px rgba(var(--door), 0.45);
+  }
+  .door:hover::after { opacity: 1; }
+
+  .object {
+    height: clamp(150px, 16vw, 200px);
+    display: grid;
+    place-items: center;
+    margin-bottom: 10px;
+  }
+  .object svg {
+    width: auto;
+    height: 100%;
+    overflow: visible;
+    transition: transform 0.7s var(--ease-out);
+  }
+  .door:hover .object svg { transform: scale(1.07) rotate(-3deg); }
+
+  /* Atoms planet */
+  .moon { transform-origin: 100px 100px; animation: orbit 9s linear infinite; }
+  @keyframes orbit { to { transform: rotate(360deg); } }
+  .door-atoms:hover .moon { animation-duration: 3s; }
+
+  /* Bits satellite */
+  .sat { animation: bob 6s var(--ease-in-out) infinite; transform-origin: 100px 100px; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-7px) rotate(3deg); }
+  }
+  .cursor { animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .beacon { animation: beacon 2.2s ease-in-out infinite; }
+  @keyframes beacon {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+
+  /* Ventures nova */
+  .nova { transform-origin: 100px 100px; }
+  .halo { transform-origin: 100px 100px; animation: pulse 4.5s var(--ease-in-out) infinite; }
+  .spikes { transform-origin: 100px 100px; transition: transform 1.2s var(--ease-out); }
+  .door-ventures:hover .spikes { transform: rotate(30deg) scale(1.08); }
+  @keyframes pulse {
+    0%, 100% { transform: scale(0.92); opacity: 0.8; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(var(--door), 0.95);
+  }
+  .tagline { color: var(--muted); }
+
+  h3 {
+    margin-top: 8px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 4.4vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .teaser {
+    margin-top: 12px;
+    color: rgba(244, 241, 234, 0.72);
+    font-size: 15.5px;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .enter {
+    margin-top: 22px;
+    display: inline-flex;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgb(var(--door));
+  }
+  .enter span { transition: transform 0.4s var(--ease-out); }
+  .door:hover .enter span { transform: translateX(6px); }
+
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; }
+    .door {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      grid-template-areas:
+        'obj meta'
+        'obj title'
+        'obj teaser'
+        'obj enter';
+      column-gap: 18px;
+      align-items: start;
+      padding: 18px;
+    }
+    .object { grid-area: obj; height: 112px; margin: 0; align-self: center; }
+    .meta { grid-area: meta; }
+    h3 { grid-area: title; font-size: 40px; margin-top: 2px; }
+    .teaser { grid-area: teaser; margin-top: 6px; font-size: 14.5px; }
+    .enter { grid-area: enter; margin-top: 10px; }
+  }
+  @media (max-width: 420px) {
+    .door { grid-template-columns: 84px 1fr; column-gap: 14px; }
+    .object { height: 84px; }
+    .tagline { display: none; }
+  }
+</style>
+
+<script>
+  import { initWarpLinks } from '../../scripts/warp';
+  import { track } from '../../lib/track';
+
+  initWarpLinks();
+  document.querySelectorAll<HTMLAnchorElement>('[data-door]').forEach((door) => {
+    door.addEventListener('click', () => track(`door-${door.dataset.door}`));
+    door.addEventListener('pointermove', (e) => {
+      const r = door.getBoundingClientRect();
+      door.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      door.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+</script>
